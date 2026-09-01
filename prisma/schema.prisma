@@ -1,0 +1,450 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String  @map("user_id")
+  type              String
+  provider          String
+  providerAccountId String  @map("provider_account_id")
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  role          String    @default("USER")
+  isBanned      Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts      Account[]
+  sessions      Session[]
+  posts         Post[]
+  comments      Comment[]
+  likes         Like[]
+  bookmarks     Bookmark[]
+  gameScores    GameScore[]
+  achievements  Achievement[]
+  forumPosts    ForumPost[]
+  qnaAnswers    QnAAnswer[]
+  qnaQuestions  QnAQuestion[]
+  jobApplications JobApplication[]
+  subscriptions Subscription[]
+  profile       Profile?
+  newsletterSubs NewsletterSubscriber[]
+
+  @@map("users")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique @map("session_token")
+  userId       String   @map("user_id")
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model Profile {
+  id            String   @id @default(cuid())
+  userId        String   @unique @map("user_id")
+  bio           String?  @db.Text
+  website       String?
+  location      String?
+  birthday      DateTime?
+  points        Int      @default(0)
+  level         Int      @default(1)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("profiles")
+}
+
+model Category {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  slug        String    @unique
+  description String?
+  icon        String?
+  color       String?   @default("#3b82f6")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  posts   Post[]
+  jobs    JobListing[]
+
+  @@map("categories")
+}
+
+model Tag {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  slug      String   @unique
+  createdAt DateTime @default(now())
+
+  posts Post[]
+
+  @@map("tags")
+}
+
+model Post {
+  id            String    @id @default(cuid())
+  title         String
+  slug          String    @unique
+  content       String    @db.Text
+  excerpt       String?
+  featuredImage String?
+  postType      String    @default("BLOG")
+  status        String    @default("DRAFT")
+  views         Int       @default(0)
+  seoTitle      String?
+  seoDesc       String?
+  focusKeyword  String?
+  readTime      Int?
+  publishedAt   DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  authorId String
+  author   User     @relation(fields: [authorId], references: [id])
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
+  tagId    String?
+  tags     Tag?     @relation(fields: [tagId], references: [id])
+
+  comments Comment[]
+  likes    Like[]
+  bookmarks Bookmark[]
+
+  @@map("posts")
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String   @db.Text
+  isApproved Boolean @default(true)
+  createdAt DateTime @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+  postId String
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  parentId String?
+  parent   Comment? @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies   Comment[] @relation("CommentReplies")
+
+  @@map("comments")
+}
+
+model Like {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+  postId String
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, postId])
+  @@map("likes")
+}
+
+model Bookmark {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+  postId String
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, postId])
+  @@map("bookmarks")
+}
+
+model NewsArticle {
+  id          String    @id @default(cuid())
+  title       String
+  content     String    @db.Text
+  excerpt     String?
+  imageUrl    String?
+  source      String?
+  sourceUrl   String?
+  categoryId  String
+  category    NewsCategory @relation(fields: [categoryId], references: [id])
+  publishedAt DateTime  @default(now())
+  createdAt   DateTime  @default(now())
+
+  @@map("news_articles")
+}
+
+model NewsCategory {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  slug      String   @unique
+  createdAt DateTime @default(now())
+
+  articles NewsArticle[]
+
+  @@map("news_categories")
+}
+
+model Game {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?  @db.Text
+  category    String
+  icon        String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  scores GameScore[]
+
+  @@map("games")
+}
+
+model GameScore {
+  id        String   @id @default(cuid())
+  score     Int
+  playedAt  DateTime @default(now())
+
+  userId String
+  gameId String
+  game   Game @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("game_scores")
+}
+
+model Achievement {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  icon        String?
+  earnedAt    DateTime @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("achievements")
+}
+
+model Tool {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?  @db.Text
+  category    String
+  icon        String?
+  route       String   @unique
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  usages ToolUsage[]
+
+  @@map("tools")
+}
+
+model ToolUsage {
+  id        String   @id @default(cuid())
+  metadata  String?  @db.Text
+  usedAt    DateTime @default(now())
+
+  userId String?
+  toolId String
+  tool   Tool @relation(fields: [toolId], references: [id], onDelete: Cascade)
+
+  @@map("tool_usages")
+}
+
+model Forum {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?  @db.Text
+  icon        String?
+  createdAt   DateTime @default(now())
+
+  posts ForumPost[]
+
+  @@map("forums")
+}
+
+model ForumPost {
+  id        String   @id @default(cuid())
+  title     String
+  content   String   @db.Text
+  views     Int      @default(0)
+  isPinned  Boolean  @default(false)
+  isLocked  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+  forumId String
+  forum   Forum @relation(fields: [forumId], references: [id], onDelete: Cascade)
+
+  @@map("forum_posts")
+}
+
+model QnAQuestion {
+  id              String   @id @default(cuid())
+  title           String
+  content         String   @db.Text
+  views           Int      @default(0)
+  votes           Int      @default(0)
+  acceptedAnswerId String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  userId String
+  user   User    @relation(fields: [userId], references: [id])
+  answers QnAAnswer[]
+
+  @@map("qna_questions")
+}
+
+model QnAAnswer {
+  id        String   @id @default(cuid())
+  content   String   @db.Text
+  votes     Int      @default(0)
+  createdAt DateTime @default(now())
+
+  userId     String
+  user       User          @relation(fields: [userId], references: [id])
+  questionId String
+  question   QnAQuestion   @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@map("qna_answers")
+}
+
+model JobListing {
+  id          String   @id @default(cuid())
+  title       String
+  company     String
+  description String   @db.Text
+  location    String?
+  categoryId  String
+  category    Category @relation(fields: [categoryId], references: [id])
+  salary      String?
+  applyUrl    String?
+  isActive    Boolean  @default(true)
+  postedAt    DateTime @default(now())
+
+  applications JobApplication[]
+
+  @@map("job_listings")
+}
+
+model JobApplication {
+  id        String   @id @default(cuid())
+  resume    String?
+  coverLetter String? @db.Text
+  status    String   @default("PENDING")
+  createdAt DateTime @default(now())
+
+  userId     String
+  user       User         @relation(fields: [userId], references: [id])
+  jobId      String
+  jobListing JobListing   @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, jobId])
+  @@map("job_applications")
+}
+
+model AdSlot {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  location  String
+  size      String
+  code      String?  @db.Text
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  @@map("ad_slots")
+}
+
+model Subscription {
+  id        String   @id @default(cuid())
+  plan      String
+  startsAt  DateTime
+  expiresAt DateTime
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@map("subscriptions")
+}
+
+model AffiliateLink {
+  id          String   @id @default(cuid())
+  title       String
+  url         String
+  description String?  @db.Text
+  category    String?
+  createdAt   DateTime @default(now())
+
+  @@map("affiliate_links")
+}
+
+model NewsletterSubscriber {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  name        String?
+  isVerified  Boolean  @default(false)
+  subscribedAt DateTime @default(now())
+
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id])
+
+  @@map("newsletter_subscribers")
+}
+
+model SiteConfig {
+  key   String   @id
+  value String   @db.Text
+  updatedAt DateTime @updatedAt
+
+  @@map("site_config")
+}
+
+model PageView {
+  id        String   @id @default(cuid())
+  path      String
+  userId    String?
+  ip        String?
+  userAgent String?
+  referrer  String?
+  visitedAt DateTime @default(now())
+
+  @@map("page_views")
+}
