@@ -10,6 +10,8 @@ export const metadata: Metadata = {
   openGraph: { title: 'Blog', description: 'Discover stories, tutorials, and insights.', type: 'website' },
 };
 
+export const dynamic = 'force-dynamic';
+
 export default async function BlogPage() {
   let posts: any[] = [];
   try {

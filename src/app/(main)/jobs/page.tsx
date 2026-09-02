@@ -10,6 +10,8 @@ export const metadata: Metadata = {
   openGraph: { title: 'Job Board', description: 'Find your next career opportunity. Browse latest job listings.', type: 'website' },
 };
 
+export const dynamic = 'force-dynamic';
+
 export default async function JobsPage() {
   let jobs: any[] = [];
   try {

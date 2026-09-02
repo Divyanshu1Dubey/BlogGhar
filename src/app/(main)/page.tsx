@@ -6,6 +6,7 @@ import { formatDate } from '@/lib/utils';
 import prisma from '@/lib/prisma';
 import { AdSlot } from '@/components/ads/ad-slot';
 
+export const dynamic = 'force-dynamic';
 export async function generateMetadata() {
   const categories = await getCategories();
   const categoryKeywords = categories.map((c: any) => c.name).join(', ');

@@ -9,6 +9,8 @@ export const metadata: Metadata = {
   openGraph: { title: 'Q&A Community', description: 'Ask questions, share knowledge, and help others.', type: 'website' },
 };
 
+export const dynamic = 'force-dynamic';
+
 export default async function QAPage() {
   let questions: any[] = [];
   try {

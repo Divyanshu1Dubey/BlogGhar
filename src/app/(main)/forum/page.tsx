@@ -10,6 +10,8 @@ export const metadata: Metadata = {
   openGraph: { title: 'Community Forum', description: 'Join the Blog-Ghar community forum and connect with other users.', type: 'website' },
 };
 
+export const dynamic = 'force-dynamic';
+
 export default async function ForumPage() {
   let forums: any[] = [];
   let topics: any[] = [];

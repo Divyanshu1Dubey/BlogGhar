@@ -16,6 +16,8 @@ interface Props {
   searchParams: Promise<{ tab?: string }>;
 }
 
+export const dynamic = 'force-dynamic';
+
 export default async function ProfilePage({ searchParams }: Props) {
   const params = await searchParams;
   const activeTab = params.tab || 'saved';

@@ -9,6 +9,8 @@ export const metadata: Metadata = {
   openGraph: { title: 'Latest News', description: 'Stay updated with the latest news and trending stories from around the world.', type: 'website' },
 };
 
+export const dynamic = 'force-dynamic';
+
 export default async function NewsPage() {
   let news: any[] = [];
   try {

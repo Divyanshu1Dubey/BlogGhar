@@ -1,6 +1,5 @@
 import Link from 'next/link';
-import { Metadata } from 'next';
-import { Script } from 'next/script';
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'About Blog-Ghar',
@@ -62,7 +61,7 @@ export default function AboutPage() {
         </p>
       </div>
 
-      <Script
+      <script
         id="about-schema"
         type="application/ld+json"
         dangerouslySetInnerHTML={{
