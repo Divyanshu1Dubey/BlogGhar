@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 export default function EMICalculator() {
-  const [principal, setPrincipal] = useState;
+  const [principal, setPrincipal] = useState(0);
   const [rate, setRate] = useState(8.5);
   const [tenure, setTenure] = useState(20);
   const [result, setResult] = useState<{ emi: number; total: number; interest: number } | null>(null);
