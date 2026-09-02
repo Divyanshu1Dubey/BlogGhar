@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import Script from 'next/script';
-import { ArrowRight, Gamepad2, Calculator, Newspaper, Sparkles } from 'lucide-react';
+import { ArrowRight, Gamepad2, Calculator, Newspaper, Sparkles, Shield, Zap, Users, TrendingUp, Star } from 'lucide-react';
 import { formatDate } from '@/lib/utils';
 import prisma from '@/lib/prisma';
 import { AdSlot } from '@/components/ads/ad-slot';
@@ -22,7 +22,7 @@ export async function generateMetadata() {
 async function getFeaturedPosts() {
   try {
     const posts = await prisma.post.findMany({
-      where: { status: 'PUBLISHED' },
+      where: { postType: 'BLOG', status: 'PUBLISHED' },
       take: 3,
       orderBy: { publishedAt: 'desc' },
       include: {
@@ -39,7 +39,7 @@ async function getFeaturedPosts() {
 async function getTrendingPosts() {
   try {
     const posts = await prisma.post.findMany({
-      where: { status: 'PUBLISHED' },
+      where: { postType: 'BLOG', status: 'PUBLISHED' },
       take: 6,
       orderBy: { views: 'desc' },
       include: {
@@ -78,7 +78,8 @@ async function getGames() {
 
 async function getNews() {
   try {
-    return await prisma.newsArticle.findMany({
+    return await prisma.post.findMany({
+      where: { postType: 'NEWS', status: 'PUBLISHED' },
       take: 5,
       orderBy: { publishedAt: 'desc' },
       include: { category: { select: { name: true, slug: true } } },
@@ -86,6 +87,30 @@ async function getNews() {
   } catch {
     return [];
   }
+}
+
+function FeatureCard({ icon, title, desc }: { icon: React.ReactNode; title: string; desc: string }) {
+  return (
+    <div className="text-center p-6">
+      <div className="w-14 h-14 mx-auto bg-primary-100 dark:bg-primary-900/30 rounded-2xl flex items-center justify-center text-primary-600 mb-4">
+        {icon}
+      </div>
+      <h3 className="font-display font-bold text-lg mb-1">{title}</h3>
+      <p className="text-sm text-gray-500 dark:text-gray-400">{desc}</p>
+    </div>
+  );
+}
+
+function StepCard({ num, title, desc }: { num: number; title: string; desc: string }) {
+  return (
+    <div className="relative">
+      <div className="w-10 h-10 bg-primary-600 text-white rounded-full flex items-center justify-center font-bold text-lg mb-3">
+        {num}
+      </div>
+      <h3 className="font-display font-bold mb-1">{title}</h3>
+      <p className="text-sm text-gray-500 dark:text-gray-400">{desc}</p>
+    </div>
+  );
 }
 
 export default async function HomePage() {
@@ -108,7 +133,7 @@ export default async function HomePage() {
         <div className="max-w-7xl mx-auto px-4 py-16 md:py-24 relative">
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 rounded-full text-sm mb-6">
-              <Sparkles className="w-4 h-4" />
+              <Star className="w-4 h-4" />
               Your One-Stop Destination
             </div>
             <h1 className="text-4xl md:text-6xl font-display font-extrabold leading-tight mb-6 text-balance">
@@ -133,8 +158,38 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* Why Blog-Ghar — Trust Signals */}
+      <section className="max-w-7xl mx-auto px-4 -mt-10 relative z-10">
+        <div className="bg-white dark:bg-dark-card rounded-2xl shadow-xl border border-gray-200 dark:border-dark-border p-8">
+          <div className="text-center mb-6">
+            <h2 className="text-2xl font-display font-bold mb-2">Why Blog-Ghar?</h2>
+            <p className="text-sm text-gray-500 dark:text-gray-400">Trusted by readers from 50+ countries worldwide</p>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <FeatureCard icon={<Users className="w-7 h-7" />} title="10K+ Monthly Readers" desc="Growing community of engaged readers" />
+            <FeatureCard icon={<Zap className="w-7 h-7" />} title="30+ Free Tools" desc="Calculators, converters & text tools" />
+            <FeatureCard icon={<Shield className="w-7 h-7" />} title="100% Free" desc="No registration, no hidden costs" />
+            <FeatureCard icon={<TrendingUp className="w-7 h-7" />} title="Daily Updates" desc="Fresh content every single day" />
+          </div>
+        </div>
+      </section>
+
+      {/* How It Works */}
+      <section className="max-w-7xl mx-auto px-4 py-16">
+        <div className="text-center mb-10">
+          <h2 className="text-2xl font-display font-bold mb-2">How It Works</h2>
+          <p className="text-gray-500 dark:text-gray-400">Getting started is simple</p>
+        </div>
+        <div className="grid md:grid-cols-4 gap-8 max-w-4xl mx-auto">
+          <StepCard num={1} title="Explore" desc="Browse blogs, tools, games, news, horoscopes, and more" />
+          <StepCard num={2} title="Discover" desc="Find exactly what you need — all in one place, for free" />
+          <StepCard num={3} title="Engage" desc="Comment, share, and connect with our community" />
+          <StepCard num={4} title="Return" desc="Come back daily for fresh content and new tools" />
+        </div>
+      </section>
+
       {/* Categories Grid */}
-      <section className="max-w-7xl mx-auto px-4 -mt-8 relative z-10">
+      <section className="max-w-7xl mx-auto px-4">
         <div className="bg-white dark:bg-dark-card rounded-2xl shadow-xl border border-gray-200 dark:border-dark-border p-6">
           <h2 className="text-xl font-display font-bold mb-4">Browse by Category</h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-3">
@@ -156,7 +211,7 @@ export default async function HomePage() {
       {/* Featured Posts */}
       <section className="max-w-7xl mx-auto px-4 py-12">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-display font-bold">🔥 Featured Posts</h2>
+          <h2 className="text-2xl font-display font-bold">Featured Posts</h2>
           <Link href="/blog" className="text-primary-600 hover:text-primary-700 font-medium text-sm flex items-center gap-1">
             View All <ArrowRight className="w-4 h-4" />
           </Link>
@@ -223,7 +278,7 @@ export default async function HomePage() {
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Trending */}
           <div className="lg:col-span-2">
-            <h2 className="text-2xl font-display font-bold mb-6">📈 Trending Now</h2>
+            <h2 className="text-2xl font-display font-bold mb-6">Trending Now</h2>
             <div className="space-y-4">
               {trendingPosts.map((post, idx) => (
                 <article key={post.id} className="card p-4 flex gap-4 group">
@@ -252,7 +307,7 @@ export default async function HomePage() {
           <aside className="space-y-6">
             {/* Popular Games */}
             <div className="card p-5">
-              <h3 className="font-display font-bold text-lg mb-4">🎮 Popular Games</h3>
+              <h3 className="font-display font-bold text-lg mb-4">Popular Games</h3>
               <div className="space-y-3">
                 {games.map((game) => (
                   <Link key={game.id} href={`/games/${game.slug}`} className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-dark-bg transition-colors group">
@@ -275,7 +330,7 @@ export default async function HomePage() {
 
             {/* Latest News Ticker */}
             <div className="card p-5">
-              <h3 className="font-display font-bold text-lg mb-4">📰 Latest News</h3>
+              <h3 className="font-display font-bold text-lg mb-4">Latest News</h3>
               <div className="space-y-3">
                 {news.map((item) => (
                   <Link key={item.id} href={`/news/${item.slug}`} className="block group">
@@ -283,7 +338,7 @@ export default async function HomePage() {
                       {item.title}
                     </p>
                     <div className="flex items-center gap-2 mt-1 text-xs text-gray-500">
-                      <span className="px-1.5 py-0.5 bg-gray-100 dark:bg-dark-bg rounded text-xs">{item.source}</span>
+                      <span className="px-1.5 py-0.5 bg-gray-100 dark:bg-dark-bg rounded text-xs">{item.category?.name}</span>
                       <span>{formatDate(new Date(item.publishedAt))}</span>
                     </div>
                   </Link>
@@ -296,7 +351,7 @@ export default async function HomePage() {
 
             {/* Newsletter Card */}
             <div className="card p-5 bg-gradient-to-br from-primary-500 to-primary-700 text-white">
-              <h3 className="font-display font-bold text-lg mb-2">📧 Newsletter</h3>
+              <h3 className="font-display font-bold text-lg mb-2">Newsletter</h3>
               <p className="text-primary-100 text-sm mb-4">Get weekly updates with the best content.</p>
               <input
                 type="email"
@@ -327,7 +382,7 @@ export default async function HomePage() {
               target: { '@type': 'EntryPoint', urlTemplate: 'https://blogghar.com/search?q={search_term_string}' },
               'query-input': 'required name=search_term_string',
             },
-            publisher: { '@type': 'Organization', name: 'Blog-Ghar', url: 'https://blogghar.com' },
+            publisher: { '@type': 'Organization', name: 'Blog-Ghar', url: 'https://blogghar.com', logo: { '@type': 'ImageObject', url: 'https://blogghar.com/logo.svg' } },
             inLanguage: 'en-IN',
           }),
         }}
@@ -347,4 +402,3 @@ function QuickCard({ href, icon, title, subtitle, color }: { href: string; icon:
     </Link>
   );
 }
-
