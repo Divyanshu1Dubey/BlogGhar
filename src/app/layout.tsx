@@ -159,11 +159,9 @@ export default function RootLayout({
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="apple-touch-icon" href="/favicon.svg" />
         <link rel="canonical" href="https://blogghar.com" />
-        <meta property="og:image" content="https://blogghar.com/og-image.svg" />
-      <meta property="og:image:width" content="1200" />
-      <meta property="og:image:height" content="630" />
-      <meta property="og:image:type" content="image/svg+xml" />
-      <meta name="twitter:image" content="https://blogghar.com/og-image.svg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:type" content="image/svg+xml" />
       </head>
 
       <body className={`${inter.variable} ${poppins.variable} font-sans min-h-screen flex flex-col bg-white dark:bg-dark-bg text-gray-900 dark:text-gray-100`}>
