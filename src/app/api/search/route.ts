@@ -50,12 +50,19 @@ export async function GET(request: Request) {
 
     // Search news
     if (type === 'all' || type === 'news') {
-      const news = await prisma.newsArticle.findMany({
-        where: { title: { contains: query, mode: 'insensitive' } },
-        take: 3,
+      const news = await prisma.post.findMany({
+        where: {
+          postType: 'NEWS',
+          status: 'PUBLISHED',
+          OR: [
+            { title: { contains: query, mode: 'insensitive' } },
+            { content: { contains: query, mode: 'insensitive' } },
+          ],
+        },
+        take: 5,
       });
       news.forEach((n) => {
-        results.push({ type: 'news', title: n.title, slug: n.slug, description: n.summary || '', url: `/news/${n.slug}` });
+        results.push({ type: 'news', title: n.title, slug: n.slug, description: n.excerpt || '', url: `/news/${n.slug}` });
       });
     }
 

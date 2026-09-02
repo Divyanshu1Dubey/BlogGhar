@@ -36,9 +36,8 @@ export default async function GamePage({ params }: { params: GameParams }) {
 
   return (
     <>
-      <JsonLd data={{
+      <JsonLd type="VideoGame" data={{
         '@context': 'https://schema.org',
-        '@type': 'VideoGame',
         name: game.name,
         description: game.description,
         url: `https://blogghar.com/games/${game.slug}`,

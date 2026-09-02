@@ -4,6 +4,7 @@ import { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Contact Us',
   description: 'Get in touch with Blog-Ghar - We are here to help with any questions, feedback, or partnerships.',
+  alternates: { canonical: 'https://blogghar.com/contact' },
 };
 
 export default function ContactPage() {

@@ -3,14 +3,17 @@ import Link from 'next/link';
 import { Briefcase, MapPin, DollarSign, ExternalLink } from 'lucide-react';
 import { formatDate } from '@/lib/utils';
 import { Metadata } from 'next';
-
-export const metadata: Metadata = {
-  title: 'Job Board',
-  description: 'Find your next career opportunity. Browse latest job listings across tech, design, marketing, and more on Blog-Ghar.',
-  openGraph: { title: 'Job Board', description: 'Find your next career opportunity. Browse latest job listings.', type: 'website' },
-};
+import { JsonLd } from '@/components/seo/json-ld';
 
 export const dynamic = 'force-dynamic';
+
+export async function generateMetadata() {
+  return {
+    title: 'Job Board',
+    description: 'Find your next career opportunity. Browse latest job listings across tech, design, marketing, and more on Blog-Ghar.',
+    alternates: { canonical: 'https://blogghar.com/jobs' },
+  };
+}
 
 export default async function JobsPage() {
   let jobs: any[] = [];
@@ -22,8 +25,29 @@ export default async function JobsPage() {
     });
   } catch {}
 
+  const jobSchema = jobs.length > 0 ? {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    numberOfItems: jobs.length,
+    itemListElement: jobs.map((job, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      url: `https://blogghar.com/jobs/${job.id}`,
+      name: `${job.title} at ${job.company}`,
+    })),
+  } : null;
+
   return (
     <div className="max-w-5xl mx-auto px-4 py-8">
+      <JsonLd type="BreadcrumbList" data={{
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://blogghar.com' },
+          { '@type': 'ListItem', position: 2, name: 'Jobs', item: 'https://blogghar.com/jobs' },
+        ],
+      }} />
+      {jobSchema && <JsonLd type="ItemList" data={jobSchema} />}
       {/* Header */}
       <div className="text-center mb-10">
         <h1 className="text-4xl font-display font-extrabold mb-3">💼 Job Board</h1>

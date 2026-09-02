@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic';
 export default async function AdminNewsPage() {
   let posts: any[] = [];
   try {
-    posts = await prisma.post.findMany({ where: { postType: 'NEWS' }, orderBy: { createdAt: 'desc' }, take: 50, include: { user: { select: { name: true } } } });
+    posts = await prisma.post.findMany({ where: { postType: 'NEWS' }, orderBy: { createdAt: 'desc' }, take: 50, include: { author: { select: { name: true } } } });
   } catch {}
 
   return (
@@ -18,7 +18,7 @@ export default async function AdminNewsPage() {
             <thead><tr className="bg-gray-50 dark:bg-dark-bg"><th className="text-left p-3">Title</th><th className="text-left p-3">Author</th><th className="text-left p-3">Status</th><th className="text-left p-3">Views</th></tr></thead>
             <tbody>{posts.map((p: any) => (
               <tr key={p.id} className="border-t border-gray-100 dark:border-dark-border">
-                <td className="p-3">{p.title}</td><td className="p-3">{p.user?.name}</td>
+                <td className="p-3">{p.title}</td><td className="p-3">{p.author?.name}</td>
                 <td className="p-3"><span className={`px-2 py-0.5 rounded-full text-xs ${p.status === 'PUBLISHED' ? 'bg-green-100 text-green-700' : 'bg-gray-100'}`}>{p.status}</span></td>
                 <td className="p-3">{p.views}</td>
               </tr>

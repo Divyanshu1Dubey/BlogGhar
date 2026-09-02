@@ -1,26 +1,47 @@
 import prisma from '@/lib/prisma';
 import Link from 'next/link';
 import { Trophy, Play } from 'lucide-react';
-import { Metadata } from 'next';
+import { JsonLd } from '@/components/seo/json-ld';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata: Metadata = {
-  title: 'Free Online Games',
-  description: 'Play free online mini-games, puzzles, quizzes, and arcade games on Blog-Ghar. Compete on leaderboards!',
-  openGraph: { title: 'Free Online Games', description: 'Play free online mini-games, puzzles, quizzes, and arcade games.', type: 'website' },
-};
+export async function generateMetadata() {
+  return {
+    title: 'Free Online Games',
+    description: 'Play free online mini-games, puzzles, quizzes, and arcade games on Blog-Ghar. Compete on leaderboards!',
+    alternates: { canonical: 'https://blogghar.com/games' },
+  };
+}
 
 export default async function GamesPage() {
   let games: any[] = [];
   try {
-    games = await prisma.game.findMany({ orderBy: { playCount: 'desc' } });
+    games = await prisma.game.findMany({ orderBy: { createdAt: 'desc' } });
   } catch {}
 
   const featured = games[0];
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
+      <JsonLd type="BreadcrumbList" data={{
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://blogghar.com' },
+          { '@type': 'ListItem', position: 2, name: 'Games', item: 'https://blogghar.com/games' },
+        ],
+      }} />
+      {games.length > 0 && <JsonLd type="ItemList" data={{
+        '@context': 'https://schema.org',
+        '@type': 'ItemList',
+        numberOfItems: games.length,
+        itemListElement: games.slice(0, 10).map((game, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          url: `https://blogghar.com/games/${game.slug}`,
+          name: game.name,
+        })),
+      }} />}
       <div className="text-center mb-10">
         <h1 className="text-4xl font-display font-extrabold mb-3">🎮 Games Arcade</h1>
         <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
@@ -64,7 +85,7 @@ export default async function GamesPage() {
               <p className="text-xs text-gray-500 mt-1">{game.description}</p>
               <div className="flex items-center justify-between mt-3 text-xs text-gray-400">
                 <span className="px-2 py-0.5 rounded-full bg-gray-100 dark:bg-dark-bg">{game.category}</span>
-                <span>{game.playCount} plays</span>
+                <span className="flex items-center gap-1"><Trophy className="w-3 h-3 text-yellow-500" /> Score</span>
               </div>
             </Link>
           ))}

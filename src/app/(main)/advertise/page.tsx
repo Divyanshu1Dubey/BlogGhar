@@ -5,6 +5,7 @@ import { AdSlot } from '@/components/ads/ad-slot';
 export const metadata: Metadata = {
   title: 'Advertise With Us | Blog-Ghar',
   description: 'Reach thousands of daily readers on Blog-Ghar. Advertise your brand, product, or service with our affordable ad packages.',
+  alternates: { canonical: 'https://blogghar.com/advertise' },
 };
 
 export default function AdvertisePage() {

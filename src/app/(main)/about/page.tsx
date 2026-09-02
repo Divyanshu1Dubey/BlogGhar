@@ -3,7 +3,8 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'About Blog-Ghar',
-  description: 'Learn about Blog-Ghar — your one-stop destination for blogs, games, news, online tools, horoscopes, and more.',
+  description: 'Learn about Blog-Ghar - your one-stop destination for blogs, games, news, online tools, horoscopes, and more.',
+  alternates: { canonical: 'https://blogghar.com/about' },
 };
 
 export default function AboutPage() {

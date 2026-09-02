@@ -1,39 +1,37 @@
 import prisma from '@/lib/prisma';
-import { cookies } from 'next/headers';
+import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { formatDate } from '@/lib/utils';
 import Link from 'next/link';
 import { Bookmark, Gamepad2, MessageSquare, Trophy, User } from 'lucide-react';
-import { Metadata } from 'next';
 
-export const metadata: Metadata = {
-  title: 'My Profile',
-  description: 'Manage your Blog-Ghar profile, bookmarks, and preferences.',
-  robots: { index: false, follow: false },
-};
+export const dynamic = 'force-dynamic';
+
+export async function generateMetadata() {
+  return {
+    title: 'My Profile',
+    description: 'Manage your Blog-Ghar profile, bookmarks, and preferences.',
+    robots: { index: false, follow: false },
+  };
+}
 
 interface Props {
   searchParams: Promise<{ tab?: string }>;
 }
 
-export const dynamic = 'force-dynamic';
-
 export default async function ProfilePage({ searchParams }: Props) {
   const params = await searchParams;
   const activeTab = params.tab || 'saved';
 
-  // Get session from cookies
-  const cookieStore = await cookies();
-  const sessionToken = cookieStore.get('authjs.session-token')?.value;
-
-  if (!sessionToken) {
+  const session = await auth();
+  if (!session?.user?.id) {
     redirect('/login');
   }
 
   let user: any;
   try {
-    // This is a simplified version - in production you'd properly decode the session
-    user = await prisma.user.findFirst({
+    user = await prisma.user.findUnique({
+      where: { id: session.user.id },
       include: {
         _count: { select: { posts: true, comments: true, gameScores: true, bookmarks: true } },
       },
@@ -41,6 +39,8 @@ export default async function ProfilePage({ searchParams }: Props) {
   } catch {
     redirect('/login');
   }
+
+  if (!user) redirect('/login');
 
   const tabs = [
     { id: 'saved', label: 'Saved', icon: <Bookmark className="w-4 h-4" /> },

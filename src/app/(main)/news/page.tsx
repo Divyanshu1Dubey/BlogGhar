@@ -2,14 +2,17 @@ import prisma from '@/lib/prisma';
 import Link from 'next/link';
 import { formatDate } from '@/lib/utils';
 import { Metadata } from 'next';
-
-export const metadata: Metadata = {
-  title: 'Latest News',
-  description: 'Stay updated with the latest news and trending stories from around the world on Blog-Ghar.',
-  openGraph: { title: 'Latest News', description: 'Stay updated with the latest news and trending stories from around the world.', type: 'website' },
-};
+import { JsonLd } from '@/components/seo/json-ld';
 
 export const dynamic = 'force-dynamic';
+
+export async function generateMetadata() {
+  return {
+    title: 'Latest News',
+    description: 'Stay updated with the latest news and trending stories from around the world on Blog-Ghar.',
+    alternates: { canonical: 'https://blogghar.com/news' },
+  };
+}
 
 export default async function NewsPage() {
   let news: any[] = [];
@@ -24,8 +27,29 @@ export default async function NewsPage() {
 
   const trending = news.slice(0, 5);
 
+  const newsSchema = news.length > 0 ? {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    numberOfItems: news.length,
+    itemListElement: news.map((post, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      url: `https://blogghar.com/news/${post.slug}`,
+      name: post.title,
+    })),
+  } : null;
+
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
+      <JsonLd type="BreadcrumbList" data={{
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://blogghar.com' },
+          { '@type': 'ListItem', position: 2, name: 'News', item: 'https://blogghar.com/news' },
+        ],
+      }} />
+      {newsSchema && <JsonLd type="ItemList" data={newsSchema} />}
       <div className="text-center mb-10">
         <h1 className="text-4xl font-display font-extrabold mb-3">📰 Latest News</h1>
         <p className="text-gray-600 dark:text-gray-400">Stay updated with the latest news from around the world</p>
@@ -39,7 +63,7 @@ export default async function NewsPage() {
             {trending.map((post, idx) => (
               <Link key={post.id} href={`/news/${post.slug}`} className={`card overflow-hidden group ${idx === 0 ? 'md:col-span-2 md:row-span-2' : ''}`}>
                 <div className={`bg-gray-200 dark:bg-dark-bg ${idx === 0 ? 'aspect-video' : 'aspect-square'}`}>
-                  {post.coverImage && <img src={post.coverImage} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />}
+                  {post.featuredImage && <img src={post.featuredImage} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />}
                 </div>
                 <div className="p-4">
                   <h3 className="font-bold group-hover:text-primary-600 line-clamp-2">{post.title}</h3>
@@ -61,7 +85,7 @@ export default async function NewsPage() {
             {news.map((post) => (
               <Link key={post.id} href={`/news/${post.slug}`} className="card overflow-hidden group">
                 <div className="aspect-video bg-gray-200 dark:bg-dark-bg">
-                  {post.coverImage && <img src={post.coverImage} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />}
+                  {post.featuredImage && <img src={post.featuredImage} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />}
                 </div>
                 <div className="p-5">
                   <h3 className="font-bold group-hover:text-primary-600 line-clamp-2 mb-2">{post.title}</h3>

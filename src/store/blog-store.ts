@@ -7,7 +7,7 @@ export interface Post {
   slug: string;
   excerpt?: string;
   content: string;
-  coverImage?: string;
+  featuredImage?: string;
   categoryId?: string;
   categoryName?: string;
   authorId: string;

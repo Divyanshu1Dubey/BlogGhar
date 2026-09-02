@@ -71,7 +71,6 @@ export interface Game {
   icon: string | null;
   instructions: string | null;
   isActive: boolean;
-  playCount: number;
   _count: { scores: number };
 }
 
@@ -91,7 +90,7 @@ export interface NewsArticle {
   id: string;
   title: string;
   content: string;
-  summary: string | null;
+  excerpt: string | null;
   imageUrl: string | null;
   source: string;
   sourceUrl: string | null;

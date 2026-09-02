@@ -69,7 +69,7 @@ async function getGames() {
     return await prisma.game.findMany({
       where: { isActive: true },
       take: 6,
-      orderBy: { playCount: 'desc' },
+      orderBy: { createdAt: 'desc' },
     });
   } catch {
     return [];
@@ -318,7 +318,7 @@ export default async function HomePage() {
                       <p className="font-medium text-sm group-hover:text-primary-600 transition-colors truncate">
                         {game.name}
                       </p>
-                      <p className="text-xs text-gray-500">{game.playCount.toLocaleString()} plays</p>
+                      <p className="text-xs text-gray-500">Play now</p>
                     </div>
                   </Link>
                 ))}

@@ -303,6 +303,7 @@ model ForumPost {
   views     Int      @default(0)
   isPinned  Boolean  @default(false)
   isLocked  Boolean  @default(false)
+  parentId  String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -310,6 +311,9 @@ model ForumPost {
   user   User   @relation(fields: [userId], references: [id])
   forumId String
   forum   Forum @relation(fields: [forumId], references: [id], onDelete: Cascade)
+
+  parent   ForumPost? @relation("ForumPostReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies  ForumPost[] @relation("ForumPostReplies")
 
   @@map("forum_posts")
 }

@@ -4,7 +4,15 @@ import Link from 'next/link';
 export const dynamic = 'force-dynamic';
 
 export default async function AdminDashboard() {
-  let stats: { totalPosts: number; totalUsers: number; totalViews: number; totalComments: number } | null = null;
+  let stats: {
+    posts: number;
+    users: number;
+    games: number;
+    tools: number;
+    comments: number;
+    subscribers: number;
+    views: { _sum: { views: number | null } } | null;
+  } | null = null;
   try {
     stats = {
       posts: await prisma.post.count(),
@@ -40,18 +48,18 @@ export default async function AdminDashboard() {
           {/* Stats */}
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             {[
-              { label: 'Posts', value: stats.posts, icon: '📝', color: 'bg-blue-500' },
-              { label: 'Users', value: stats.users, icon: '👥', color: 'bg-green-500' },
-              { label: 'Games', value: stats.games, icon: '🎮', color: 'bg-purple-500' },
-              { label: 'Tools', value: stats.tools, icon: '🔧', color: 'bg-yellow-500' },
-              { label: 'Comments', value: stats.comments, icon: '💬', color: 'bg-pink-500' },
-              { label: 'Subscribers', value: stats.subscribers, icon: '📧', color: 'bg-orange-500' },
-              { label: 'Views', value: stats.views._sum.views, icon: '👁️', color: 'bg-indigo-500' },
+              { label: 'Posts', value: (stats?.posts ?? 0).toLocaleString(), icon: '📝', color: 'bg-blue-500' },
+              { label: 'Users', value: (stats?.users ?? 0).toLocaleString(), icon: '👥', color: 'bg-green-500' },
+              { label: 'Games', value: (stats?.games ?? 0).toLocaleString(), icon: '🎮', color: 'bg-purple-500' },
+              { label: 'Tools', value: (stats?.tools ?? 0).toLocaleString(), icon: '🔧', color: 'bg-yellow-500' },
+              { label: 'Comments', value: (stats?.comments ?? 0).toLocaleString(), icon: '💬', color: 'bg-pink-500' },
+              { label: 'Subscribers', value: (stats?.subscribers ?? 0).toLocaleString(), icon: '📧', color: 'bg-orange-500' },
+              { label: 'Views', value: (stats?.views?._sum?.views ?? 0).toLocaleString(), icon: '👁️', color: 'bg-indigo-500' },
             ].map((s) => (
               <div key={s.label} className="bg-white dark:bg-dark-card rounded-xl p-6 shadow-sm border border-gray-200 dark:border-dark-border">
                 <div className="flex items-center gap-3">
                   <div className={`w-10 h-10 ${s.color} rounded-lg flex items-center justify-center text-white text-xl`}>{s.icon}</div>
-                  <div><p className="text-sm text-gray-500">{s.label}</p><p className="text-2xl font-bold">{s.value.toLocaleString()}</p></div>
+                  <div><p className="text-sm text-gray-500">{s.label}</p><p className="text-2xl font-bold">{s.value}</p></div>
                 </div>
               </div>
             ))}

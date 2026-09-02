@@ -46,7 +46,6 @@ export default async function ForumCategoryPage({ params }: Props) {
     where: { slug },
     include: {
       posts: {
-        where: { parentId: null },
         orderBy: [{ isPinned: 'desc' }, { createdAt: 'desc' }],
         include: { user: { select: { name: true, image: true } } },
       },

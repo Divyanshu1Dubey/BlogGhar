@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
+import prisma from '@/lib/prisma';
+import { auth } from '@/lib/auth';
 
 export async function POST(request: Request) {
   try {
@@ -9,19 +10,25 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Email is required' }, { status: 400 });
     }
 
-    const existing = await prisma.subscriber.findUnique({ where: { email } });
-    if (existing?.unsubscribedAt) {
-      return NextResponse.json({ error: 'This email was previously unsubscribed' }, { status: 400 });
-    }
-    if (existing) {
+    const existing = await prisma.newsletterSubscriber.findUnique({ where: { email } });
+    if (existing?.isVerified) {
       return NextResponse.json({ error: 'Already subscribed!' }, { status: 400 });
     }
 
-    const token = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    const token = crypto.randomUUID();
 
-    await prisma.subscriber.create({
-      data: { email, name, token },
-    });
+    if (existing) {
+      await prisma.newsletterSubscriber.update({
+        where: { email },
+        data: { isVerified: true, subscribedAt: new Date() },
+      });
+    } else {
+      const session = await auth();
+      const userId = session?.user?.id || null;
+      await prisma.newsletterSubscriber.create({
+        data: { email, name: name || null, isVerified: true, userId },
+      });
+    }
 
     return NextResponse.json({ success: true, message: 'Subscribed successfully!' }, { status: 201 });
   } catch {

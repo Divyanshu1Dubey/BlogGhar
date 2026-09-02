@@ -16,7 +16,7 @@ export const postSchema = z.object({
   slug: z.string().min(1, "Slug is required"),
   excerpt: z.string().optional(),
   content: z.string().min(1, "Content is required"),
-  coverImage: z.string().url().optional().or(z.literal("")),
+  featuredImage: z.string().url().optional().or(z.literal("")),
   categoryId: z.string().optional(),
   published: z.boolean().default(false),
   tags: z.array(z.string()).optional(),

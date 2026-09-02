@@ -4,7 +4,7 @@ export const dynamic = 'force-dynamic';
 
 export default async function AdminToolsPage() {
   let tools: any[] = [];
-  try { tools = await prisma.tool.findMany({ orderBy: { usageCount: 'desc' } }); }
+  try { tools = await prisma.tool.findMany({ orderBy: { createdAt: 'desc' } }); }
   catch {}
 
   return (
@@ -14,10 +14,10 @@ export default async function AdminToolsPage() {
         <h1 className="text-3xl font-extrabold mb-6">Tools</h1>
         <div className="card overflow-hidden">
           <table className="w-full text-sm">
-            <thead><tr className="bg-gray-50 dark:bg-dark-bg"><th className="text-left p-3">Name</th><th className="text-left p-3">Category</th><th className="text-left p-3">Usage</th></tr></thead>
+            <thead><tr className="bg-gray-50 dark:bg-dark-bg"><th className="text-left p-3">Name</th><th className="text-left p-3">Category</th><th className="text-left p-3">Active</th></tr></thead>
             <tbody>{tools.map((t: any) => (
               <tr key={t.id} className="border-t border-gray-100 dark:border-dark-border">
-                <td className="p-3">{t.name}</td><td className="p-3">{t.category}</td><td className="p-3">{t.usageCount}</td>
+                <td className="p-3">{t.name}</td><td className="p-3">{t.category}</td><td className="p-3">{t.isActive ? 'Yes' : 'No'}</td>
               </tr>
             ))}</tbody>
           </table>

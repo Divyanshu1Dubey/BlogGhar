@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Download, Heart, Search, Grid, List } from 'lucide-react';
+import { Download, Search, Grid, List } from 'lucide-react';
 
 const wallpapers = [
   { id: '1', title: 'Mountain Sunrise', category: 'Nature', url: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800' },

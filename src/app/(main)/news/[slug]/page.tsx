@@ -12,7 +12,7 @@ export async function generateMetadata({ params }: { params: NewsParams }) {
     const { slug } = await params;
     const post = await prisma.post.findUnique({ where: { slug } });
     if (!post) return {};
-    const authorName = post.user?.name || 'Blog-Ghar';
+    const authorName = post.author?.name || 'Blog-Ghar';
     return {
       title: `${post.title} | Blog-Ghar News`,
       description: post.excerpt || post.content?.replace(/<[^>]*>/g, '').slice(0, 160) || '',
@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: { params: NewsParams }) {
         type: 'article',
         publishedTime: post.publishedAt?.toISOString(),
         authors: [authorName],
-        images: post.coverImage ? [post.coverImage] : undefined,
+        images: post.featuredImage ? [post.featuredImage] : undefined,
       },
       twitter: { card: 'summary_large_image', title: post.title, description: post.excerpt || '' },
       alternates: { canonical: `https://blogghar.com/news/${post.slug}` },
@@ -36,14 +36,14 @@ export default async function NewsDetailPage({ params }: { params: NewsParams })
   try {
     post = await prisma.post.findUnique({
       where: { slug },
-      include: { user: { select: { name: true } }, category: { select: { name: true, slug: true } } },
+      include: { author: { select: { name: true } }, category: { select: { name: true, slug: true } } },
     });
   } catch { post = null; }
   if (!post) notFound();
 
   try { await prisma.post.update({ where: { id: post.id }, data: { views: { increment: 1 } } }); } catch {}
 
-  const authorName = post.user?.name || 'Blog-Ghar';
+  const authorName = post.author?.name || 'Blog-Ghar';
   const contentText = post.content?.replace(/<[^>]*>/g, '') || '';
   const wordCount = contentText.split(/\s+/).filter(Boolean).length;
   const newsSchema = {
@@ -51,14 +51,14 @@ export default async function NewsDetailPage({ params }: { params: NewsParams })
     '@type': 'NewsArticle',
     headline: post.title,
     description: post.excerpt || contentText.slice(0, 160),
-    datePublished: post.publishedAt?.toISOString() || post.createdAt.toISOString(),
-    dateModified: post.publishedAt?.toISOString() || post.createdAt.toISOString(),
+    datePublished: post.publishedAt?.toISOString() || post.createdAt?.toISOString() || new Date().toISOString(),
+    dateModified: post.publishedAt?.toISOString() || post.createdAt?.toISOString() || new Date().toISOString(),
     author: { '@type': 'Person', name: authorName },
     publisher: { '@type': 'Organization', name: 'Blog-Ghar', url: 'https://blogghar.com' },
     mainEntityOfPage: { '@type': 'WebPage', '@id': `https://blogghar.com/news/${post.slug}` },
     articleSection: post.category?.name || 'General',
     wordCount,
-    image: post.coverImage || undefined,
+    image: post.featuredImage || undefined,
     url: `https://blogghar.com/news/${post.slug}`,
   };
 
@@ -74,8 +74,8 @@ export default async function NewsDetailPage({ params }: { params: NewsParams })
 
   return (
     <>
-      <JsonLd data={newsSchema} />
-      <JsonLd data={breadcrumbSchema} />
+      <JsonLd type="NewsArticle" data={newsSchema} />
+      <JsonLd type="BreadcrumbList" data={breadcrumbSchema} />
       <article className="max-w-3xl mx-auto px-4 py-8">
         <Link href="/news" className="flex items-center gap-2 text-sm text-gray-500 hover:text-primary-600 mb-6">
           <ArrowLeft className="w-4 h-4" /> Back to News

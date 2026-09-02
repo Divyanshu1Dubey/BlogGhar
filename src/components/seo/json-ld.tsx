@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 export interface JsonLdProps {
-  type: 'WebSite' | 'Article' | 'BreadcrumbList' | 'FAQPage' | 'Organization' | 'HowTo' | 'Product' | 'ItemList';
+  type: 'WebSite' | 'Article' | 'BreadcrumbList' | 'FAQPage' | 'Organization' | 'HowTo' | 'Product' | 'ItemList' | 'JobPosting' | 'NewsArticle' | 'DiscussionForumPosting' | 'VideoGame' | 'WebApplication' | 'Person';
   data: Record<string, any>;
 }
 
@@ -117,6 +117,31 @@ export function generateBreadcrumbSchema(items: { name: string; url: string }[])
       name: item.name,
       item: item.url,
     })),
+  };
+}
+
+export function generateJobPostingSchema(job: {
+  title: string;
+  company: string;
+  location: string;
+  type: string;
+  description: string;
+  url: string;
+  postedAt?: string;
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'JobPosting',
+    title: job.title,
+    hiringOrganization: {
+      '@type': 'Organization',
+      name: job.company,
+    },
+    jobLocationType: job.location.toLowerCase().includes('remote') ? 'TELECOMMUTE' : 'ONSITE',
+    employmentType: job.type.toUpperCase(),
+    description: job.description,
+    datePosted: job.postedAt || new Date().toISOString(),
+    url: job.url,
   };
 }
 

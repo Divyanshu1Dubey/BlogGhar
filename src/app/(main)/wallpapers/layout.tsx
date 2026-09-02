@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'HD Wallpapers - Free Download',
-  description: 'Download stunning HD wallpapers for phone, tablet, and desktop. Free high-resolution backgrounds in Nature, City, Space, Abstract categories.',
-  openGraph: { title: 'HD Wallpapers - Free Download', description: 'Free HD wallpapers for all devices.', type: 'website' },
+  title: 'HD Wallpapers - Free Download | Blog-Ghar',
+  description: 'Download stunning HD wallpapers for your phone, tablet, and desktop. Free high-quality wallpapers in Nature, City, Space, Abstract categories.',
+  alternates: { canonical: 'https://blogghar.com/wallpapers' },
 };
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function WallpapersLayout({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }

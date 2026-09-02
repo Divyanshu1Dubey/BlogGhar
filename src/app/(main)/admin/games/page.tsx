@@ -4,7 +4,7 @@ export const dynamic = 'force-dynamic';
 
 export default async function AdminGamesPage() {
   let games: any[] = [];
-  try { games = await prisma.game.findMany({ orderBy: { playCount: 'desc' } }); }
+  try { games = await prisma.game.findMany({ orderBy: { createdAt: 'desc' } }); }
   catch {}
 
   return (
@@ -14,10 +14,10 @@ export default async function AdminGamesPage() {
         <h1 className="text-3xl font-extrabold mb-6">Games</h1>
         <div className="card overflow-hidden">
           <table className="w-full text-sm">
-            <thead><tr className="bg-gray-50 dark:bg-dark-bg"><th className="text-left p-3">Icon</th><th className="text-left p-3">Name</th><th className="text-left p-3">Category</th><th className="text-left p-3">Plays</th><th className="text-left p-3">Actions</th></tr></thead>
+            <thead><tr className="bg-gray-50 dark:bg-dark-bg"><th className="text-left p-3">Icon</th><th className="text-left p-3">Name</th><th className="text-left p-3">Category</th><th className="text-left p-3">Active</th><th className="text-left p-3">Actions</th></tr></thead>
             <tbody>{games.map((g: any) => (
               <tr key={g.id} className="border-t border-gray-100 dark:border-dark-border">
-                <td className="p-3 text-2xl">{g.icon}</td><td className="p-3">{g.name}</td><td className="p-3">{g.category}</td><td className="p-3">{g.playCount}</td>
+                <td className="p-3 text-2xl">{g.icon}</td><td className="p-3">{g.name}</td><td className="p-3">{g.category}</td><td className="p-3">{g.isActive ? 'Yes' : 'No'}</td>
                 <td className="p-3"><a href={`/games/${g.slug}`} className="text-primary-600 text-xs">View</a></td>
               </tr>
             ))}</tbody>

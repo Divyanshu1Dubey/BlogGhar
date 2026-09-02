@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: { params: BlogParams }) {
     const { slug } = await params;
     const post = await prisma.post.findUnique({
       where: { slug },
-      include: { user: { select: { name: true } }, category: { select: { name: true } } },
+      include: { author: { select: { name: true } }, category: { select: { name: true } } },
     });
     if (!post) return {};
 
@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: { params: BlogParams }) {
       title: post.seoTitle || post.title,
       description,
       keywords: post.focusKeyword ? [post.focusKeyword, 'blog', 'blog-ghar'] : undefined,
-      authors: [{ name: post.user.name || 'Blog-Ghar' }],
+      authors: [{ name: post.author.name || 'Blog-Ghar' }],
       alternates: { canonical },
       openGraph: {
         type: 'article',
@@ -36,7 +36,7 @@ export async function generateMetadata({ params }: { params: BlogParams }) {
         images: [{ url: ogImage, width: 1200, height: 630, alt: post.title }],
         publishedTime: post.publishedAt?.toISOString(),
         modifiedTime: post.updatedAt?.toISOString(),
-        authors: [post.user.name || 'Blog-Ghar'],
+        authors: [post.author.name || 'Blog-Ghar'],
         section: post.category?.name,
         tags: post.focusKeyword ? [post.focusKeyword] : undefined,
       },
@@ -59,7 +59,7 @@ export default async function BlogPostPage({ params }: { params: BlogParams }) {
     post = await prisma.post.findUnique({
       where: { slug },
       include: {
-        user: { select: { name: true, image: true } },
+        author: { select: { name: true, image: true } },
         category: { select: { name: true, slug: true } },
         tags: { include: { tag: true } },
         _count: { select: { comments: true } },
@@ -93,7 +93,7 @@ export default async function BlogPostPage({ params }: { params: BlogParams }) {
     dateModified: post.updatedAt?.toISOString() || post.createdAt?.toISOString(),
     author: {
       '@type': 'Person',
-      name: post.user.name || 'Blog-Ghar',
+      name: post.author.name || 'Blog-Ghar',
     },
     publisher: {
       '@type': 'Organization',
@@ -153,9 +153,9 @@ export default async function BlogPostPage({ params }: { params: BlogParams }) {
         {post.excerpt && <p className="text-lg text-gray-600 dark:text-gray-400 mb-6">{post.excerpt}</p>}
         <div className="flex items-center justify-between text-sm text-gray-500 pb-6 border-b border-gray-200 dark:border-dark-border">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center font-medium">{post.user.name?.charAt(0).toUpperCase()}</div>
+            <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center font-medium">{post.author.name?.charAt(0).toUpperCase()}</div>
             <div>
-              <p className="font-medium text-gray-900 dark:text-white">{post.user.name}</p>
+              <p className="font-medium text-gray-900 dark:text-white">{post.author.name}</p>
               <div className="flex items-center gap-2 text-xs">
                 <time dateTime={post.publishedAt?.toISOString()}>{formatDate(post.publishedAt || post.createdAt)}</time>
                 <span>•</span>
