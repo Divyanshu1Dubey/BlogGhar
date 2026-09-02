@@ -11,7 +11,7 @@ type JobParams = Promise<{ id: string }>;
 export async function generateMetadata({ params }: { params: JobParams }) {
   const { id } = await params;
   try {
-    const job = await prisma.jobListing.findUnique({ where: { id: parseInt(id) } });
+    const job = await prisma.jobListing.findUnique({ where: { id } });
     if (!job) return {};
     const url = `https://blogghar.com/jobs/${job.id}`;
     return {
@@ -29,7 +29,7 @@ export default async function JobDetailPage({ params }: { params: JobParams }) {
   let job;
   try {
     job = await prisma.jobListing.findUnique({
-      where: { id: parseInt(id) },
+      where: { id },
     });
   } catch {
     job = null;
@@ -67,7 +67,7 @@ export default async function JobDetailPage({ params }: { params: JobParams }) {
           title: job.title,
           company: job.company,
           location: job.location || 'Remote',
-          description: job.description,
+          type: (job as any).type || 'Full-time',
           description: job.description,
           url,
           postedAt: (job as any).postedAt || new Date().toISOString(),
@@ -137,6 +137,7 @@ export default async function JobDetailPage({ params }: { params: JobParams }) {
             </a>
           )}
         </div>
+        )}
       </div>
     </>
   );
