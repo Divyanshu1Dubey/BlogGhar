@@ -67,7 +67,7 @@ export default async function GamePage({ params }: { params: GameParams }) {
 
       <div className="card p-6 mt-6">
         <h3 className="font-display font-bold text-lg mb-3">📜 Instructions</h3>
-        <p className="text-gray-600 dark:text-gray-400">{game.instructions}</p>
+        <p className="text-gray-600 dark:text-gray-400">{game.description || 'Play this game and try to beat the high score!'}</p>
       </div>
 
       <div className="text-center py-6">

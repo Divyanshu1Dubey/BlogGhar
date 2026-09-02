@@ -35,7 +35,7 @@ export default async function TagPage({ params }: { params: TagParams }) {
           orderBy: { publishedAt: 'desc' },
           take: 20,
           include: {
-            user: { select: { name: true } },
+            author: { select: { name: true } },
             category: { select: { name: true, slug: true } },
           },
         },

@@ -2,7 +2,7 @@ import prisma from '@/lib/prisma';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { formatDate } from '@/lib/utils';
-import { ArrowLeft, MapPin, Briefcase, ExternalLink, Calendar } from 'lucide-react';
+import { ArrowLeft, MapPin, ExternalLink, Calendar } from 'lucide-react';
 import { JsonLd, generateJobPostingSchema } from '@/components/seo/json-ld';
 import { PageSeo } from '@/components/seo/page-seo';
 
@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: { params: JobParams }) {
     const url = `https://blogghar.com/jobs/${job.id}`;
     return {
       title: `${job.title} at ${job.company} | Blog-Ghar Jobs`,
-      description: `${job.title} ${job.location ? `- ${job.location}` : ''} ${job.type ? `(${job.type})` : ''}`,
+      description: `${job.title} ${job.location ? `- ${job.location}` : ''}`,
       alternates: { canonical: url },
     };
   } catch {
@@ -67,7 +67,7 @@ export default async function JobDetailPage({ params }: { params: JobParams }) {
           title: job.title,
           company: job.company,
           location: job.location || 'Remote',
-          type: job.type || 'Full-time',
+          description: job.description,
           description: job.description,
           url,
           postedAt: (job as any).postedAt || new Date().toISOString(),
@@ -79,6 +79,14 @@ export default async function JobDetailPage({ params }: { params: JobParams }) {
           <ArrowLeft className="w-4 h-4" /> Back to Jobs
         </Link>
 
+        {!job ? (
+          <div className="card p-12 text-center">
+            <p className="text-6xl mb-4">💼</p>
+            <h1 className="text-2xl font-display font-bold mb-2">Job Not Found</h1>
+            <p className="text-gray-500 mb-4">This job listing may have been removed or is no longer active.</p>
+            <Link href="/jobs" className="btn-primary">Browse All Jobs</Link>
+          </div>
+        ) : (
         <div className="card p-6 md:p-8">
           <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-6">
             <div>
@@ -86,14 +94,9 @@ export default async function JobDetailPage({ params }: { params: JobParams }) {
               <p className="text-lg text-primary-600 font-medium">{job.company}</p>
             </div>
             <div className="flex flex-wrap gap-2">
-              {job.isRemote && (
+              {job.salary && (
                 <span className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-sm font-medium rounded-full">
-                  Remote
-                </span>
-              )}
-              {job.type && (
-                <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-sm font-medium rounded-full">
-                  {job.type}
+                  {job.salary}
                 </span>
               )}
             </div>
@@ -103,11 +106,6 @@ export default async function JobDetailPage({ params }: { params: JobParams }) {
             {job.location && (
               <span className="flex items-center gap-1.5">
                 <MapPin className="w-4 h-4" /> {job.location}
-              </span>
-            )}
-            {job.type && (
-              <span className="flex items-center gap-1.5">
-                <Briefcase className="w-4 h-4" /> {job.type}
               </span>
             )}
             {job.salary && (

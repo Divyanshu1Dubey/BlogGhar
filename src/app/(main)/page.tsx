@@ -5,6 +5,7 @@ import { ArrowRight, Gamepad2, Calculator, Newspaper, Sparkles, Shield, Zap, Use
 import { formatDate } from '@/lib/utils';
 import prisma from '@/lib/prisma';
 import { AdSlot } from '@/components/ads/ad-slot';
+import NewsletterForm from '@/components/newsletter-form';
 
 export const dynamic = 'force-dynamic';
 export async function generateMetadata() {
@@ -353,14 +354,7 @@ export default async function HomePage() {
             <div className="card p-5 bg-gradient-to-br from-primary-500 to-primary-700 text-white">
               <h3 className="font-display font-bold text-lg mb-2">Newsletter</h3>
               <p className="text-primary-100 text-sm mb-4">Get weekly updates with the best content.</p>
-              <input
-                type="email"
-                placeholder="Your email"
-                className="w-full px-3 py-2 rounded-lg bg-white/20 text-white placeholder-primary-200 text-sm focus:outline-none focus:ring-2 focus:ring-white mb-2"
-              />
-              <button className="w-full bg-white text-primary-700 py-2 rounded-lg text-sm font-semibold hover:bg-primary-50 transition-colors">
-                Subscribe Free
-              </button>
+              <NewsletterForm variant="sidebar" />
             </div>
           </aside>
         </div>

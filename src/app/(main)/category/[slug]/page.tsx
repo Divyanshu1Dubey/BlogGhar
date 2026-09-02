@@ -36,7 +36,7 @@ export default async function CategoryPage({ params }: { params: CategoryParams 
           orderBy: { publishedAt: 'desc' },
           take: 20,
           include: {
-            user: { select: { name: true } },
+            author: { select: { name: true } },
             category: { select: { name: true, slug: true } },
           },
         },
