@@ -2,15 +2,8 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Metadata } from 'next';
 import { signIn } from 'next-auth/react';
 import { Eye, EyeOff } from 'lucide-react';
-
-export const metadata: Metadata = {
-  title: 'Sign In',
-  description: 'Sign in to your Blog-Ghar account.',
-  robots: { index: false, follow: false },
-};
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');

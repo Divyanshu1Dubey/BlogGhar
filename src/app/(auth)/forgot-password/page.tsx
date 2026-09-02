@@ -1,12 +1,8 @@
-import Link from 'next/link';
-import { Metadata } from 'next';
-import { ArrowLeft } from 'lucide-react';
+'use client';
 
-export const metadata: Metadata = {
-  title: 'Reset Password',
-  description: 'Reset your Blog-Ghar account password.',
-  robots: { index: false, follow: false },
-};
+import { useState } from 'react';
+import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
