@@ -1,14 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { Metadata } from 'next';
-
-export const metadata: Metadata = {
-  title: 'Free Online Tools',
-  description: '30+ free online tools including calculators, converters, and text tools. No registration required!',
-  openGraph: { title: 'Free Online Tools', description: '30+ free online tools including calculators, converters, and text tools.', type: 'website' },
-};
-
 const tools = [
   { name: 'BMI Calculator', slug: 'bmi-calculator', icon: '⚖️', desc: 'Calculate your Body Mass Index', route: '/tools/bmi-calculator' },
   { name: 'Age Calculator', slug: 'age-calculator', icon: '🎂', desc: 'Calculate exact age', route: '/tools/age-calculator' },

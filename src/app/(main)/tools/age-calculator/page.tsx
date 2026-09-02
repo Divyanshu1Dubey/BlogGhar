@@ -1,13 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import type { Metadata } from 'next';
-
-export const metadata: Metadata = {
-  title: 'Age Calculator',
-  description: 'Calculate your exact age in years, months, and days. Free online age calculator.',
-  openGraph: { title: 'Age Calculator', description: 'Calculate your exact age in years, months, and days.', type: 'website' },
-};
 
 export default function AgeCalculator() {
   const [birthDate, setBirthDate] = useState('');

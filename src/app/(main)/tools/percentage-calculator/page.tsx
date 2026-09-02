@@ -1,13 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import type { Metadata } from 'next';
-
-export const metadata: Metadata = {
-  title: 'Percentage Calculator',
-  description: 'Calculate percentages online free. Find percentage of a number, increase/decrease percentage, and more.',
-  openGraph: { title: 'Percentage Calculator', description: 'Calculate percentages online free.', type: 'website' },
-};
 
 export default function PercentageCalculator() {
   const [mode, setMode] = useState<'simple' | 'change' | 'increase'>('simple');

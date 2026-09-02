@@ -1,13 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import type { Metadata } from 'next';
-
-export const metadata: Metadata = {
-  title: 'Free Daily Horoscope - All Zodiac Signs',
-  description: 'Get your free daily, weekly, and monthly horoscope for all 12 zodiac signs. Love, career, health predictions and lucky numbers.',
-  openGraph: { title: 'Free Daily Horoscope', description: 'Daily horoscope readings for all zodiac signs.', type: 'website' },
-};
 
 const signs = [
   { name: 'Aries', icon: '♈', date: 'Mar 21 - Apr 19', color: 'from-red-400 to-orange-400' },
