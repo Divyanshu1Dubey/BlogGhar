@@ -1,6 +1,6 @@
 import prisma from '@/lib/prisma';
 import Link from 'next/link';
-import { Briefcase, MapPin, DollarSign, ExternalLink } from 'lucide-react';
+import { MapPin, DollarSign, ExternalLink } from 'lucide-react';
 import { formatDate } from '@/lib/utils';
 import { Metadata } from 'next';
 import { JsonLd } from '@/components/seo/json-ld';
@@ -76,11 +76,6 @@ export default async function JobsPage() {
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
                     <h3 className="font-display font-bold text-lg">{job.title}</h3>
-                    {job.isRemote && (
-                      <span className="px-2 py-0.5 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs font-medium rounded-full">
-                        Remote
-                      </span>
-                    )}
                   </div>
                   <p className="text-primary-600 font-medium text-sm mb-2">{job.company}</p>
                   <p className="text-gray-600 dark:text-gray-400 text-sm mb-3 line-clamp-2">{job.description}</p>

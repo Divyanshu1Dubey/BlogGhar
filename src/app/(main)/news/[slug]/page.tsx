@@ -5,6 +5,8 @@ import { formatDate, readingTime } from '@/lib/utils';
 import { ArrowLeft, Eye } from 'lucide-react';
 import { JsonLd } from '@/components/seo/json-ld';
 
+export const dynamic = 'force-dynamic';
+
 type NewsParams = Promise<{ slug: string }>;
 
 export async function generateMetadata({ params }: { params: NewsParams }) {

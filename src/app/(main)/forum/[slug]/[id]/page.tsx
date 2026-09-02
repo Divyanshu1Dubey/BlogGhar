@@ -5,6 +5,8 @@ import { ArrowLeft, Eye, MessageSquare } from 'lucide-react';
 import { formatDate } from '@/lib/utils';
 import { JsonLd } from '@/components/seo/json-ld';
 
+export const dynamic = 'force-dynamic';
+
 type PostParams = Promise<{ slug: string; id: string }>;
 
 export async function generateMetadata({ params }: { params: PostParams }) {

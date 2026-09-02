@@ -5,6 +5,8 @@ import { formatDate } from '@/lib/utils';
 import { Eye, Pin, Lock } from 'lucide-react';
 import { Metadata } from 'next';
 
+export const dynamic = 'force-dynamic';
+
 type ForumParams = Promise<{ slug: string }>;
 
 interface Props {
