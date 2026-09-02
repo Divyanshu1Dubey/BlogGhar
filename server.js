@@ -1,24 +1,27 @@
 // Railway entrypoint - starts Next.js standalone server
-const { exec } = require('child_process');
+// Note: next.config.ts uses output: 'standalone' so we must run the standalone bundle,
+// not `next start`. This file expects Railway to provide DATABASE_URL (and optionally
+// REDIS_URL) as environment variables - the PostgreSQL plugin auto-populates these.
 
-// Run any pending migrations
-const migrate = () => {
-  return new Promise((resolve) => {
-    exec('npx prisma migrate deploy', (err) => {
-      if (err) {
-        console.log('Migration deploy note:', err.message);
-      }
-      resolve(true);
-    });
-  });
-};
+const path = require('path');
+const { spawn } = require('child_process');
+const nextStandalone = path.join(process.cwd(), '.next', 'standalone', 'server.js');
 
-migrate().then(() => {
-  const port = process.env.PORT || 8080;
-  const args = ['start', '-p', String(port)];
-  const next = require.resolve('next/dist/bin/next');
-  require('child_process').spawnSync('node', [next, ...args], {
-    stdio: 'inherit',
-    cwd: process.cwd(),
-  });
+// Log startup info (helpful in Railway logs)
+console.log('[server.js] Starting Next.js standalone server...');
+console.log('[server.js] NODE_ENV:', process.env.NODE_ENV);
+console.log('[server.js] PORT:', process.env.PORT);
+console.log('[server.js] DATABASE_URL set:', !!process.env.DATABASE_URL);
+
+const child = spawn('node', [nextStandalone], {
+  stdio: 'inherit',
+  env: process.env,
 });
+
+child.on('exit', (code) => {
+  console.log(`[server.js] Next.js exited with code ${code}`);
+  process.exit(code ?? 0);
+});
+
+process.on('SIGTERM', () => child.kill('SIGTERM'));
+process.on('SIGINT', () => child.kill('SIGINT'));
