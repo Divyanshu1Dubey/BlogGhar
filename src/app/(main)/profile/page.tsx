@@ -266,7 +266,7 @@ export default async function ProfilePage({ searchParams }: Props) {
                       <div className="flex items-center gap-3 mt-1.5 text-xs text-gray-500">
                         {b.post.category && <span className="px-2 py-0.5 bg-gray-200 dark:bg-dark-border rounded-full">{b.post.category.name}</span>}
                         <span className="flex items-center gap-1"><Eye className="w-3 h-3" /> {b.post.views}</span>
-                        <span>{formatDate(b.post.publishedAt || b.createdAt)}</span>
+                        <span>{formatDate(b.post.publishedAt || new Date())}</span>
                       </div>
                     </div>
                     <form action="/api/bookmarks" method="POST">
