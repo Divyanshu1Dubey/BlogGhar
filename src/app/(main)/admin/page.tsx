@@ -1,5 +1,12 @@
+import type { Metadata } from 'next';
 import prisma from '@/lib/prisma';
 import Link from 'next/link';
+
+export const metadata: Metadata = {
+  title: 'Admin',
+  description: 'Admin dashboard',
+  robots: { index: false, follow: false },
+};
 
 export const dynamic = 'force-dynamic';
 

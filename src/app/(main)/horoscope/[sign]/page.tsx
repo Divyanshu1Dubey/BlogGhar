@@ -1,5 +1,6 @@
 import prisma from '@/lib/prisma';
 import { notFound } from 'next/navigation';
+import { JsonLd } from '@/components/seo/json-ld';
 
 type HoroscopeParams = Promise<{ sign: string }>;
 
@@ -83,6 +84,15 @@ export default async function HoroscopeSignPage({ params }: Props) {
           </div>
         </div>
       </div>
+
+      <JsonLd type="WebPage" data={{
+        '@context': 'https://schema.org',
+        '@type': 'WebPage',
+        name: `${signLower.charAt(0).toUpperCase() + signLower.slice(1)} Horoscope`,
+        description: `Daily ${signLower} horoscope with love, career, and health predictions.`,
+        url: `https://blogghar.com/horoscope/${signLower}`,
+        inLanguage: 'en-IN',
+      }} />
     </div>
   );
 }

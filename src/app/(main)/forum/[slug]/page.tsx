@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { formatDate } from '@/lib/utils';
 import { Eye, Pin, Lock } from 'lucide-react';
 import { Metadata } from 'next';
+import { JsonLd } from '@/components/seo/json-ld';
 
 export const dynamic = 'force-dynamic';
 
@@ -18,10 +19,12 @@ export async function generateMetadata({ params }: { params: ForumParams }): Pro
     const { slug } = await params;
     const forum = await prisma.forum.findUnique({ where: { slug }, select: { name: true, description: true } });
     if (!forum) return { title: 'Forum Not Found' };
+    const canonicalUrl = `https://blogghar.com/forum/${slug}`;
     return {
       title: `${forum.name} - Forum`,
       description: forum.description || `Join the ${forum.name} discussion on Blog-Ghar.`,
-      openGraph: { title: forum.name, description: forum.description || undefined, type: 'website' },
+      alternates: { canonical: canonicalUrl },
+      openGraph: { title: forum.name, description: forum.description || undefined, type: 'website', url: canonicalUrl },
     };
   } catch { return {}; }
 }
@@ -102,6 +105,15 @@ export default async function ForumCategoryPage({ params }: Props) {
           <p className="text-gray-500">No posts yet. Start the conversation!</p>
         </div>
       )}
+
+      <JsonLd type="DiscussionForumPosting" data={{
+        '@context': 'https://schema.org',
+        '@type': 'DiscussionForumPosting',
+        name: forum.name,
+        description: forum.description || undefined,
+        url: `https://blogghar.com/forum/${slug}`,
+        inLanguage: 'en-IN',
+      }} />
     </div>
   );
 }

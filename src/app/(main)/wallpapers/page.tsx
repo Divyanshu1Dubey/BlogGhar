@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import type { Metadata } from 'next';
+import { JsonLd } from '@/components/seo/json-ld';
 import { Download, Search, Grid, List } from 'lucide-react';
 
 const wallpapers = [
@@ -13,6 +15,20 @@ const wallpapers = [
   { id: '7', title: 'Sunset Beach', category: 'Nature', url: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800' },
   { id: '8', title: 'Cyberpunk City', category: 'City', url: 'https://images.unsplash.com/photo-1575405142778-3892cf1705e2?w=800' },
 ];
+
+export const metadata: Metadata = {
+  title: 'HD Wallpapers | Blog-Ghar',
+  description: 'Download stunning free HD wallpapers for phone, tablet, and desktop. Nature, city, space, abstract & more.',
+  keywords: ['wallpapers', 'HD wallpapers', 'free wallpapers', 'phone wallpapers', 'desktop wallpapers', 'nature wallpapers', 'abstract wallpapers'],
+  alternates: { canonical: 'https://blogghar.com/wallpapers' },
+};
+
+const wallpaperSchema = wallpapers.map((wp, i) => ({
+  '@type': 'ListItem',
+  position: i + 1,
+  name: wp.title,
+  url: `https://blogghar.com/wallpapers#${wp.id}`,
+}));
 
 export default function WallpapersPage() {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -118,6 +134,14 @@ export default function WallpapersPage() {
           <p className="text-gray-500">No wallpapers found</p>
         </div>
       )}
+
+      <JsonLd type="ItemList" data={{
+        name: 'Blog-Ghar HD Wallpapers',
+        description: 'Free HD wallpapers for phone, tablet, and desktop.',
+        url: 'https://blogghar.com/wallpapers',
+        numberOfItems: wallpapers.length,
+        itemListElement: wallpaperSchema,
+      }} />
     </div>
   );
 }

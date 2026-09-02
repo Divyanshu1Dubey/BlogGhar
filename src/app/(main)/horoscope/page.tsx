@@ -1,6 +1,15 @@
 'use client';
 
 import { useState } from 'react';
+import type { Metadata } from 'next';
+import { JsonLd } from '@/components/seo/json-ld';
+
+export const metadata: Metadata = {
+  title: 'Daily Horoscope | Blog-Ghar',
+  description: 'Get your daily horoscope for all zodiac signs. Aries, Taurus, Gemini, Cancer, Leo, Virgo, Libra, Scorpio, Sagittarius, Capricorn, Aquarius, Pisces.',
+  keywords: ['horoscope', 'daily horoscope', 'zodiac signs', 'aries', 'taurus', 'gemini', 'cancer', 'leo', 'virgo', 'libra', 'scorpio', 'sagittarius', 'capricorn', 'aquarius', 'pisces', 'astrology', 'today horoscope'],
+  alternates: { canonical: 'https://blogghar.com/horoscope' },
+};
 
 const signs = [
   { name: 'Aries', icon: '♈', date: 'Mar 21 - Apr 19', color: 'from-red-400 to-orange-400' },
@@ -102,6 +111,12 @@ export default function HoroscopePage() {
           <p className="text-3xl font-bold text-primary-600 mt-2">{details.lucky.time}</p>
         </div>
       </div>
+
+      <JsonLd type="WebSite" data={{
+        name: 'Blog-Ghar Horoscope',
+        url: 'https://blogghar.com/horoscope',
+        description: 'Daily horoscope readings for all 12 zodiac signs.',
+      }} />
     </div>
   );
 }
