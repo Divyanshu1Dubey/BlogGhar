@@ -41,10 +41,11 @@ async function main() {
   ];
 
   for (const game of games) {
+    const { instructions, ...gameData } = game as any;
     await prisma.game.upsert({
       where: { slug: game.slug },
       update: {},
-      create: game,
+      create: gameData,
     });
   }
   console.log(`✅ Seeded ${games.length} games`);

@@ -17,10 +17,23 @@ export default function LoginPage() {
     setLoading(true);
     setError('');
     try {
-      const res = await signIn('credentials', { email, password, redirect: true, callbackUrl: '/' });
-      if (res?.error) setError('Invalid credentials');
-    } catch { setError('Login failed'); }
-    setLoading(false);
+      const res = await signIn('credentials', {
+        email,
+        password,
+        redirect: false,
+      });
+      if (res?.error) {
+        setError('Invalid email or password');
+      } else if (res?.ok) {
+        window.location.href = '/';
+      } else {
+        setError('Unable to sign in. Please try again.');
+      }
+    } catch {
+      setError('Login failed. Please check your connection.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

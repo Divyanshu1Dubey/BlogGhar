@@ -17,13 +17,34 @@ export default function RegisterPage() {
     if (password !== confirm) { setError('Passwords do not match'); return; }
     if (password.length < 8) { setError('Password must be at least 8 characters'); return; }
     setLoading(true);
+    setError('');
     try {
-      const res = await fetch('/api/auth/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name, email, password }) });
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password }),
+      });
       const data = await res.json();
-      if (!res.ok) { setError(data.error || 'Registration failed'); setLoading(false); return; }
-      await signIn('credentials', { email, password, redirect: true, callbackUrl: '/' });
-    } catch { setError('Registration failed'); }
-    setLoading(false);
+      if (!res.ok) {
+        setError(data.error || 'Registration failed');
+        setLoading(false);
+        return;
+      }
+      const signRes = await signIn('credentials', {
+        email,
+        password,
+        redirect: false,
+      });
+      if (signRes?.ok) {
+        window.location.href = '/';
+      } else {
+        window.location.href = '/login?registered=true';
+      }
+    } catch {
+      setError('Registration failed. Please check your connection.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

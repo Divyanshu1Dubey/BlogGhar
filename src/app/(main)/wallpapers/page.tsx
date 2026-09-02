@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import type { Metadata } from 'next';
 import { JsonLd } from '@/components/seo/json-ld';
 import { Download, Search, Grid, List } from 'lucide-react';
 
@@ -16,12 +15,7 @@ const wallpapers = [
   { id: '8', title: 'Cyberpunk City', category: 'City', url: 'https://images.unsplash.com/photo-1575405142778-3892cf1705e2?w=800' },
 ];
 
-export const metadata: Metadata = {
-  title: 'HD Wallpapers | Blog-Ghar',
-  description: 'Download stunning free HD wallpapers for phone, tablet, and desktop. Nature, city, space, abstract & more.',
-  keywords: ['wallpapers', 'HD wallpapers', 'free wallpapers', 'phone wallpapers', 'desktop wallpapers', 'nature wallpapers', 'abstract wallpapers'],
-  alternates: { canonical: 'https://blogghar.com/wallpapers' },
-};
+
 
 const wallpaperSchema = wallpapers.map((wp, i) => ({
   '@type': 'ListItem',

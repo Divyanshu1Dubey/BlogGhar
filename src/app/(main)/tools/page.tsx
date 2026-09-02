@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import type { Metadata } from 'next';
 import { JsonLd } from '@/components/seo/json-ld';
 
 const TOOL_ITEMS = [
@@ -44,12 +43,7 @@ const categories: Record<string, string[]> = {
   'Dev Tools': ['qr-code-generator', 'color-palette', 'base64-encoder', 'hash-generator'],
 };
 
-export const metadata: Metadata = {
-  title: '30+ Free Online Tools | Blog-Ghar',
-  description: 'Access 30+ free online tools — calculators, converters, generators, and text utilities. No registration required.',
-  keywords: ['online tools', 'free tools', 'calculator', 'converter', 'BMI calculator', 'EMI calculator', 'QR code generator', 'password generator', 'JSON formatter', 'text tools'],
-  alternates: { canonical: 'https://blogghar.com/tools' },
-};
+
 
 const toolListSchema = TOOL_ITEMS.map((tool, i) => ({
   '@type': 'ListItem',
