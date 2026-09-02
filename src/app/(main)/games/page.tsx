@@ -1,6 +1,13 @@
 import prisma from '@/lib/prisma';
 import Link from 'next/link';
 import { Trophy, Play } from 'lucide-react';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Free Online Games',
+  description: 'Play free online mini-games, puzzles, quizzes, and arcade games on Blog-Ghar. Compete on leaderboards!',
+  openGraph: { title: 'Free Online Games', description: 'Play free online mini-games, puzzles, quizzes, and arcade games.', type: 'website' },
+};
 
 export default async function GamesPage() {
   let games: any[] = [];

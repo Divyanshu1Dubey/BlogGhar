@@ -4,6 +4,13 @@ import { redirect } from 'next/navigation';
 import { formatDate } from '@/lib/utils';
 import Link from 'next/link';
 import { Bookmark, Gamepad2, MessageSquare, Trophy, User } from 'lucide-react';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'My Profile',
+  description: 'Manage your Blog-Ghar profile, bookmarks, and preferences.',
+  robots: { index: false, follow: false },
+};
 
 interface Props {
   searchParams: Promise<{ tab?: string }>;

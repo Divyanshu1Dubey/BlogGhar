@@ -1,6 +1,13 @@
 import prisma from '@/lib/prisma';
 import Link from 'next/link';
 import { formatDate } from '@/lib/utils';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Latest News',
+  description: 'Stay updated with the latest news and trending stories from around the world on Blog-Ghar.',
+  openGraph: { title: 'Latest News', description: 'Stay updated with the latest news and trending stories from around the world.', type: 'website' },
+};
 
 export default async function NewsPage() {
   let news: any[] = [];

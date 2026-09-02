@@ -1,6 +1,13 @@
 import prisma from '@/lib/prisma';
 import Link from 'next/link';
 import { MessageSquare, ThumbsUp, Eye } from 'lucide-react';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Q&A Community',
+  description: 'Ask questions, share knowledge, and help others in the Blog-Ghar Q&A community.',
+  openGraph: { title: 'Q&A Community', description: 'Ask questions, share knowledge, and help others.', type: 'website' },
+};
 
 export default async function QAPage() {
   let questions: any[] = [];

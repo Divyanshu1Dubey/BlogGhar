@@ -1,7 +1,14 @@
 'use client';
 
 import { useState } from 'react';
+import type { Metadata } from 'next';
 import { Download, Heart, Search, Grid, List } from 'lucide-react';
+
+export const metadata: Metadata = {
+  title: 'HD Wallpapers - Free Download',
+  description: 'Download stunning HD wallpapers for phone, tablet, and desktop. Free high-resolution backgrounds in Nature, City, Space, Abstract categories.',
+  openGraph: { title: 'HD Wallpapers - Free Download', description: 'Free HD wallpapers for all devices.', type: 'website' },
+};
 
 const wallpapers = [
   { id: '1', title: 'Mountain Sunrise', category: 'Nature', url: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800' },

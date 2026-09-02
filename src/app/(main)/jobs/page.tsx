@@ -2,6 +2,13 @@ import prisma from '@/lib/prisma';
 import Link from 'next/link';
 import { Briefcase, MapPin, DollarSign, ExternalLink } from 'lucide-react';
 import { formatDate } from '@/lib/utils';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Job Board',
+  description: 'Find your next career opportunity. Browse latest job listings across tech, design, marketing, and more on Blog-Ghar.',
+  openGraph: { title: 'Job Board', description: 'Find your next career opportunity. Browse latest job listings.', type: 'website' },
+};
 
 export default async function JobsPage() {
   let jobs: any[] = [];

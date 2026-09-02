@@ -1,10 +1,23 @@
 import prisma from '@/lib/prisma';
 import { notFound } from 'next/navigation';
+import { Metadata } from 'next';
 
 type HoroscopeParams = Promise<{ sign: string }>;
 
 interface Props {
   params: HoroscopeParams;
+}
+
+export async function generateMetadata({ params }: { params: HoroscopeParams }): Promise<Metadata> {
+  try {
+    const { sign } = await params;
+    const signName = decodeURIComponent(sign);
+    return {
+      title: `${signName} Horoscope - Daily, Weekly & Monthly`,
+      description: `Get your free ${signName} horoscope. Daily, weekly, and monthly predictions for love, career, and health.`,
+      openGraph: { title: `${signName} Horoscope`, description: `Free ${signName} horoscope predictions.`, type: 'website' },
+    };
+  } catch { return {}; }
 }
 
 export default async function HoroscopeSignPage({ params }: Props) {

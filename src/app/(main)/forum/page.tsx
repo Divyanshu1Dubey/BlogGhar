@@ -2,6 +2,13 @@ import prisma from '@/lib/prisma';
 import Link from 'next/link';
 import { MessageCircle } from 'lucide-react';
 import { formatDate } from '@/lib/utils';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Community Forum',
+  description: 'Join the Blog-Ghar community forum. Discuss topics, ask questions, and connect with other users.',
+  openGraph: { title: 'Community Forum', description: 'Join the Blog-Ghar community forum and connect with other users.', type: 'website' },
+};
 
 export default async function ForumPage() {
   let forums: any[] = [];

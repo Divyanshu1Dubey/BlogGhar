@@ -1,6 +1,13 @@
 'use client';
 
 import { useState } from 'react';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'BMI Calculator',
+  description: 'Calculate your Body Mass Index (BMI) free online. Supports metric (kg/cm) and imperial (ft/lbs) units.',
+  openGraph: { title: 'BMI Calculator', description: 'Calculate your Body Mass Index free online.', type: 'website' },
+};
 
 export default function BMICalculator() {
   const [height, setHeight] = useState({ feet: 5, inches: 7 });

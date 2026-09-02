@@ -2,6 +2,13 @@ import prisma from '@/lib/prisma';
 import Link from 'next/link';
 import { Clock, Eye } from 'lucide-react';
 import { readingTime } from '@/lib/utils';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Blog',
+  description: 'Discover stories, tutorials, and insights across technology, lifestyle, education, and more on Blog-Ghar.',
+  openGraph: { title: 'Blog', description: 'Discover stories, tutorials, and insights.', type: 'website' },
+};
 
 export default async function BlogPage() {
   let posts: any[] = [];

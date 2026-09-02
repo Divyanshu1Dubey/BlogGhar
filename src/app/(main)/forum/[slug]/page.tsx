@@ -3,11 +3,25 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { formatDate } from '@/lib/utils';
 import { Eye, Pin, Lock } from 'lucide-react';
+import { Metadata } from 'next';
 
 type ForumParams = Promise<{ slug: string }>;
 
 interface Props {
   params: ForumParams;
+}
+
+export async function generateMetadata({ params }: { params: ForumParams }): Promise<Metadata> {
+  try {
+    const { slug } = await params;
+    const forum = await prisma.forum.findUnique({ where: { slug }, select: { name: true, description: true } });
+    if (!forum) return { title: 'Forum Not Found' };
+    return {
+      title: `${forum.name} - Forum`,
+      description: forum.description || `Join the ${forum.name} discussion on Blog-Ghar.`,
+      openGraph: { title: forum.name, description: forum.description || undefined, type: 'website' },
+    };
+  } catch { return {}; }
 }
 
 export default async function ForumCategoryPage({ params }: Props) {

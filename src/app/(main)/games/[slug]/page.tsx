@@ -3,8 +3,24 @@ import { notFound } from 'next/navigation';
 import GameClient from './game-client';
 import Link from 'next/link';
 import { ArrowLeft, Share2 } from 'lucide-react';
+import { Metadata } from 'next';
+import { JsonLd } from '@/components/seo/json-ld';
 
 type GameParams = Promise<{ slug: string }>;
+
+export async function generateMetadata({ params }: { params: GameParams }): Promise<Metadata> {
+  try {
+    const { slug } = await params;
+    const game = await prisma.game.findUnique({ where: { slug } });
+    if (!game) return {};
+    return {
+      title: `${game.name} - Free Online Game`,
+      description: game.description,
+      openGraph: { title: `${game.name} - Free Online Game`, description: game.description, type: 'website' },
+      alternates: { canonical: `https://blogghar.com/games/${game.slug}` },
+    };
+  } catch { return {}; }
+}
 
 export default async function GamePage({ params }: { params: GameParams }) {
   const { slug } = await params;
@@ -19,7 +35,19 @@ export default async function GamePage({ params }: { params: GameParams }) {
   });
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8">
+    <>
+      <JsonLd data={{
+        '@context': 'https://schema.org',
+        '@type': 'VideoGame',
+        name: game.name,
+        description: game.description,
+        url: `https://blogghar.com/games/${game.slug}`,
+        applicationCategory: 'Game',
+        operatingSystem: 'Web Browser',
+        playMode: 'SinglePlayer',
+        genre: game.category || 'Puzzle',
+      }} />
+      <div className="max-w-5xl mx-auto px-4 py-8">
       <div className="flex items-center justify-between mb-6">
         <Link href="/games" className="flex items-center gap-2 text-sm text-gray-500 hover:text-primary-600">
           <ArrowLeft className="w-4 h-4" /> Back to Games
@@ -46,6 +74,6 @@ export default async function GamePage({ params }: { params: GameParams }) {
       <div className="text-center py-6">
         <p className="text-sm text-gray-400">🤖 Built by Blog-Ghar • Share this game with friends!</p>
       </div>
-    </div>
+    </>
   );
 }

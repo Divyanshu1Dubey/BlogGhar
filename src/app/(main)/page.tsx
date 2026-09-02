@@ -1,8 +1,22 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import Script from 'next/script';
 import { ArrowRight, Gamepad2, Calculator, Newspaper, Sparkles } from 'lucide-react';
 import { formatDate } from '@/lib/utils';
 import prisma from '@/lib/prisma';
+import { AdSlot } from '@/components/ads/ad-slot';
+
+export async function generateMetadata() {
+  const categories = await getCategories();
+  const categoryKeywords = categories.map((c: any) => c.name).join(', ');
+
+  return {
+    title: 'Blog-Ghar - Home of Blogs | Games, News, Tools & More',
+    description: 'Blog-Ghar is your one-stop destination for blogs, games, news, online tools, horoscopes, and more. Discover daily updated content across technology, lifestyle, entertainment, and more.',
+    keywords: ['blog', 'games', 'news', 'online tools', 'calculator', 'horoscope', categoryKeywords],
+    alternates: { canonical: 'https://blogghar.com' },
+  };
+}
 
 async function getFeaturedPosts() {
   try {
@@ -198,6 +212,11 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* Homepage Banner Ad */}
+      <div className="max-w-7xl mx-auto px-4 mb-8">
+        <AdSlot slot="1234567890" format="auto" responsive={true} />
+      </div>
+
       {/* Trending Posts + Sidebar */}
       <section className="max-w-7xl mx-auto px-4 py-12">
         <div className="grid lg:grid-cols-3 gap-8">
@@ -290,6 +309,28 @@ export default async function HomePage() {
           </aside>
         </div>
       </section>
+
+      {/* Homepage Structured Data */}
+      <Script
+        id="homepage-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'WebSite',
+            name: 'Blog-Ghar',
+            description: 'Your one-stop destination for blogs, games, news, tools & more',
+            url: 'https://blogghar.com',
+            potentialAction: {
+              '@type': 'SearchAction',
+              target: { '@type': 'EntryPoint', urlTemplate: 'https://blogghar.com/search?q={search_term_string}' },
+              'query-input': 'required name=search_term_string',
+            },
+            publisher: { '@type': 'Organization', name: 'Blog-Ghar', url: 'https://blogghar.com' },
+            inLanguage: 'en-IN',
+          }),
+        }}
+      />
     </div>
   );
 }
