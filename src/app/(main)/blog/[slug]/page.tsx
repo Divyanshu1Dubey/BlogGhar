@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: { params: BlogParams }) {
     if (!post) return {};
 
     const canonical = `https://blogghar.com/blog/${post.slug}`;
-    const ogImage = post.featuredImage || 'https://blogghar.com/og-image.png';
+    const ogImage = post.featuredImage || 'https://blogghar.com/og-image.svg';
     const description = post.seoDesc || post.excerpt || post.title;
 
     return {
@@ -99,7 +99,7 @@ export default async function BlogPostPage({ params }: { params: BlogParams }) {
       '@type': 'Organization',
       name: 'Blog-Ghar',
       url: 'https://blogghar.com',
-      logo: { '@type': 'ImageObject', url: 'https://blogghar.com/logo.png' },
+      logo: { '@type': 'ImageObject', url: 'https://blogghar.com/logo.svg' },
     },
     mainEntityOfPage: {
       '@type': 'WebPage',

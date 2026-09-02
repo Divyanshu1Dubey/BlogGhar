@@ -55,7 +55,7 @@ export async function GET(request: Request) {
         take: 3,
       });
       news.forEach((n) => {
-        results.push({ type: 'news', title: n.title, slug: n.id, description: n.summary || '', url: `/news/${n.id}` });
+        results.push({ type: 'news', title: n.title, slug: n.slug, description: n.summary || '', url: `/news/${n.slug}` });
       });
     }
 

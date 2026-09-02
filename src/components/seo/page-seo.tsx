@@ -1,5 +1,3 @@
-'use client';
-
 import { Metadata } from 'next';
 import { JsonLd } from './json-ld';
 
@@ -21,7 +19,7 @@ export function generateMetadata({
   title,
   description,
   canonical,
-  ogImage = '/og-image.png',
+  ogImage = '/og-image.svg',
   ogType = 'website',
   publishedTime,
   modifiedTime,
@@ -47,7 +45,7 @@ export function generateMetadata({
           width: 1200,
           height: 630,
           alt: title,
-          type: 'image/png',
+          type: ogImage.endsWith('.svg') ? 'image/svg+xml' : 'image/png',
         },
       ],
       ...(publishedTime && { publishedTime }),

@@ -278,7 +278,7 @@ export default async function HomePage() {
               <h3 className="font-display font-bold text-lg mb-4">📰 Latest News</h3>
               <div className="space-y-3">
                 {news.map((item) => (
-                  <Link key={item.id} href={`/news/${item.id}`} className="block group">
+                  <Link key={item.id} href={`/news/${item.slug}`} className="block group">
                     <p className="text-sm font-medium line-clamp-2 group-hover:text-primary-600 transition-colors">
                       {item.title}
                     </p>

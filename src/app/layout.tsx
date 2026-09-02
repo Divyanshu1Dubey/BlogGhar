@@ -50,11 +50,11 @@ export const metadata: Metadata = {
     description: 'Your one-stop destination for blogs, games, news, online tools, horoscopes, and more. Discover daily updated content.',
     images: [
       {
-        url: 'https://blogghar.com/og-image.png',
+        url: 'https://blogghar.com/og-image.svg',
         width: 1200,
         height: 630,
         alt: 'Blog-Ghar - Home of Blogs',
-        type: 'image/png',
+        type: 'image/svg+xml',
       },
     ],
   },
@@ -62,7 +62,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Blog-Ghar - Home of Blogs',
     description: 'Your one-stop destination for blogs, games, news, tools & more.',
-    images: ['https://blogghar.com/og-image.png'],
+    images: ['https://blogghar.com/og-image.svg'],
     creator: '@blogghar',
   },
   alternates: {
@@ -91,7 +91,7 @@ const jsonLd = {
     url: 'https://blogghar.com',
     logo: {
       '@type': 'ImageObject',
-      url: 'https://blogghar.com/logo.png',
+      url: 'https://blogghar.com/logo.svg',
     },
   },
   inLanguage: 'en-IN',
