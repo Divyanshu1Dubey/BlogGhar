@@ -74,6 +74,7 @@ export default async function GamePage({ params }: { params: GameParams }) {
       <div className="text-center py-6">
         <p className="text-sm text-gray-400">🤖 Built by Blog-Ghar • Share this game with friends!</p>
       </div>
+    </div>
     </>
   );
 }
