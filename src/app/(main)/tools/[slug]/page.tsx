@@ -321,7 +321,7 @@ function PercentageCalc() {
 }
 
 function EMICalc() {
-  const [p, setP] = useState; const [r, setR] = useState(9); const [t, setT] = useState(5);
+  const [p, setP] = useState(0); const [r, setR] = useState(9); const [t, setT] = useState(5);
   const n = t * 12, ri = r / 12 / 100;
   const emi = +(p * ri * Math.pow(1 + ri, n) / (Math.pow(1 + ri, n) - 1)).toFixed(2);
   const total = +(emi * n).toFixed(2); const interest = +(total - p).toFixed(2);
@@ -342,7 +342,7 @@ function EMICalc() {
 }
 
 function GSTCalc() {
-  const [amount, setAmount] = useState; const [rate, setRate] = useState(18);
+  const [amount, setAmount] = useState(0); const [rate, setRate] = useState(18);
   const gst = +(amount * rate / 100).toFixed(2);
   return (
     <Card title="🧮 GST Calculator (India)">
@@ -365,7 +365,7 @@ function GSTCalc() {
 }
 
 function CompoundCalc() {
-  const [p, setP] = useState; const [r, setR] = useState(8); const [t, setT] = useState(10); const [n, setN] = useState(12);
+  const [p, setP] = useState(0); const [r, setR] = useState(8); const [t, setT] = useState(10); const [n, setN] = useState(12);
   const amt = +(p * Math.pow(1 + r / 100 / n, n * t)).toFixed(2); const ci = +(amt - p).toFixed(2);
   return (
     <Card title="📈 Compound Interest Calculator">
@@ -433,7 +433,7 @@ function GPACalc() {
 }
 
 function TipCalc() {
-  const [bill, setBill] = useState; const [tip, setTip] = useState(15); const [people, setPeople] = useState(2);
+  const [bill, setBill] = useState(0); const [tip, setTip] = useState(15); const [people, setPeople] = useState(2);
   const tipAmt = +(bill * tip / 100).toFixed(2); const total = +(bill + tipAmt).toFixed(2); const perPerson = +(total / people).toFixed(2);
   return (
     <Card title="💵 Tip Calculator">
@@ -452,7 +452,7 @@ function TipCalc() {
 }
 
 function DiscountCalc() {
-  const [price, setPrice] = useState; const [discount, setDiscount] = useState(25);
+  const [price, setPrice] = useState(0); const [discount, setDiscount] = useState(25);
   const saved = +(price * discount / 100).toFixed(2);
   return (
     <Card title="🏷️ Discount Calculator">
@@ -534,7 +534,7 @@ function UnitConverter({ type }: { type: 'length' | 'weight' | 'temperature' | '
 }
 
 function NumberToWords() {
-  const [n, setN] = useState;
+  const [n, setN] = useState(0);
   const numWords = (num: number): string => {
     if (num === 0) return 'Zero';
     const ones = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
@@ -557,7 +557,7 @@ function NumberToWords() {
 }
 
 function RomanConverter() {
-  const [n, setN] = useState;
+  const [n, setN] = useState(0);
   const roman = (num: number): string => {
     const map: [number, string][] = [[1000, 'M'], [900, 'CM'], [500, 'D'], [400, 'CD'], [100, 'C'], [90, 'XC'], [50, 'L'], [40, 'XL'], [10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I']];
     let r = ''; for (const [v, s] of map) { while (num >= v) { r += s; num -= v; } } return r;
