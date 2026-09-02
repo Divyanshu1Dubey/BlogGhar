@@ -3,6 +3,8 @@ import { prisma } from '@/lib/prisma';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://blogghar.com';
 
+const FORUM_SLUGS = ['general', 'tech', 'lifestyle', 'gaming', 'help'];
+
 // All 30 tools that have dynamic routes at /tools/[slug]
 const TOOL_SLUGS = [
   'bmi-calculator', 'age-calculator', 'percentage-calculator', 'emi-calculator',
@@ -46,6 +48,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: now,
       changeFrequency: 'monthly' as const,
       priority: 0.8,
+    })),
+    // Forum category pages
+    ...FORUM_SLUGS.map((slug) => ({
+      url: `${SITE_URL}/forum/category/${slug}`,
+      lastModified: now,
+      changeFrequency: 'daily' as const,
+      priority: 0.7,
     })),
     // All 12 horoscope sign pages
     ...SIGNS.map((sign) => ({
@@ -105,6 +114,39 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }));
   } catch {}
 
+  // Dynamic - forum posts (top-level only)
+  let forumPosts: MetadataRoute.Sitemap = [];
+  try {
+    const posts = await prisma.forumPost.findMany({
+      where: { parentId: null },
+      select: { id: true, createdAt: true },
+      orderBy: { createdAt: 'desc' },
+      take: 500,
+    });
+    forumPosts = posts.map((p: any) => ({
+      url: `${SITE_URL}/forum/post/${p.id}`,
+      lastModified: p.createdAt || now,
+      changeFrequency: 'daily' as const,
+      priority: 0.5,
+    }));
+  } catch {}
+
+  // Dynamic - Q&A pages
+  let qaPages: MetadataRoute.Sitemap = [];
+  try {
+    const questions = await prisma.qnAQuestion.findMany({
+      select: { id: true, createdAt: true },
+      orderBy: { createdAt: 'desc' },
+      take: 500,
+    });
+    qaPages = questions.map((q: any) => ({
+      url: `${SITE_URL}/qa/${q.id}`,
+      lastModified: q.createdAt || now,
+      changeFrequency: 'weekly' as const,
+      priority: 0.5,
+    }));
+  } catch {}
+
   // Dynamic - job listings
   let jobs: MetadataRoute.Sitemap = [];
   try {
@@ -122,5 +164,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }));
   } catch {}
 
-  return [...staticPages, ...blogPosts, ...newsArticles, ...games, ...jobs];
+  return [...staticPages, ...blogPosts, ...newsArticles, ...games, ...forumPosts, ...qaPages, ...jobs];
 }

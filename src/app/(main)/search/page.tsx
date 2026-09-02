@@ -19,6 +19,15 @@ export default function SearchPage({ searchParams }: { searchParams: Promise<{ q
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    // Set page title for SEO
+    if (query) {
+      document.title = `Search: "${query}" | Blog-Ghar`;
+    } else {
+      document.title = 'Search | Blog-Ghar';
+    }
+  }, [query]);
+
+  useEffect(() => {
     if (!query || query.length < 2) {
       setResults([]);
       return;

@@ -152,6 +152,19 @@ export default function RootLayout({
           <meta name="msvalidate.01" content={process.env.NEXT_PUBLIC_BING_VERIFICATION} />
         )}
 
+        {/* Sitemap Discovery */}
+        <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
+
+        {/* Hreflang for regional targeting */}
+        <link rel="alternate" hrefLang="en-IN" href="https://blogghar.com" />
+        <link rel="alternate" hrefLang="en-US" href="https://blogghar.com" />
+        <link rel="alternate" hrefLang="en-GB" href="https://blogghar.com" />
+        <link rel="alternate" hrefLang="x-default" href="https://blogghar.com" />
+
+        {/* Preconnect for performance */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+
         {/* Additional SEO Meta Tags */}
         <meta name="theme-color" content="#3b82f6" media="(prefers-color-scheme: light)" />
         <meta name="theme-color" content="#1e293b" media="(prefers-color-scheme: dark)" />

@@ -360,27 +360,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Homepage Structured Data */}
-      <Script
-        id="homepage-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'WebSite',
-            name: 'Blog-Ghar',
-            description: 'Your one-stop destination for blogs, games, news, tools & more',
-            url: 'https://blogghar.com',
-            potentialAction: {
-              '@type': 'SearchAction',
-              target: { '@type': 'EntryPoint', urlTemplate: 'https://blogghar.com/search?q={search_term_string}' },
-              'query-input': 'required name=search_term_string',
-            },
-            publisher: { '@type': 'Organization', name: 'Blog-Ghar', url: 'https://blogghar.com', logo: { '@type': 'ImageObject', url: 'https://blogghar.com/logo.svg' } },
-            inLanguage: 'en-IN',
-          }),
-        }}
-      />
+      {/* Homepage Structured Data (WebSite is injected by layout.tsx) */}
     </div>
   );
 }

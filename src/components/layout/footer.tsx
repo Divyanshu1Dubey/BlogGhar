@@ -132,20 +132,37 @@ export function Footer() {
 function NewsletterForm() {
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
-    // TODO: API call
-    setSubmitted(true);
-    setEmail('');
+    try {
+      const res = await fetch('/api/newsletter/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      if (res.ok) {
+        setSubmitted(true);
+        setEmail('');
+      } else {
+        setError('Subscription failed. Please try again.');
+      }
+    } catch {
+      setError('Network error. Please try again.');
+    }
   };
 
   return (
     <form onSubmit={handleSubmit} className="flex gap-2 w-full md:w-auto">
       {submitted ? (
         <div className="px-4 py-2 bg-green-500/20 text-green-400 rounded-lg text-sm">
-          ✓ Subscribed successfully!
+          Subscribed successfully!
+        </div>
+      ) : error ? (
+        <div className="px-4 py-2 bg-red-500/20 text-red-400 rounded-lg text-sm">
+          {error}
         </div>
       ) : (
         <>

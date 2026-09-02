@@ -2,7 +2,14 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { Metadata } from 'next';
 import { signIn } from 'next-auth/react';
+
+export const metadata: Metadata = {
+  title: 'Create Account',
+  description: 'Sign up for a free Blog-Ghar account.',
+  robots: { index: false, follow: false },
+};
 
 export default function RegisterPage() {
   const [name, setName] = useState('');

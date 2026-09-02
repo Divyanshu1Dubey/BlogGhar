@@ -1,8 +1,12 @@
-'use client';
-
-import { useState } from 'react';
 import Link from 'next/link';
+import { Metadata } from 'next';
 import { ArrowLeft } from 'lucide-react';
+
+export const metadata: Metadata = {
+  title: 'Reset Password',
+  description: 'Reset your Blog-Ghar account password.',
+  robots: { index: false, follow: false },
+};
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
@@ -12,7 +16,6 @@ export default function ForgotPasswordPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    // Simulated - real password reset flow is configured via NextAuth/Resend
     await new Promise((r) => setTimeout(r, 800));
     setSubmitted(true);
     setLoading(false);

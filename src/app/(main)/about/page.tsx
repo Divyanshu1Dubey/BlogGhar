@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import { JsonLd } from '@/components/seo/json-ld';
 
 export const metadata: Metadata = {
   title: 'About Blog-Ghar',
@@ -8,6 +9,20 @@ export const metadata: Metadata = {
 };
 
 export default function AboutPage() {
+  const aboutSchema = {
+    '@context': 'https://schema.org' as const,
+    '@type': 'AboutPage',
+    name: 'About Blog-Ghar',
+    description: 'Learn about Blog-Ghar - your one-stop destination for blogs, games, news, online tools, and more.',
+    url: 'https://blogghar.com/about',
+    mainEntity: {
+      '@type': 'Organization',
+      name: 'Blog-Ghar',
+      url: 'https://blogghar.com',
+      description: 'Your one-stop destination for blogs, games, news, tools & more.',
+    },
+  };
+
   return (
     <div className="max-w-3xl mx-auto px-4 py-12">
       <h1 className="text-4xl font-display font-extrabold mb-6">About Blog-Ghar</h1>
@@ -43,7 +58,7 @@ export default function AboutPage() {
         <h2 className="text-2xl font-display font-bold text-gray-900 dark:text-white">Why Blog-Ghar?</h2>
         <ul className="list-disc pl-6 space-y-2">
           <li>100% free tools and content — no hidden charges</li>
-          <li>Privacy-first approach — we don't sell your data</li>
+          <li>Privacy-first approach — we don&apos;t sell your data</li>
           <li>SEO-optimized, high-quality content for genuine value</li>
           <li>Mobile-responsive design for all devices</li>
           <li>Dark mode support for comfortable browsing</li>
@@ -62,25 +77,7 @@ export default function AboutPage() {
         </p>
       </div>
 
-      <script
-        id="about-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'AboutPage',
-            name: 'About Blog-Ghar',
-            description: 'Learn about Blog-Ghar - your one-stop destination for blogs, games, news, online tools, and more.',
-            url: 'https://blogghar.com/about',
-            mainEntity: {
-              '@type': 'Organization',
-              name: 'Blog-Ghar',
-              url: 'https://blogghar.com',
-              description: 'Your one-stop destination for blogs, games, news, tools & more.',
-            },
-          }),
-        }}
-      />
+      <JsonLd type="AboutPage" data={aboutSchema} />
     </div>
   );
 }
