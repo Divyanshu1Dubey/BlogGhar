@@ -194,7 +194,7 @@ export default async function BlogPostPage({ params }: { params: BlogParams }) {
         </Link>
       </div>
 
-      <CommentSection postId={post.id} />
+      <CommentSection />
 
       {related.length > 0 && (
         <section className="mt-12 pt-8 border-t border-gray-200 dark:border-dark-border">

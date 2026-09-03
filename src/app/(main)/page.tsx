@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import Script from 'next/script';
 import { ArrowRight, Gamepad2, Calculator, Newspaper, Sparkles, Shield, Zap, Users, TrendingUp, Star } from 'lucide-react';
 import { formatDate } from '@/lib/utils';
 import prisma from '@/lib/prisma';
@@ -340,7 +339,7 @@ export default async function HomePage() {
                     </p>
                     <div className="flex items-center gap-2 mt-1 text-xs text-gray-500">
                       <span className="px-1.5 py-0.5 bg-gray-100 dark:bg-dark-bg rounded text-xs">{item.category?.name}</span>
-                      <span>{formatDate(new Date(item.publishedAt))}</span>
+                      <span>{formatDate(new Date(item.publishedAt ?? ''))}</span>
                     </div>
                   </Link>
                 ))}

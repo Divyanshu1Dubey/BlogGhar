@@ -6,18 +6,19 @@ import prisma from '@/lib/prisma';
 export async function POST(request: Request) {
   try {
     const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    if (!(session?.user as any)?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+    const userId = (session as any).user.id;
 
-    const { gameId, score, metadata } = await request.json();
+    const { gameId, score } = await request.json();
 
     if (!gameId || score === undefined) {
       return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
     }
 
     const gameScore = await prisma.gameScore.create({
-      data: { gameId, score: Number(score), metadata: metadata || null, userId: session.user.id },
+      data: { gameId, score: Number(score), userId },
       include: { user: { select: { name: true } } },
     });
 

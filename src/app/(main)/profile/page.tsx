@@ -1,11 +1,11 @@
 import prisma from '@/lib/prisma';
 import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
-import { formatDate, readingTime } from '@/lib/utils';
+import { formatDate } from '@/lib/utils';
 import Link from 'next/link';
 import {
   Bookmark, Gamepad2, MessageSquare, Trophy, User, Clock,
-  Eye, ExternalLink, Save, Shield, Bell, Palette, Trash2
+  Eye, Shield, Bell, Palette, Trash2
 } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
@@ -113,9 +113,10 @@ export default async function ProfilePage({ searchParams }: Props) {
   const activeTab = params.tab || 'saved';
 
   const session = await auth();
-  if (!session?.user?.id) {
+  if (!(session?.user as any)?.id) {
     redirect('/login');
   }
+  const userId = (session as any).user.id;
 
   let user: any;
   let bookmarks: any[] = [];
@@ -123,13 +124,13 @@ export default async function ProfilePage({ searchParams }: Props) {
   let scores: any[] = [];
   try {
     user = await prisma.user.findUnique({
-      where: { id: session.user.id },
+      where: { id: userId },
       include: {
         _count: { select: { posts: true, comments: true, gameScores: true, bookmarks: true } },
       },
     });
     bookmarks = await prisma.bookmark.findMany({
-      where: { userId: session.user.id },
+      where: { userId },
       orderBy: { createdAt: 'desc' },
       take: 20,
       include: {
@@ -150,7 +151,7 @@ export default async function ProfilePage({ searchParams }: Props) {
       },
     });
     comments = await prisma.comment.findMany({
-      where: { userId: session.user.id },
+      where: { userId },
       orderBy: { createdAt: 'desc' },
       take: 20,
       include: {
@@ -165,7 +166,7 @@ export default async function ProfilePage({ searchParams }: Props) {
       },
     });
     scores = await prisma.gameScore.findMany({
-      where: { userId: session.user.id },
+      where: { userId },
       orderBy: { score: 'desc' },
       take: 20,
       include: {

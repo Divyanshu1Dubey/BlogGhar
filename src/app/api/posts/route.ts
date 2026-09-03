@@ -6,11 +6,12 @@ import { authOptions } from '@/lib/auth';
 export async function POST(request: Request) {
   try {
     const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    if (!(session?.user as any)?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+    const authorId = (session as any).user.id;
     const data = await request.json();
-    const post = await prisma.post.create({ data: { ...data, authorId: session.user.id } });
+    const post = await prisma.post.create({ data: { ...data, authorId } });
     return NextResponse.json(post);
   } catch {
     return NextResponse.json({ error: 'Failed to create post' }, { status: 500 });

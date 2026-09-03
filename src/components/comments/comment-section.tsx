@@ -1,26 +1,24 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
-import { signIn } from 'next-auth/react';
 import { Heart, Reply, MoreHorizontal } from 'lucide-react';
 import { formatDate } from '@/lib/utils';
 
 interface Comment {
   id: string;
   content: string;
-  createdAt: Date;
+  createdAt: string;
   likes: number;
   user: { name: string; image?: string };
   replies?: Comment[];
 }
 
-export default function CommentSection({ postId }: { postId: string }) {
+export default function CommentSection() {
   const [comments] = useState<Comment[]>([
-    { id: '1', content: 'Great article! Very informative and well-written. Looking forward to more content like this.', createdAt: new Date(Date.now() - 3600000), likes: 12, user: { name: 'Rahul', image: '' } },
-    { id: '2', content: 'This helped me a lot. Thanks for sharing this valuable information!', createdAt: new Date(Date.now() - 7200000), likes: 8, user: { name: 'Priya', image: '' } },
-    { id: '3', content: 'I had a question about the third point. Can someone elaborate?', createdAt: new Date(Date.now() - 10800000), likes: 3, user: { name: 'Amit', image: '' }, replies: [
-      { id: '3-1', content: 'Sure! The third point refers to...', createdAt: new Date(Date.now() - 9000000), likes: 5, user: { name: 'Author', image: '' } },
+    { id: '1', content: 'Great article! Very informative and well-written. Looking forward to more content like this.', createdAt: new Date(Date.now() - 3600000).toISOString(), likes: 12, user: { name: 'Rahul', image: '' } },
+    { id: '2', content: 'This helped me a lot. Thanks for sharing this valuable information!', createdAt: new Date(Date.now() - 7200000).toISOString(), likes: 8, user: { name: 'Priya', image: '' } },
+    { id: '3', content: 'I had a question about the third point. Can someone elaborate?', createdAt: new Date(Date.now() - 10800000).toISOString(), likes: 3, user: { name: 'Amit', image: '' }, replies: [
+      { id: '3-1', content: 'Sure! The third point refers to...', createdAt: new Date(Date.now() - 9000000).toISOString(), likes: 5, user: { name: 'Author', image: '' } },
     ] },
   ]);
   const [newComment, setNewComment] = useState('');
@@ -38,7 +36,7 @@ export default function CommentSection({ postId }: { postId: string }) {
       <div className="mb-8">
         <textarea value={newComment} onChange={(e) => setNewComment(e.target.value)} placeholder="Write a comment..." className="w-full h-24 px-4 py-3 border border-gray-300 dark:border-dark-border rounded-xl bg-white dark:bg-dark-card resize-none focus:outline-none focus:ring-2 focus:ring-primary-500 mb-3" />
         <div className="flex justify-end">
-          <button onClick={() => signIn()} className="btn-primary text-sm">Sign in to Comment</button>
+          <button onClick={() => (window as any).signIn?.()} className="btn-primary text-sm">Sign in to Comment</button>
         </div>
       </div>
 
@@ -65,7 +63,7 @@ export default function CommentSection({ postId }: { postId: string }) {
                 <button onClick={() => handleLike(comment.id)} className={`flex items-center gap-1 text-xs ${liked.includes(comment.id) ? 'text-red-500' : 'text-gray-500 hover:text-red-500'}`}>
                   <Heart className={`w-3.5 h-3.5 ${liked.includes(comment.id) ? 'fill-current' : ''}`} /> {comment.likes + (liked.includes(comment.id) ? 1 : 0)}
                 </button>
-                <button onClick={() => signIn()} className="flex items-center gap-1 text-xs text-gray-500 hover:text-primary-600">
+                <button onClick={() => (window as any).signIn?.()} className="flex items-center gap-1 text-xs text-gray-500 hover:text-primary-600">
                   <Reply className="w-3.5 h-3.5" /> Reply
                 </button>
               </div>

@@ -28,7 +28,7 @@ function createBoard() {
   return board;
 }
 
-export default function GameClient({ game, topScores }: { game: any; topScores: any[] }) {
+export default function GameClient({ topScores }: { topScores: any[] }) {
   const [board, setBoard] = useState<number[]>(createBoard);
   const [revealed, setRevealed] = useState<boolean[]>(Array(CELL_COUNT).fill(false));
   const [flagged, setFlagged] = useState<boolean[]>(Array(CELL_COUNT).fill(false));

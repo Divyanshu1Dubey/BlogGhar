@@ -5,9 +5,10 @@ import { NextResponse } from 'next/server';
 export async function POST(request: Request) {
   try {
     const session = await auth();
-    if (!session?.user?.id) {
+    if (!(session?.user as any)?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+    const userId = (session as any).user.id;
 
     const { postId } = await request.json();
     if (!postId) {
@@ -20,7 +21,7 @@ export async function POST(request: Request) {
     }
 
     const existing = await prisma.bookmark.findUnique({
-      where: { userId_postId: { userId: session.user.id, postId } },
+      where: { userId_postId: { userId, postId } },
     });
 
     if (existing) {
@@ -29,7 +30,7 @@ export async function POST(request: Request) {
     }
 
     await prisma.bookmark.create({
-      data: { userId: session.user.id, postId },
+      data: { userId, postId },
     });
 
     return NextResponse.json({ success: true, bookmarked: true });
@@ -41,12 +42,13 @@ export async function POST(request: Request) {
 export async function GET() {
   try {
     const session = await auth();
-    if (!session?.user?.id) {
+    if (!(session?.user as any)?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+    const userId = (session as any).user.id;
 
     const bookmarks = await prisma.bookmark.findMany({
-      where: { userId: session.user.id },
+      where: { userId },
       select: { postId: true },
       orderBy: { createdAt: 'desc' },
     });

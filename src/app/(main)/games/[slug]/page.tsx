@@ -16,8 +16,8 @@ export async function generateMetadata({ params }: { params: GameParams }): Prom
     return {
       title: `${game.name} - Free Online Game`,
       description: game.description,
-      openGraph: { title: `${game.name} - Free Online Game`, description: game.description, type: 'website' },
-      alternates: { canonical: `https://bloghar.com/games/${game.slug}` },
+      openGraph: { title: `${game.name} - Free Online Game`, description: game.description ?? undefined, type: 'website' },
+      alternates: { canonical: `https://bloghar.com/games/${game.slug ?? ''}` },
     };
   } catch { return {}; }
 }
@@ -62,7 +62,7 @@ export default async function GamePage({ params }: { params: GameParams }) {
       </div>
 
       <div className="card overflow-hidden">
-        <GameClient game={game} topScores={topScores} />
+        <GameClient topScores={topScores} />
       </div>
 
       <div className="card p-6 mt-6">

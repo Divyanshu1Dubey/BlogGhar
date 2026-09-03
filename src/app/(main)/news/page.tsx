@@ -1,8 +1,7 @@
 import prisma from '@/lib/prisma';
 import Link from 'next/link';
-import { formatDate } from '@/lib/utils';
-import { Metadata } from 'next';
 import { JsonLd } from '@/components/seo/json-ld';
+import { formatDate } from '@/lib/utils';
 
 export const dynamic = 'force-dynamic';
 

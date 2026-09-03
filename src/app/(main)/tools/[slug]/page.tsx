@@ -3,7 +3,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import Script from 'next/script';
-import { notFound, useParams } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { AdSlot } from '@/components/ads/ad-slot';
 
 // ==== TOOL DEFINITIONS ====
@@ -593,7 +593,7 @@ function TextCase() {
     <Card title="Aa Text Case Converter">
       <textarea value={t} onChange={(e) => setT(e.target.value)} placeholder="Type text..." className="w-full h-24 px-3 py-2 border rounded-lg dark:bg-dark-bg resize-none mb-3" />
       <div className="space-y-2">
-        {[['UPPERCASE', t.toUpperCase()], ['lowercase', t.toLowerCase()], ['Title Case', t.replace(/\w\S*/g, w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())], ['Sentence case', t.charAt(0).toUpperCase() + t.slice(1).toLowerCase()], ['camelCase', t.replace(/[^a-zA-Z0-9]+(.)/g, (m, c) => c.toUpperCase())], ['snake_case', t.toLowerCase().replace(/[^a-zA-Z0-9]+/g, '_')], ['kebab-case', t.toLowerCase().replace(/[^a-zA-Z0-9]+/g, '-')]].map(([label, val]) => (
+        {[['UPPERCASE', t.toUpperCase()], ['lowercase', t.toLowerCase()], ['Title Case', t.replace(/\w\S*/g, w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())], ['Sentence case', t.charAt(0).toUpperCase() + t.slice(1).toLowerCase()], ['camelCase', t.replace(/[^a-zA-Z0-9]+(.)/g, (_, c) => c.toUpperCase())], ['snake_case', t.toLowerCase().replace(/[^a-zA-Z0-9]+/g, '_')], ['kebab-case', t.toLowerCase().replace(/[^a-zA-Z0-9]+/g, '-')]].map(([label, val]) => (
           <div key={label as string} className="flex items-center gap-2"><span className="w-24 text-sm font-medium text-gray-500">{label}</span><input readOnly value={val as string} className="flex-1 px-3 py-2 bg-gray-100 dark:bg-dark-bg rounded-lg text-sm" /><button onClick={() => navigator.clipboard.writeText(val as string)} className="px-2 py-1 text-xs bg-gray-200 dark:bg-dark-border rounded">Copy</button></div>
         ))}
       </div>

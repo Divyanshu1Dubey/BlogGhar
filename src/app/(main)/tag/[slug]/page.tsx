@@ -1,9 +1,8 @@
 import prisma from '@/lib/prisma';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import { readingTime } from '@/lib/utils';
 import { ArrowLeft, Clock, Eye } from 'lucide-react';
-import { formatDate, readingTime } from '@/lib/utils';
-import { Metadata } from 'next';
 import { JsonLd } from '@/components/seo/json-ld';
 
 type TagParams = Promise<{ slug: string }>;

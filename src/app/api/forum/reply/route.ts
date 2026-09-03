@@ -8,9 +8,10 @@ export const dynamic = 'force-dynamic';
 export async function POST(request: Request) {
   try {
     const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    if (!(session?.user as any)?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+    const userId = (session as any).user.id;
 
     const body = await request.json();
     const { topicId, content } = body;
@@ -30,7 +31,7 @@ export async function POST(request: Request) {
         content: content.trim(),
         parentId: topicId,
         forumId: topic.forumId,
-        userId: session.user.id,
+        userId,
       },
       include: {
         user: { select: { name: true } },

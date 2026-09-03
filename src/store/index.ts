@@ -1,3 +1,3 @@
-import { store } from "./blog-store";
+import { useBlogStore } from "./blog-store";
 
-export { store };
+export { useBlogStore };

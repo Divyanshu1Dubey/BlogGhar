@@ -1,7 +1,7 @@
 import prisma from '@/lib/prisma';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { formatDate, readingTime } from '@/lib/utils';
+import { formatDate } from '@/lib/utils';
 import { ArrowLeft, Eye } from 'lucide-react';
 import { JsonLd } from '@/components/seo/json-ld';
 
@@ -12,7 +12,10 @@ type NewsParams = Promise<{ slug: string }>;
 export async function generateMetadata({ params }: { params: NewsParams }) {
   try {
     const { slug } = await params;
-    const post = await prisma.post.findUnique({ where: { slug } });
+    const post = await prisma.post.findUnique({
+      where: { slug },
+      include: { author: { select: { name: true } } },
+    });
     if (!post) return {};
     const authorName = post.author?.name || 'Blog-Ghar';
     return {

@@ -1,11 +1,17 @@
 import prisma from '@/lib/prisma';
 import { NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 
 export async function POST(request: Request) {
   try {
-    const { postId, content, parentId } = await request.json();
-    if (!content) return NextResponse.json({ error: 'Content required' }, { status: 400 });
-    const comment = await prisma.comment.create({ data: { content, postId, parentId } });
+    const session = await getServerSession(authOptions);
+    if (!(session?.user as any)?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+    const authorId = (session as any).user.id;
+    const data = await request.json();
+    const comment = await prisma.comment.create({ data: { ...data, userId: authorId } });
     return NextResponse.json(comment);
   } catch {
     return NextResponse.json({ error: 'Failed' }, { status: 500 });

@@ -1,9 +1,8 @@
 import prisma from '@/lib/prisma';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, Clock, Eye } from 'lucide-react';
-import { formatDate, readingTime } from '@/lib/utils';
-import { Metadata } from 'next';
+import { readingTime } from '@/lib/utils';
+import { ArrowLeft, Eye, Clock } from 'lucide-react';
 import { JsonLd } from '@/components/seo/json-ld';
 
 type CategoryParams = Promise<{ slug: string }>;

@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import { Metadata } from 'next';
-import { AdSlot } from '@/components/ads/ad-slot';
 
 export const metadata: Metadata = {
   title: 'Advertise With Us | Blog-Ghar',

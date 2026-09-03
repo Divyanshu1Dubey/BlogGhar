@@ -1,7 +1,5 @@
-import type { Metadata } from 'next';
-
 export interface JsonLdProps {
-  type: 'WebSite' | 'Article' | 'BreadcrumbList' | 'FAQPage' | 'Organization' | 'HowTo' | 'Product' | 'ItemList' | 'JobPosting' | 'NewsArticle' | 'DiscussionForumPosting' | 'VideoGame' | 'WebApplication' | 'Person' | 'AboutPage';
+  type: 'WebSite' | 'Article' | 'BreadcrumbList' | 'FAQPage' | 'Organization' | 'HowTo' | 'Product' | 'ItemList' | 'JobPosting' | 'NewsArticle' | 'DiscussionForumPosting' | 'VideoGame' | 'WebApplication' | 'Person' | 'AboutPage' | 'Blog' | 'WebPage';
   data: Record<string, any>;
 }
 

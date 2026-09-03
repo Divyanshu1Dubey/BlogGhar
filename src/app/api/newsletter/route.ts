@@ -15,8 +15,6 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Already subscribed!' }, { status: 400 });
     }
 
-    const token = crypto.randomUUID();
-
     if (existing) {
       await prisma.newsletterSubscriber.update({
         where: { email },
@@ -24,9 +22,9 @@ export async function POST(request: Request) {
       });
     } else {
       const session = await auth();
-      const userId = session?.user?.id || null;
+      const userId = session?.user ? (session as any).user.id : null;
       await prisma.newsletterSubscriber.create({
-        data: { email, name: name || null, isVerified: true, userId },
+        data: { email, name: name || null, isVerified: true, userId: userId as string | null },
       });
     }
 

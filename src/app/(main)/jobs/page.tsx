@@ -2,7 +2,6 @@ import prisma from '@/lib/prisma';
 import Link from 'next/link';
 import { MapPin, DollarSign, ExternalLink } from 'lucide-react';
 import { formatDate } from '@/lib/utils';
-import { Metadata } from 'next';
 import { JsonLd } from '@/components/seo/json-ld';
 
 export const dynamic = 'force-dynamic';

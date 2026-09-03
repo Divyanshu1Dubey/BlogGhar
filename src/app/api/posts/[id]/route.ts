@@ -7,14 +7,13 @@ type PostIdParams = Promise<{ id: string }>;
 
 async function requireAuth() {
   const session = await getServerSession(authOptions);
-  if (!session?.user?.id) {
+  if (!session || !(session?.user as any)?.id) {
     return null;
   }
   return session;
 }
 
 export async function GET(
-  request: Request,
   { params }: { params: PostIdParams }
 ) {
   try {
@@ -39,11 +38,12 @@ export async function PATCH(
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+    const userId = (session as any).user.id;
     const { id } = await params;
     const data = await request.json();
     const post = await prisma.post.findUnique({ where: { id } });
     if (!post) return NextResponse.json({ error: 'Not found' }, { status: 404 });
-    if (post.authorId !== session.user.id) {
+    if (post.authorId !== userId) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
     const updated = await prisma.post.update({ where: { id }, data });
@@ -54,7 +54,6 @@ export async function PATCH(
 }
 
 export async function DELETE(
-  request: Request,
   { params }: { params: PostIdParams }
 ) {
   try {
@@ -62,10 +61,11 @@ export async function DELETE(
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+    const userId = (session as any).user.id;
     const { id } = await params;
     const post = await prisma.post.findUnique({ where: { id } });
     if (!post) return NextResponse.json({ error: 'Not found' }, { status: 404 });
-    if (post.authorId !== session.user.id) {
+    if (post.authorId !== userId) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
     await prisma.post.delete({ where: { id } });

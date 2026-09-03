@@ -1,19 +1,16 @@
-import prisma from '@/lib/prisma';
 import { notFound } from 'next/navigation';
 import { JsonLd } from '@/components/seo/json-ld';
 
-type HoroscopeParams = Promise<{ sign: string }>;
-
 interface Props {
-  params: HoroscopeParams;
+  params: Promise<{ sign: string }>;
 }
 
 export default async function HoroscopeSignPage({ params }: Props) {
   const { sign } = await params;
-  const signLower = sign.toLowerCase();
+  const signLower = (sign as string).toLowerCase();
 
   const validSigns = ['aries', 'taurus', 'gemini', 'cancer', 'leo', 'virgo', 'libra', 'scorpio', 'sagittarius', 'capricorn', 'aquarius', 'pisces'];
-  if (!validSigns.includes(sign)) {
+  if (!validSigns.includes(signLower)) {
     notFound();
   }
 
