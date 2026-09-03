@@ -86,7 +86,8 @@ export function generatePageMetadata({
       description,
       images: [absoluteOgImage],
       creator: DEFAULT_TWITTER_HANDLE,
-      ...(author && { site: author }),
+      site: DEFAULT_TWITTER_HANDLE,
+      ...(author && { creator: author }),
     },
   };
 

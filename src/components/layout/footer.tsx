@@ -101,9 +101,9 @@ export function Footer() {
               <div className="px-6 py-3 bg-green-500/20 text-green-400 rounded-lg text-sm font-medium">
                 Subscribed successfully! Check your inbox.
               </div>
-            ) : error ? (
-              <div className="px-6 py-3 bg-red-500/20 text-red-400 rounded-lg text-sm font-medium">{error}</div>
             ) : (
+              <div className="flex flex-col items-end gap-2">
+                {error && <div className="px-6 py-2 bg-red-500/20 text-red-400 rounded-lg text-sm font-medium">{error}</div>}
               <form onSubmit={handleSubscribe} className="flex gap-2 w-full lg:w-auto">
                 <input
                   type="email"
@@ -118,6 +118,7 @@ export function Footer() {
                   Subscribe
                 </button>
               </form>
+              </div>
             )}
           </div>
         </div>

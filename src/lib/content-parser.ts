@@ -144,11 +144,26 @@ function parseMarkdownToHtml(text: string): string {
   html = html.replace(/__(.+?)__/g, '<strong>$1</strong>');
   html = html.replace(/_(.+?)_/g, '<em>$1</em>');
 
-  // Links
-  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+  const sanitizeUrl = (url: string): string | null => {
+    const trimmed = url.trim();
+    if (!trimmed || /^(?:javascript|data|vbscript):/i.test(trimmed)) return null;
+    if (/^(?:https?:|mailto:)/i.test(trimmed) || trimmed.startsWith('/') || trimmed.startsWith('./') || trimmed.startsWith('../') || trimmed.startsWith('#')) {
+      return trimmed.replace(/"/g, '&quot;');
+    }
+    return null;
+  };
 
   // Images
-  html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" style="max-width:100%;border-radius:8px;margin:12px 0;" />');
+  html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_match, alt, url) => {
+    const safeUrl = sanitizeUrl(url);
+    return safeUrl ? `<img src="${safeUrl}" alt="${alt}" style="max-width:100%;border-radius:8px;margin:12px 0;" />` : '';
+  });
+
+  // Links
+  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_match, label, url) => {
+    const safeUrl = sanitizeUrl(url);
+    return safeUrl ? `<a href="${safeUrl}" target="_blank" rel="noopener">${label}</a>` : label;
+  });
 
   // Lists
   const lines = html.split('\n');
@@ -220,7 +235,7 @@ function detectCategory(text: string): string {
     }
   }
 
-  return bestCategory;
+  return bestCategory.toLowerCase().replace(/_/g, '-');
 }
 
 function extractTags(text: string): string[] {

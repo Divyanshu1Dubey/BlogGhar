@@ -1,31 +1,5 @@
 import { NextResponse } from 'next/server';
-
-// ─── In-Memory Room Store ──────────────────────────────────────────────────
-
-interface Player {
-  id: string;
-  name: string;
-  isReady: boolean;
-  isHost: boolean;
-  joinedAt: number;
-}
-
-interface GameRoom {
-  id: string;
-  code: string;
-  gameType: string;
-  gameSlug: string;
-  mode: 'casual' | 'ranked';
-  players: Player[];
-  status: 'waiting' | 'playing' | 'finished';
-  result?: { winner: string | null; scores: Record<string, number> };
-  createdAt: number;
-  maxPlayers: number;
-}
-
-type RoomStore = Map<string, GameRoom>;
-
-const rooms: RoomStore = new Map();
+import { cleanupRooms, rooms, type GameRoom } from '@/lib/multiplayer-room-store';
 
 const GAME_TYPES = [
   { name: 'Tic-Tac-Toe', slug: 'tic-tac-toe', players: '2', maxPlayers: 2, icon: '❌⭕' },
@@ -74,6 +48,7 @@ function getRoomsList() {
 
 export async function GET() {
   try {
+    cleanupRooms();
     const list = getRoomsList();
     return NextResponse.json({ rooms: list, gameTypes: GAME_TYPES });
   } catch {

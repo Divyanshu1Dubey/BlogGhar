@@ -32,11 +32,14 @@ export function NewsTicker({ items }: NewsTickerProps) {
 
     let offset = 0;
     let rafId: number;
+    let previousTimestamp: number | undefined;
     const singleWidth = () => track.scrollWidth / 2;
 
-    const tick = () => {
+    const tick = (timestamp: number) => {
+      const elapsed = previousTimestamp === undefined ? 0 : timestamp - previousTimestamp;
+      previousTimestamp = timestamp;
       if (!isPaused.current) {
-        offset -= TICKER_SPEED_MS / 16;
+        offset -= elapsed * (TICKER_SPEED_MS / (16 * 16.67));
         const sw = singleWidth();
         if (offset <= -sw) offset = 0;
         if (track) track.style.transform = `translateX(${offset}px)`;

@@ -24,8 +24,24 @@ import { AdSlot } from '@/components/ads/ad-slot';
 import NewsletterForm from '@/components/newsletter-form';
 import { formatDate, readingTime, formatNumber } from '@/lib/utils';
 import { CopyLinkButton } from '@/components/ui/copy-link-button';
+import { generatePageMetadata } from '@/components/seo/page-seo';
 
 type BlogParams = Promise<{ slug: string }>;
+
+export async function generateMetadata({ params }: { params: BlogParams }) {
+  const { slug } = await params;
+  const post = await prisma.post.findUnique({ where: { slug }, select: { title: true, excerpt: true, slug: true, featuredImage: true, author: { select: { name: true } }, tags: { select: { name: true } } } });
+  if (!post) return {};
+  return generatePageMetadata({
+    title: post.title,
+    description: post.excerpt || post.title,
+    canonical: `https://bloghar.com/blog/${post.slug}`,
+    ogImage: post.featuredImage || undefined,
+    ogType: 'article',
+    author: post.author?.name || undefined,
+    tags: post.tags ? [post.tags.name] : undefined,
+  });
+}
 
 function buildArticleSchema(post: {
   title: string;
@@ -85,14 +101,22 @@ function extractHeadings(html: string): { text: string; level: number; id: strin
       .replace(/&nbsp;/g, ' ')
       .trim();
     if (!rawText) continue;
-    const id = rawText
-      .toLowerCase()
-      .replace(/[^\w\s-]/g, '')
-      .replace(/\s+/g, '-')
-      .slice(0, 60);
+    const id = slugifyHeading(rawText);
     headings.push({ text: rawText, level: parseInt(match[1]), id });
   }
+
   return headings;
+}
+
+function slugifyHeading(text: string): string {
+  return text.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-').slice(0, 60);
+}
+
+function withHeadingIds(html: string): string {
+  return html.replace(/<h([23])([^>]*)>([\s\S]*?)<\/h\1>/g, (_match, level, attrs, inner) => {
+    const text = inner.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim();
+    return `<h${level}${attrs} id="${slugifyHeading(text)}">${inner}</h${level}>`;
+  });
 }
 
 export default async function BlogPostPage({ params }: { params: BlogParams }) {
@@ -297,7 +321,7 @@ export default async function BlogPostPage({ params }: { params: BlogParams }) {
                     prose-pre:rounded-xl prose-pre:my-6
                     prose-hr:border-gray-200 dark:prose-hr:border-dark-border
                   "
-                  dangerouslySetInnerHTML={{ __html: post.content }}
+                  dangerouslySetInnerHTML={{ __html: withHeadingIds(post.content) }}
                 />
               </div>
 

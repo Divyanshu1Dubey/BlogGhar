@@ -50,7 +50,7 @@ function parseSourceBlogs(source: string): SourceBlog[] {
 
     const bodyLines = lines.slice(closingDelimiter + 1);
     const endMarker = bodyLines.findIndex(line => /^END OF BLOG POST #\d+/.test(line.trim()));
-    const articleLines = endMarker >= 0 ? bodyLines.slice(0, Math.max(0, endMarker - 1)) : bodyLines;
+    const articleLines = endMarker >= 0 ? bodyLines.slice(0, endMarker) : bodyLines;
     const body = articleLines.join('\n').trim();
     if (!body) throw new Error(`Blog ${index + 1} has no article body`);
 

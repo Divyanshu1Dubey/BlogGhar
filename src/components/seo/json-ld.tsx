@@ -167,7 +167,7 @@ export interface BreadcrumbItem {
 
 export function generateBreadcrumbSchema(items: BreadcrumbItem[]) {
   return {
-    '@context': 'https://schema',
+    '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: items.map((item, i) => ({
       '@type': 'ListItem',
@@ -201,7 +201,7 @@ export function generateJobPostingSchema(job: JobPostingInput) {
       ...(job.companyLogo && { logo: job.companyLogo }),
     },
     jobLocationType: job.location.toLowerCase().includes('remote') ? 'TELECOMMUTE' : 'ONSITE',
-    employmentType: (job.type || 'FULL_TIME').toUpperCase(),
+    employmentType: (job.type || 'FULL_TIME').replace(/\W+/g, '_').toUpperCase(),
     description: job.description,
     datePosted: job.postedAt || new Date().toISOString(),
     url: job.url,

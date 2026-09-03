@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { Save, Eye, Send, Image as ImageIcon, Tag, Settings, FileText, Sparkles } from 'lucide-react';
+import { Save, Eye, Send, Tag, Settings, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { parseContent, generateSlug, generateExcerpt, type ParsedContent } from '@/lib/content-parser';
 
@@ -13,7 +13,7 @@ interface Category {
   icon: string;
 }
 
-export default function NewPostPage({ categories }: { categories: Category[] }) {
+export default function NewPostPage() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
@@ -21,6 +21,15 @@ export default function NewPostPage({ categories }: { categories: Category[] }) 
   const [rawText, setRawText] = useState('');
   const [parsed, setParsed] = useState<ParsedContent | null>(null);
   const [activeTab, setActiveTab] = useState<'write' | 'raw'>('write');
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [slugManuallyEdited, setSlugManuallyEdited] = useState(false);
+
+  useEffect(() => {
+    fetch('/api/categories')
+      .then(res => res.ok ? res.json() : Promise.reject(new Error('Failed to load categories')))
+      .then(data => setCategories(data.categories || data))
+      .catch(() => setCategories([]));
+  }, []);
 
   const [form, setForm] = useState({
     title: '',
@@ -40,16 +49,17 @@ export default function NewPostPage({ categories }: { categories: Category[] }) 
       const result = parseContent(text);
       setParsed(result);
       if (!form.title) {
-        setForm(f => ({ ...f, title: result.title, slug: result.slug, excerpt: result.excerpt, content: result.content, categoryId: result.suggestedCategory }));
+        const categoryId = categories.find(c => c.slug === result.suggestedCategory)?.id || '';
+        setForm(f => ({ ...f, title: result.title, slug: slugManuallyEdited ? f.slug : result.slug, excerpt: result.excerpt, content: result.content, categoryId }));
       }
     }
-  }, [form.title]);
+  }, [form.title, categories, slugManuallyEdited]);
 
   const handleTitleChange = (title: string) => {
     setForm(f => ({
       ...f,
       title,
-      slug: f.slug && !f._slugManuallyEdited ? f.slug : generateSlug(title),
+      slug: slugManuallyEdited ? f.slug : generateSlug(title),
     }));
   };
 
@@ -299,7 +309,7 @@ This is a section with more details. You can write multiple paragraphs.
                   <input
                     type="text"
                     value={form.slug}
-                    onChange={e => setForm(f => ({ ...f, slug: e.target.value, _slugManuallyEdited: true }))}
+                    onChange={e => { setSlugManuallyEdited(true); setForm(f => ({ ...f, slug: e.target.value })); }}
                     placeholder="my-post-title"
                     className="flex-1 px-3 py-2 border border-gray-200 dark:border-dark-border rounded-lg text-sm bg-white dark:bg-dark-card"
                   />

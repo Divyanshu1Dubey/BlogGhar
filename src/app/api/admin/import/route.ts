@@ -9,12 +9,25 @@ export async function POST(request: Request) {
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+    if ((session.user as { role?: string }).role !== 'ADMIN') {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
 
     const body = await request.json();
-    const { content, title, slug, excerpt, categoryId, tags, status, featuredImage, postType, readTime } = body;
+    const { content, title, slug, excerpt, categoryId, status, featuredImage, postType, readTime } = body;
 
     if (!content?.trim()) {
       return NextResponse.json({ error: 'Content is required' }, { status: 400 });
+    }
+    if (!categoryId || typeof categoryId !== 'string') {
+      return NextResponse.json({ error: 'Category is required' }, { status: 400 });
+    }
+    const category = await prisma.category.findFirst({
+      where: { OR: [{ id: categoryId }, { slug: categoryId }] },
+      select: { id: true },
+    });
+    if (!category) {
+      return NextResponse.json({ error: 'Category not found' }, { status: 400 });
     }
 
     // Auto-generate missing fields
@@ -30,7 +43,7 @@ export async function POST(request: Request) {
         featuredImage: featuredImage || '',
         postType: postType || 'BLOG',
         status: status || 'DRAFT',
-        categoryId: categoryId || '',
+        categoryId: category.id,
         authorId: (session.user as any).id,
         readTime: readTime || parsed.readTime,
         publishedAt: status === 'PUBLISHED' ? new Date() : null,
@@ -41,7 +54,7 @@ export async function POST(request: Request) {
       },
     });
 
-    return NextResponse.json({ success: true, post });
+    return NextResponse.json({ success: true, ...post });
   } catch (err) {
     console.error('Error creating post:', err);
     return NextResponse.json({ error: 'Failed to create post' }, { status: 500 });

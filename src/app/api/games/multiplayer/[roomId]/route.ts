@@ -1,11 +1,9 @@
 import { NextResponse } from 'next/server';
-
-const rooms = new Map<string, any>();
+import { rooms } from '@/lib/multiplayer-room-store';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const roomId = searchParams.get('roomId');
-  const playerId = searchParams.get('playerId');
 
   if (roomId) {
     const room = rooms.get(roomId);
@@ -92,14 +90,23 @@ export async function PATCH(request: Request) {
       if (!player.isHost) {
         return NextResponse.json({ error: 'Only host can start the game' }, { status: 403 });
       }
+      if (room.status !== 'waiting' || room.players.length < 2 || !room.players.every((p) => p.isReady)) {
+        return NextResponse.json({ error: 'Room is not ready to start' }, { status: 400 });
+      }
       room.status = 'playing';
       room.startedAt = Date.now();
     } else if (action === 'setResult') {
       const { winner, scores } = body;
+      if (room.status !== 'playing') {
+        return NextResponse.json({ error: 'Game is not currently playing' }, { status: 400 });
+      }
       room.status = 'finished';
       room.result = { winner, scores };
       room.finishedAt = Date.now();
     } else if (action === 'rematch') {
+      if (room.status !== 'finished') {
+        return NextResponse.json({ error: 'Game has not finished' }, { status: 400 });
+      }
       room.status = 'waiting';
       room.players.forEach((p: any) => (p.isReady = false));
       delete room.result;
