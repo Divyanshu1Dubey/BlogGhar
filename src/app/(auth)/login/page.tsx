@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { signIn } from 'next-auth/react';
+import { getSession, signIn } from 'next-auth/react';
 import { Eye, EyeOff } from 'lucide-react';
 
 export default function LoginPage() {
@@ -25,7 +25,9 @@ export default function LoginPage() {
       if (res?.error) {
         setError('Invalid email or password');
       } else if (res?.ok) {
-        window.location.href = '/';
+        const session = await getSession();
+        const role = (session?.user as { role?: string } | undefined)?.role;
+        window.location.href = role === 'ADMIN' ? '/admin' : '/';
       } else {
         setError('Unable to sign in. Please try again.');
       }
