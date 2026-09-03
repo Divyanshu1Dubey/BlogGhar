@@ -3,6 +3,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { parseContent } from '../src/lib/content-parser';
 import { additionalOfficialJobs, expansionJobs, expansionPosts } from './expanded-content';
+import { researchedContentAsiaOceania } from './researched-content-asia-oceania';
+import { researchedContentAmericasTech } from './researched-content-americas-tech';
+import { researchedContentEuropeAfrica } from './researched-content-europe-africa';
 
 const prisma = new PrismaClient();
 
@@ -158,6 +161,42 @@ async function main() {
     { name: 'Memory Sequence', slug: 'memory-sequence', category: 'PUZZLE', description: 'Simon says! Remember and repeat the growing sequence of colors.', icon: '🎵', difficulty: 'MEDIUM', players: '1', tags: 'memory,sequence,colors', playCount: 0 },
     { name: 'Color Match', slug: 'color-match', category: 'ARCADE', description: 'Match the color name as fast as you can! Stroop effect challenge.', icon: '🎨', difficulty: 'EASY', players: '1', tags: 'colors,reflex,speed', playCount: 0 },
     { name: 'Number Chain', slug: 'number-chain', category: 'PUZZLE', description: 'Connect numbers 1-25 in order as fast as possible!', icon: '🔗', difficulty: 'MEDIUM', players: '1', tags: 'numbers,speed,puzzle', playCount: 0 },
+    // Arcade - additional
+    { name: 'Space Invaders', slug: 'space-invaders', category: 'ARCADE', description: 'Defend Earth from alien invaders. Classic arcade shooting action!', icon: '👾', difficulty: 'MEDIUM', players: '1', tags: 'arcade,shooter,classic', playCount: 0 },
+    { name: 'Asteroids', slug: 'asteroids', category: 'ARCADE', description: 'Shoot floating space rocks and survive! Classic vector-style arcade game.', icon: '☄️', difficulty: 'MEDIUM', players: '1', tags: 'arcade,space,classic', playCount: 0 },
+    { name: 'Galaga', slug: 'galaga', category: 'ARCADE', description: 'Classic space shooter. Defend from waves of alien ships!', icon: '🚀', difficulty: 'HARD', players: '1', tags: 'arcade,shooter,classic', playCount: 0 },
+    { name: 'Centipede', slug: 'centipede', category: 'ARCADE', description: 'Shoot the centipede segments before they reach you! Classic arcade challenge.', icon: '🐛', difficulty: 'MEDIUM', players: '1', tags: 'arcade,shooter,classic', playCount: 0 },
+    { name: 'Frogger', slug: 'frogger', category: 'ARCADE', description: 'Cross roads and rivers safely! Guide the frog home without getting hit.', icon: '🐸', difficulty: 'MEDIUM', players: '1', tags: 'arcade,classic,obstacle', playCount: 0 },
+    { name: 'Tetris', slug: 'tetris', category: 'ARCADE', description: 'Falling blocks puzzle. Rotate and place blocks to complete lines!', icon: '🎮', difficulty: 'HARD', players: '1', tags: 'arcade,puzzle,blocks', playCount: 0 },
+    { name: 'Brick Breaker Pro', slug: 'brick-breaker-pro', category: 'ARCADE', description: 'Advanced breakout with 50 levels! Break all bricks with your paddle and ball.', icon: '💥', difficulty: 'MEDIUM', players: '1', tags: 'arcade,breakout,classic', playCount: 0 },
+    { name: 'Helix Jump', slug: 'helix-jump', category: 'ARCADE', description: 'Ball bouncing down spiral tower. Navigate through gaps and platforms!', icon: '🔄', difficulty: 'EASY', players: '1', tags: 'arcade,bouncing,reflex', playCount: 0 },
+    { name: 'Color Switch', slug: 'color-switch', category: 'ARCADE', description: 'Match color through obstacles! Tap to change your ball\'s color.', icon: '🌈', difficulty: 'EASY', players: '1', tags: 'arcade,colors,reflex', playCount: 0 },
+    { name: 'Stack Ball', slug: 'stack-ball', category: 'ARCADE', description: 'Smash through platforms! Drop the ball through helix tower levels.', icon: '⚪', difficulty: 'EASY', players: '1', tags: 'arcade,bouncing,reflex', playCount: 0 },
+    // Puzzle - additional
+    { name: 'Minesweeper', slug: 'minesweeper', category: 'PUZZLE', description: 'Classic mine detection game. Flag mines and clear the board logically!', icon: '💣', difficulty: 'MEDIUM', players: '1', tags: 'logic,puzzle,classic', playCount: 0 },
+    { name: 'Nonogram', slug: 'nonogram', category: 'PUZZLE', description: 'Pixel art puzzle by numbers. Fill cells to reveal hidden images!', icon: '🖼️', difficulty: 'HARD', players: '1', tags: 'logic,puzzle,art', playCount: 0 },
+    { name: 'Sliding Puzzle', slug: 'sliding-puzzle', category: 'PUZZLE', description: '15-puzzle tile game. Slide tiles to arrange numbers in order.', icon: '🧩', difficulty: 'MEDIUM', players: '1', tags: 'sliding,puzzle,classic', playCount: 0 },
+    { name: 'Pipe Connect', slug: 'pipe-connect', category: 'PUZZLE', description: 'Connect pipes to flow water! Rotate pipe segments to create a path.', icon: '🔧', difficulty: 'MEDIUM', players: '1', tags: 'puzzle,logic,connect', playCount: 0 },
+    { name: 'Flow Free', slug: 'flow-free', category: 'PUZZLE', description: 'Connect matching colors! Fill the board with colored pipes.', icon: '💧', difficulty: 'EASY', players: '1', tags: 'puzzle,colors,connect', playCount: 0 },
+    { name: 'Unblock Me', slug: 'unblock-me', category: 'PUZZLE', description: 'Slide blocks to free the red block! Classic sliding block puzzle.', icon: '🚧', difficulty: 'MEDIUM', players: '1', tags: 'puzzle,sliding,logic', playCount: 0 },
+    { name: 'Tangram', slug: 'tangram', category: 'PUZZLE', description: 'Arrange geometric shapes to match the target silhouette!', icon: '📐', difficulty: 'HARD', players: '1', tags: 'puzzle,geometry,shapes', playCount: 0 },
+    { name: 'KenKen', slug: 'kenken', category: 'PUZZLE', description: 'Math grid puzzle. Fill the grid using arithmetic with cage rules!', icon: '🔢', difficulty: 'HARD', players: '1', tags: 'math,puzzle,logic', playCount: 0 },
+    // Word - additional
+    { name: 'Wordle Clone', slug: 'wordle-clone', category: 'WORD', description: 'Guess the 5-letter word in 6 tries! Color-coded feedback after each guess.', icon: '🟩', difficulty: 'MEDIUM', players: '1', tags: 'words,guessing,popular', playCount: 0 },
+    { name: 'Spelling Bee', slug: 'spelling-bee', category: 'WORD', description: 'Make words from 7 letters! How many can you find?', icon: '🐝', difficulty: 'MEDIUM', players: '1', tags: 'words,spelling,vocabulary', playCount: 0 },
+    { name: 'Word Search', slug: 'word-search', category: 'WORD', description: 'Find hidden words in a grid of letters! Multiple themes available.', icon: '🔍', difficulty: 'EASY', players: '1', tags: 'words,search,puzzle', playCount: 0 },
+    { name: 'Anagrams', slug: 'anagrams', category: 'WORD', description: 'Rearrange letters to form words! Challenge your vocabulary skills.', icon: '🔄', difficulty: 'EASY', players: '1', tags: 'words,letters,vocabulary', playCount: 0 },
+    { name: 'Text Twist', slug: 'text-twist', category: 'WORD', description: 'Unscramble words from letters! Find all words before time runs out.', icon: '💬', difficulty: 'MEDIUM', players: '1', tags: 'words,scramble,typing', playCount: 0 },
+    // Board - additional
+    { name: 'Connect 4', slug: 'connect-4', category: 'BOARD', description: 'Drop discs to connect 4 in a row! Play against AI or a friend.', icon: '🔴', difficulty: 'EASY', players: '1-2', tags: 'strategy,classic,board', playCount: 0 },
+    { name: 'Checkers', slug: 'checkers', category: 'BOARD', description: 'Classic checkers game. Jump and capture opponent pieces!', icon: '⚫', difficulty: 'MEDIUM', players: '1-2', tags: 'strategy,classic,board', playCount: 0 },
+    { name: 'Othello', slug: 'othello', category: 'BOARD', description: 'Flip pieces to capture territory! Reversi strategy board game.', icon: '⚪', difficulty: 'HARD', players: '1-2', tags: 'strategy,classic,board', playCount: 0 },
+    { name: 'Snakes and Ladders', slug: 'snakes-and-ladders', category: 'BOARD', description: 'Roll the dice and climb ladders or slide down snakes! Family fun.', icon: '🪜', difficulty: 'EASY', players: '1-4', tags: 'board,luck,family', playCount: 0 },
+    { name: 'Ludo', slug: 'ludo', category: 'BOARD', description: 'Race your tokens home! Classic board game for 2-4 players.', icon: '🎲', difficulty: 'EASY', players: '2-4', tags: 'board,dice,multiplayer', playCount: 0 },
+    // Quiz - additional
+    { name: 'GK Quiz', slug: 'gk-quiz', category: 'QUIZ', description: 'General knowledge questions covering history, science, and culture!', icon: '🌍', difficulty: 'MEDIUM', players: '1', tags: 'quiz,knowledge,trivia', playCount: 0 },
+    { name: 'Flags Quiz', slug: 'flags-quiz', category: 'QUIZ', description: 'Identify country flags from around the world! Learn geography.', icon: '🏳️', difficulty: 'EASY', players: '1', tags: 'quiz,geography,flags', playCount: 0 },
+    { name: 'Emoji Quiz', slug: 'emoji-quiz', category: 'QUIZ', description: 'Guess the answer from emoji clues! Fun and addictive quiz game.', icon: '😀', difficulty: 'EASY', players: '1', tags: 'quiz,emoji,fun', playCount: 0 },
   ];
 
   for (const game of games) {
@@ -389,6 +428,81 @@ async function main() {
     });
   }
   console.log(`✅ Imported ${expansionPosts.length} source-linked expansion blogs`);
+
+  const researchedPosts = [
+    ...researchedContentEuropeAfrica,
+    ...researchedContentAsiaOceania,
+    ...researchedContentAmericasTech,
+  ];
+  const researchManifest: Array<Record<string, string>> = [];
+  for (const blog of researchedPosts) {
+    const category = await prisma.category.upsert({
+      where: { slug: categorySlug(blog.category) },
+      update: {},
+      create: {
+        name: blog.category,
+        slug: categorySlug(blog.category),
+        description: `${blog.category} source-researched guides`,
+      },
+    });
+    const tag = await prisma.tag.upsert({
+      where: { slug: categorySlug(blog.focusKeyword) },
+      update: { name: blog.focusKeyword },
+      create: { name: blog.focusKeyword, slug: categorySlug(blog.focusKeyword) },
+    });
+    const parsed = parseContent(blog.body);
+    const savedPost = await prisma.post.upsert({
+      where: { slug: blog.slug },
+      update: {
+        title: blog.title,
+        content: parsed.content,
+        excerpt: blog.excerpt,
+        postType: 'BLOG',
+        status: 'PUBLISHED',
+        categoryId: category.id,
+        authorId: expansionAuthor.id,
+        tagId: tag.id,
+        focusKeyword: blog.focusKeyword,
+        seoTitle: blog.title,
+        seoDesc: blog.excerpt,
+        readTime: parsed.readTime,
+        publishedAt: new Date('2026-09-03T00:00:00.000Z'),
+      },
+      create: {
+        slug: blog.slug,
+        title: blog.title,
+        content: parsed.content,
+        excerpt: blog.excerpt,
+        postType: 'BLOG',
+        status: 'PUBLISHED',
+        categoryId: category.id,
+        authorId: expansionAuthor.id,
+        tagId: tag.id,
+        focusKeyword: blog.focusKeyword,
+        seoTitle: blog.title,
+        seoDesc: blog.excerpt,
+        readTime: parsed.readTime,
+        publishedAt: new Date('2026-09-03T00:00:00.000Z'),
+      },
+    });
+    researchManifest.push({
+      topic: blog.title,
+      niche: blog.category,
+      targetRegion: blog.category,
+      searchIntent: 'Actionable informational guidance for a specific real-world task',
+      mainKeyword: blog.focusKeyword,
+      opportunityRationale: 'Selected for a localized or procedural information gap identified during source research.',
+      keySource: blog.sourceUrl,
+      verificationStatus: 'Primary source URL included; current details must be rechecked before use.',
+      databaseContentId: savedPost.id,
+    });
+  }
+  fs.writeFileSync(
+    path.join(process.cwd(), 'research-manifest.json'),
+    `${JSON.stringify(researchManifest, null, 2)}\n`,
+    'utf-8',
+  );
+  console.log(`✅ Imported ${researchedPosts.length} additional researched SEO blogs`);
 
   const newsFile = path.join(process.cwd(), 'news_all_unique_complete.txt');
   if (fs.existsSync(newsFile)) {

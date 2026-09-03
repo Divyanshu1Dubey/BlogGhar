@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
+import GameModeSelector from '@/components/games/game-mode-selector';
 
 // ─── Sudoku Generator ───────────────────────────────────────────────────
 
@@ -1146,10 +1147,11 @@ function MathGame({ onGameOver }: { onGameOver?: (score: number) => void }) {
 
 export default function GameClient({ topScores, game }: { topScores: any[]; game: any }) {
   const [score, setScore] = useState(0);
+  const [gameMode, setGameMode] = useState<'solo' | 'ai' | 'local' | 'online' | null>(null);
+  const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard'>('medium');
 
   const handleGameOver = (s: number) => {
     setScore(s);
-    // Submit score via API
     const gameId = window.location.pathname.split('/').pop();
     if (gameId) {
       fetch('/api/games/score', {
@@ -1160,42 +1162,74 @@ export default function GameClient({ topScores, game }: { topScores: any[]; game
     }
   };
 
-  const renderGame = () => {
+  const getGameComponent = () => {
     const slug = game.slug;
     switch (slug) {
-      case 'sudoku': return <SudokuGame onGameOver={handleGameOver} />;
-      case 'snake': return <SnakeGame onGameOver={handleGameOver} />;
-      case '2048': return <Game2048 onGameOver={handleGameOver} />;
-      case 'tic-tac-toe': return <TicTacToeGame onGameOver={handleGameOver} />;
-      case 'memory-cards': return <MemoryGame onGameOver={handleGameOver} />;
-      case 'word-scramble': return <WordScrambleGame onGameOver={handleGameOver} />;
-      case 'hangman': return <HangmanGame onGameOver={handleGameOver} />;
-      case 'typing-speed': return <TypingGame onGameOver={handleGameOver} />;
-      case 'crossword': return <CrosswordGame onGameOver={handleGameOver} />;
-      case 'trivia': return <TriviaGame onGameOver={handleGameOver} />;
-      case 'math-challenge': return <MathGame onGameOver={handleGameOver} />;
-      case 'flappy-bird': return <FlappyBirdGame onGameOver={handleGameOver} />;
-      case 'breakout': return <BreakoutGame onGameOver={handleGameOver} />;
-      case 'memory-sequence': return <MemorySequenceGame onGameOver={handleGameOver} />;
-      case 'color-match': return <ColorMatchGame onGameOver={handleGameOver} />;
-      case 'number-chain': return <NumberChainGame onGameOver={handleGameOver} />;
-      case 'rock-paper-scissors': return <RockPaperScissorsGame onGameOver={handleGameOver} />;
-      case 'wordle': return <WordleGame onGameOver={handleGameOver} />;
-      case 'whack-a-mole': return <WhackAMoleGame onGameOver={handleGameOver} />;
-      case 'minesweeper': return <MinesweeperGame onGameOver={handleGameOver} />;
-      case 'tetris': return <TetrisGame onGameOver={handleGameOver} />;
-      case 'speed-math': return <SpeedMathGame onGameOver={handleGameOver} />;
-      case 'emoji-match': return <EmojiMatchGame onGameOver={handleGameOver} />;
-      case 'bubble-shooter': return <BubbleShooterGame onGameOver={handleGameOver} />;
-      case 'dino-run': return <DinoRunGame onGameOver={handleGameOver} />;
-      case 'blackjack': return <BlackjackGame onGameOver={handleGameOver} />;
-      default: return <ComingSoonGame slug={slug} />;
+      case 'sudoku': return <SudokuGame {...{onGameOver: handleGameOver, difficulty} as any} />;
+      case 'snake': return <SnakeGame {...{onGameOver: handleGameOver} as any} />;
+      case '2048': return <Game2048 {...{onGameOver: handleGameOver} as any} />;
+      case 'tic-tac-toe': return <TicTacToeGame {...{onGameOver: handleGameOver, mode: gameMode || 'solo', difficulty} as any} />;
+      case 'memory-cards': return <MemoryGame {...{onGameOver: handleGameOver, difficulty} as any} />;
+      case 'word-scramble': return <WordScrambleGame {...{onGameOver: handleGameOver, difficulty} as any} />;
+      case 'hangman': return <HangmanGame {...{onGameOver: handleGameOver, difficulty} as any} />;
+      case 'typing-speed': return <TypingGame {...{onGameOver: handleGameOver} as any} />;
+      case 'crossword': return <CrosswordGame {...{onGameOver: handleGameOver, difficulty} as any} />;
+      case 'trivia': return <TriviaGame {...{onGameOver: handleGameOver, difficulty} as any} />;
+      case 'math-challenge': return <MathGame {...{onGameOver: handleGameOver, difficulty} as any} />;
+      case 'flappy-bird': return <FlappyBirdGame {...{onGameOver: handleGameOver} as any} />;
+      case 'breakout': return <BreakoutGame {...{onGameOver: handleGameOver, difficulty} as any} />;
+      case 'memory-sequence': return <MemorySequenceGame {...{onGameOver: handleGameOver, difficulty} as any} />;
+      case 'color-match': return <ColorMatchGame {...{onGameOver: handleGameOver, difficulty} as any} />;
+      case 'number-chain': return <NumberChainGame {...{onGameOver: handleGameOver, difficulty} as any} />;
+      case 'rock-paper-scissors': return <RockPaperScissorsGame {...{onGameOver: handleGameOver, mode: gameMode || 'solo'} as any} />;
+      case 'wordle': return <WordleGame {...{onGameOver: handleGameOver} as any} />;
+      case 'whack-a-mole': return <WhackAMoleGame {...{onGameOver: handleGameOver, difficulty} as any} />;
+      case 'minesweeper': return <MinesweeperGame {...{onGameOver: handleGameOver, difficulty} as any} />;
+      case 'tetris': return <TetrisGame {...{onGameOver: handleGameOver, difficulty} as any} />;
+      case 'speed-math': return <SpeedMathGame {...{onGameOver: handleGameOver, difficulty} as any} />;
+      case 'emoji-match': return <EmojiMatchGame {...{onGameOver: handleGameOver, difficulty} as any} />;
+      case 'bubble-shooter': return <BubbleShooterGame {...{onGameOver: handleGameOver, difficulty} as any} />;
+      case 'dino-run': return <DinoRunGame {...{onGameOver: handleGameOver, difficulty} as any} />;
+      case 'blackjack': return <BlackjackGame {...{onGameOver: handleGameOver} as any} />;
+      default: return <ComingSoonGame {...{slug: game.slug} as any} />;
     }
   };
 
+  if (!gameMode) {
+    return (
+      <div className="py-4">
+        <GameModeSelector
+          gameName={game.name}
+          gameIcon={game.icon || '🎮'}
+          supportedModes={['solo', 'ai', 'local', 'online']}
+          onSelectMode={(mode) => setGameMode(mode)}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col items-center py-4">
-      {renderGame()}
+      <div className="w-full max-w-2xl mb-4 flex items-center justify-between">
+        <button onClick={() => setGameMode(null)} className="text-xs text-gray-400 hover:text-primary-600 transition-colors">
+          ← Change Mode
+        </button>
+        <div className="flex items-center gap-2">
+          <span className="px-2 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 rounded-full text-xs font-medium capitalize">
+            {gameMode === 'ai' ? `🤖 vs AI (${difficulty})` :
+             gameMode === 'local' ? '👥 2 Players' :
+             gameMode === 'online' ? '🌐 Online' : '🎮 Solo'}
+          </span>
+        </div>
+        {gameMode === 'ai' && (
+          <div className="flex gap-1">
+            {(['easy','medium','hard'] as const).map(d => (
+              <button key={d} onClick={() => setDifficulty(d)} className={`px-2 py-1 rounded text-[10px] font-bold capitalize ${difficulty === d ? 'bg-primary-600 text-white' : 'bg-gray-100 dark:bg-dark-bg'}`}>{d}</button>
+            ))}
+          </div>
+        )}
+      </div>
+      {getGameComponent()}
       {score > 0 && (
         <div className="mt-6 px-6 py-3 bg-green-100 dark:bg-green-900/30 text-green-700 rounded-xl text-center">
           <p className="font-medium">🏆 Game Over! Score: {score}</p>
@@ -1221,7 +1255,6 @@ export default function GameClient({ topScores, game }: { topScores: any[]; game
     </div>
   );
 }
-
 function ComingSoonGame({ slug }: { slug: string }) {
   const name = slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
   return (
@@ -1699,8 +1732,6 @@ function RockPaperScissorsGame({ onGameOver }: { onGameOver?: (score: number) =>
     if (finalScore > 0 && round + 1 >= 10) { setGameState('over'); onGameOver?.(finalScore); }
   };
 
-  const reset = () => { setScore({ player: 0, cpu: 0, draws: 0 }); setRound(0); setPlayerChoice(null); setCpuChoice(null); setResult(''); setGameState('idle'); };
-
   return (
     <div className="flex flex-col items-center">
       <div className="flex items-center gap-4 mb-4 p-4 bg-white dark:bg-dark-card rounded-xl border border-gray-200 dark:border-dark-border">
@@ -1823,7 +1854,7 @@ function WhackAMoleGame({ onGameOver }: { onGameOver?: (score: number) => void }
   useEffect(() => {
     if (gameState !== 'playing') return;
     const interval = setInterval(() => {
-      setMoles(prev => {
+      setMoles((_prev: boolean[]) => {
         const idx = Math.floor(Math.random() * HOLES);
         const next = Array.from({ length: HOLES }, (_, i) => i === idx);
         return next as boolean[];
@@ -1934,7 +1965,6 @@ function MinesweeperGame({ onGameOver }: { onGameOver?: (score: number) => void 
       {gameState === 'over' && <p className={`text-lg font-bold mb-3 ${won ? 'text-green-600' : 'text-red-600'}`}>{won ? '🎉 You cleared the field!' : '💥 Boom! You hit a mine!'}</p>}
       <div className="grid grid-cols-10 gap-0.5 bg-gray-400 p-1 rounded-lg">
         {Array.from({ length: SIZE * SIZE }).map((_, i) => {
-          const r = Math.floor(i / SIZE), c = i % SIZE;
           const revealedCell = revealed[i];
           const isMine = mines[i] && revealedCell;
           const num = numbers[i];
@@ -2051,12 +2081,12 @@ function TetrisGame({ onGameOver }: { onGameOver?: (score: number) => void }) {
       for (let r = 0; r < 20; r++) for (let c = 0; c < 10; c++) { ctx.strokeRect(c * 25, r * 20, 25, 20); }
       // Board
       for (let r = 0; r < 20; r++) for (let c = 0; c < 10; c++) {
-        if (s.board[r][c]) { ctx.fillStyle = COLORS[s.board[r][c]]; ctx.fillRect(c * 25 + 1, r * 20 + 1, 23, 18); ctx.fillStyle = 'rgba(255,255,255,0.2)'; ctx.fillRect(c * 25 + 1, r * 20 + 1, 23, 6); }
+        if (s.board[r][c]) { ctx.fillStyle = COLORS[s.board[r][c]] as any; ctx.fillRect(c * 25 + 1, r * 20 + 1, 23, 18); ctx.fillStyle = 'rgba(255,255,255,0.2)'; ctx.fillRect(c * 25 + 1, r * 20 + 1, 23, 6); }
       }
       // Piece
       if (s.piece) {
         for (let r = 0; r < s.piece.shape.length; r++) for (let c = 0; c < s.piece.shape[r].length; c++) {
-          if (s.piece.shape[r][c]) { const px = (s.piece.x + c) * 25, py = (s.piece.y + r) * 20; ctx.fillStyle = COLORS[s.piece.color]; ctx.fillRect(px + 1, py + 1, 23, 18); ctx.fillStyle = 'rgba(255,255,255,0.2)'; ctx.fillRect(px + 1, py + 1, 23, 6); }
+          if (s.piece.shape[r][c]) { const px = (s.piece.x + c) * 25, py = (s.piece.y + r) * 20; ctx.fillStyle = COLORS[s.piece.color] as any; ctx.fillRect(px + 1, py + 1, 23, 18); ctx.fillStyle = 'rgba(255,255,255,0.2)'; ctx.fillRect(px + 1, py + 1, 23, 6); }
         }
       }
       // Next piece
@@ -2246,7 +2276,7 @@ const stateRef = useRef<{ bubbles: {x:number,y:number,r:number,color:string,vx:n
   const reset = () => {
     const grid = initGrid();
     const color = BUBBLE_COLORS[Math.floor(Math.random() * BUBBLE_COLORS.length)];
-    stateRef.current = { bubbles: [], grid, shooter: { x: 175, y: 380, angle: -Math.PI/2, color }, nextColor: BUBBLE_COLORS[Math.floor(Math.random() * BUBBLE_COLORS.length)], currentBubble: null, bubbles: [] };
+    stateRef.current = { bubbles: [], grid, shooter: { x: 175, y: 380, angle: -Math.PI/2, color }, nextColor: BUBBLE_COLORS[Math.floor(Math.random() * BUBBLE_COLORS.length)], currentBubble: null };
     setScore(0); setGameState('playing');
   };
 
@@ -2272,7 +2302,7 @@ const stateRef = useRef<{ bubbles: {x:number,y:number,r:number,color:string,vx:n
       if (s.currentBubble) return;
       const angle = s.shooter.angle;
       const speed = 8;
-      s.currentBubble = { x: 175, y: 380, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed, color: s.shooter.color };
+      s.currentBubble = { x: 175, y: 380, r: BUBBLE_R, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed, color: s.shooter.color };
     };
     canvas.addEventListener('click', handleClick);
 
@@ -2502,7 +2532,7 @@ function BlackjackGame({ onGameOver }: { onGameOver?: (score: number) => void })
   const [dealerHand, setDealerHand] = useState<({suit:string,rank:string,value:number})[]>([]);
   const [gameState, setGameState] = useState<'idle'|'playing'|'over'>('idle');
   const [result, setResult] = useState('');
-  const [balance, setBalance] = useState;
+  const [balance, setBalance] = useState<number>(0);
   const [bet, setBet] = useState(50);
 
   const createDeck = () => {
@@ -2528,7 +2558,7 @@ function BlackjackGame({ onGameOver }: { onGameOver?: (score: number) => void })
     setDeck(d);
     setPlayerHand([d[0], d[1]]);
     setDealerHand([d[2], d[3]]);
-    setBalance(b => b - bet);
+    setBalance((b: number) => b - bet);
     setGameState('playing'); setResult('');
   };
 
@@ -2548,10 +2578,10 @@ function BlackjackGame({ onGameOver }: { onGameOver?: (score: number) => void })
     while (calc(dealer) < 17) { dealer.push(d[idx]); idx++; }
     setDealerHand(dealer); setDeck(d);
     const pSum = calc(playerHand), dSum = calc(dealer);
-    if (dSum > 21) { setResult(`Dealer busts! You win!`); setBalance(b => b + bet * 2); }
-    else if (pSum > dSum) { setResult(`You win! ${pSum} vs ${dSum}`); setBalance(b => b + bet * 2); }
+    if (dSum > 21) { setResult(`Dealer busts! You win!`); setBalance((b: number) => b + bet * 2); }
+    else if (pSum > dSum) { setResult(`You win! ${pSum} vs ${dSum}`); setBalance((b: number) => b + bet * 2); }
     else if (pSum < dSum) { setResult(`Dealer wins. ${pSum} vs ${dSum}`); }
-    else { setResult(`Push! ${pSum} vs ${dSum}`); setBalance(b => b + bet); }
+    else { setResult(`Push! ${pSum} vs ${dSum}`); setBalance((b: number) => b + bet); }
     setGameState('over');
     onGameOver?.(pSum > dSum ? bet * 2 : 0);
   };
