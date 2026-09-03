@@ -11,15 +11,20 @@ export async function generateMetadata() {
   return {
     title: 'Blog',
     description: 'Discover stories, tutorials, and insights across technology, lifestyle, education, and more on Blog-Ghar.',
-    alternates: { canonical: 'https://blogghar.com/blog' },
+    alternates: { canonical: 'https://bloghar.com/blog' },
   };
 }
 
-export default async function BlogPage() {
+export default async function BlogPage({ searchParams }: { searchParams?: Promise<{ category?: string }> }) {
+  const params = await searchParams;
   let posts: any[] = [];
   try {
     posts = await prisma.post.findMany({
-      where: { postType: 'BLOG', status: 'PUBLISHED' },
+      where: {
+        postType: 'BLOG',
+        status: 'PUBLISHED',
+        ...(params?.category ? { category: { slug: params.category } } : {}),
+      },
       orderBy: { publishedAt: 'desc' },
       take: 20,
       include: { author: { select: { name: true } }, category: { select: { name: true, slug: true } } },
@@ -31,11 +36,11 @@ export default async function BlogPage() {
     '@type': 'Blog',
     name: 'Blog-Ghar Blog',
     description: 'Discover stories, tutorials, and insights across technology, lifestyle, education, and more.',
-    url: 'https://blogghar.com/blog',
+    url: 'https://bloghar.com/blog',
     blogPost: posts.slice(0, 10).map((post: any) => ({
       '@type': 'BlogPosting',
       headline: post.title,
-      url: `https://blogghar.com/blog/${post.slug}`,
+      url: `https://bloghar.com/blog/${post.slug}`,
       datePublished: post.publishedAt?.toISOString(),
       author: { '@type': 'Person', name: post.author?.name || 'Blog-Ghar' },
     })),
@@ -47,8 +52,8 @@ export default async function BlogPage() {
         '@context': 'https://schema.org',
         '@type': 'BreadcrumbList',
         itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://blogghar.com' },
-          { '@type': 'ListItem', position: 2, name: 'Blog', item: 'https://blogghar.com/blog' },
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://bloghar.com' },
+          { '@type': 'ListItem', position: 2, name: 'Blog', item: 'https://bloghar.com/blog' },
         ],
       }} />
       {blogSchema && <JsonLd type="Blog" data={blogSchema} />}

@@ -18,8 +18,8 @@ export async function generateMetadata({ params }: { params: BlogParams }) {
     });
     if (!post) return {};
 
-    const canonical = `https://blogghar.com/blog/${post.slug}`;
-    const ogImage = post.featuredImage || 'https://blogghar.com/og-image.svg';
+    const canonical = `https://bloghar.com/blog/${post.slug}`;
+    const ogImage = post.featuredImage || 'https://bloghar.com/og-image.svg';
     const description = post.seoDesc || post.excerpt || post.title;
 
     return {
@@ -61,7 +61,7 @@ export default async function BlogPostPage({ params }: { params: BlogParams }) {
       include: {
         author: { select: { name: true, image: true } },
         category: { select: { name: true, slug: true } },
-        tags: { include: { tag: true } },
+        tags: { select: { id: true, name: true, slug: true } },
         _count: { select: { comments: true } },
       },
     });
@@ -88,7 +88,7 @@ export default async function BlogPostPage({ params }: { params: BlogParams }) {
     '@type': 'BlogPosting',
     headline: post.title,
     description: post.excerpt || post.title,
-    url: `https://blogghar.com/blog/${post.slug}`,
+    url: `https://bloghar.com/blog/${post.slug}`,
     datePublished: post.publishedAt?.toISOString() || post.createdAt?.toISOString(),
     dateModified: post.updatedAt?.toISOString() || post.createdAt?.toISOString(),
     author: {
@@ -98,12 +98,12 @@ export default async function BlogPostPage({ params }: { params: BlogParams }) {
     publisher: {
       '@type': 'Organization',
       name: 'Blog-Ghar',
-      url: 'https://blogghar.com',
-      logo: { '@type': 'ImageObject', url: 'https://blogghar.com/logo.svg' },
+      url: 'https://bloghar.com',
+      logo: { '@type': 'ImageObject', url: 'https://bloghar.com/logo.svg' },
     },
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': `https://blogghar.com/blog/${post.slug}`,
+      '@id': `https://bloghar.com/blog/${post.slug}`,
     },
     image: post.featuredImage ? { '@type': 'ImageObject', url: post.featuredImage } : undefined,
     articleSection: post.category?.name || 'General',
@@ -116,9 +116,9 @@ export default async function BlogPostPage({ params }: { params: BlogParams }) {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://blogghar.com' },
-      { '@type': 'ListItem', position: 2, name: 'Blog', item: 'https://blogghar.com/blog' },
-      { '@type': 'ListItem', position: 3, name: post.title, item: `https://blogghar.com/blog/${post.slug}` },
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://bloghar.com' },
+      { '@type': 'ListItem', position: 2, name: 'Blog', item: 'https://bloghar.com/blog' },
+      { '@type': 'ListItem', position: 3, name: post.title, item: `https://bloghar.com/blog/${post.slug}` },
     ],
   };
 
@@ -175,13 +175,11 @@ export default async function BlogPostPage({ params }: { params: BlogParams }) {
         <AdSlot slot="1234567890" format="auto" responsive={true} />
       </div>
 
-      {post.tags.length > 0 && (
+      {post.tags && (
         <div className="flex flex-wrap gap-2 mb-8 pb-8 border-b border-gray-200 dark:border-dark-border">
-          {post.tags.map((t: any) => (
-            <Link key={t.tag.id} href={`/tag/${t.tag.slug}`} className="px-3 py-1 bg-gray-100 dark:bg-dark-bg rounded-full text-xs hover:bg-primary-100 dark:hover:bg-primary-900/30">
-              #{t.tag.name}
-            </Link>
-          ))}
+          <Link href={`/tag/${post.tags.slug}`} className="px-3 py-1 bg-gray-100 dark:bg-dark-bg rounded-full text-xs hover:bg-primary-100 dark:hover:bg-primary-900/30">
+            #{post.tags.name}
+          </Link>
         </div>
       )}
 
