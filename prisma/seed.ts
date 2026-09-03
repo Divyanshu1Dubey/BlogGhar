@@ -133,31 +133,31 @@ async function main() {
   // Games - 21 total with variety
   const games = [
     // Puzzle
-    { name: 'Sudoku', slug: 'sudoku', category: 'PUZZLE', description: 'Classic number puzzle. Fill the 9x9 grid with digits 1-9. Multiple difficulty levels.', icon: '🔢', difficulty: 'MEDIUM', players: '1', tags: 'logic,numbers,puzzle', playCount: 15420 },
-    { name: '2048', slug: '2048', category: 'PUZZLE', description: 'Slide and merge numbered tiles to reach 2048! Addictive puzzle game.', icon: '🎯', difficulty: 'EASY', players: '1', tags: 'numbers,merge,puzzle', playCount: 12300 },
-    { name: 'Memory Cards', slug: 'memory-cards', category: 'PUZZLE', description: 'Match pairs of cards. Test your memory with increasing difficulty.', icon: '🃏', difficulty: 'EASY', players: '1', tags: 'memory,matching,puzzle', playCount: 8900 },
-    { name: 'Crossword', slug: 'crossword', category: 'PUZZLE', description: 'Solve crossword puzzles. Tech-themed clues and answers.', icon: '📰', difficulty: 'HARD', players: '1', tags: 'words,vocabulary,puzzle', playCount: 5600 },
+    { name: 'Sudoku', slug: 'sudoku', category: 'PUZZLE', description: 'Classic number puzzle. Fill the 9x9 grid with digits 1-9. Multiple difficulty levels.', icon: '🔢', difficulty: 'MEDIUM', players: '1', tags: 'logic,numbers,puzzle', playCount: 0 },
+    { name: '2048', slug: '2048', category: 'PUZZLE', description: 'Slide and merge numbered tiles to reach 2048! Addictive puzzle game.', icon: '🎯', difficulty: 'EASY', players: '1', tags: 'numbers,merge,puzzle', playCount: 0 },
+    { name: 'Memory Cards', slug: 'memory-cards', category: 'PUZZLE', description: 'Match pairs of cards. Test your memory with increasing difficulty.', icon: '🃏', difficulty: 'EASY', players: '1', tags: 'memory,matching,puzzle', playCount: 0 },
+    { name: 'Crossword', slug: 'crossword', category: 'PUZZLE', description: 'Solve crossword puzzles. Tech-themed clues and answers.', icon: '📰', difficulty: 'HARD', players: '1', tags: 'words,vocabulary,puzzle', playCount: 0 },
     // Arcade
-    { name: 'Snake', slug: 'snake', category: 'ARCADE', description: 'Classic snake game. Eat food, grow longer, avoid walls and yourself!', icon: '🐍', difficulty: 'EASY', players: '1', tags: 'classic,arcade,retro', playCount: 18200 },
-    { name: 'Flappy Bird', slug: 'flappy-bird', category: 'ARCADE', description: 'Tap to fly through pipes. How far can you go? Simple but addictive!', icon: '🐦', difficulty: 'HARD', players: '1', tags: 'tap,arcade,classic', playCount: 21000 },
-    { name: 'Breakout', slug: 'breakout', category: 'ARCADE', description: 'Break all the bricks with your ball and paddle. Multiple levels and power-ups!', icon: '🧱', difficulty: 'MEDIUM', players: '1', tags: 'bricks,arcade,classic', playCount: 9800 },
-    { name: 'Pac Maze', slug: 'pac-maze', category: 'ARCADE', description: 'Navigate the maze, collect dots, avoid ghosts! Classic arcade action.', icon: '👻', difficulty: 'MEDIUM', players: '1', tags: 'maze,arcade,classic', playCount: 14500 },
+    { name: 'Snake', slug: 'snake', category: 'ARCADE', description: 'Classic snake game. Eat food, grow longer, avoid walls and yourself!', icon: '🐍', difficulty: 'EASY', players: '1', tags: 'classic,arcade,retro', playCount: 0 },
+    { name: 'Flappy Bird', slug: 'flappy-bird', category: 'ARCADE', description: 'Tap to fly through pipes. How far can you go? Simple but addictive!', icon: '🐦', difficulty: 'HARD', players: '1', tags: 'tap,arcade,classic', playCount: 0 },
+    { name: 'Breakout', slug: 'breakout', category: 'ARCADE', description: 'Break all the bricks with your ball and paddle. Multiple levels and power-ups!', icon: '🧱', difficulty: 'MEDIUM', players: '1', tags: 'bricks,arcade,classic', playCount: 0 },
+    { name: 'Pac Maze', slug: 'pac-maze', category: 'ARCADE', description: 'Navigate the maze, collect dots, avoid ghosts! Classic arcade action.', icon: '👻', difficulty: 'MEDIUM', players: '1', tags: 'maze,arcade,classic', playCount: 0 },
     // Word
-    { name: 'Word Scramble', slug: 'word-scramble', category: 'WORD', description: 'Unscramble letters to form words. Great vocabulary builder!', icon: '📝', difficulty: 'EASY', players: '1', tags: 'words,vocabulary,spelling', playCount: 7200 },
-    { name: 'Hangman', slug: 'hangman', category: 'WORD', description: 'Guess the word before the drawing completes. Tech-themed words!', icon: '🪢', difficulty: 'MEDIUM', players: '1', tags: 'words,guessing,classic', playCount: 6400 },
-    { name: 'Typing Speed Test', slug: 'typing-speed', category: 'WORD', description: 'Test your typing speed. See your WPM and accuracy in real-time!', icon: '⌨️', difficulty: 'EASY', players: '1', tags: 'typing,speed,keyboard', playCount: 11300 },
+    { name: 'Word Scramble', slug: 'word-scramble', category: 'WORD', description: 'Unscramble letters to form words. Great vocabulary builder!', icon: '📝', difficulty: 'EASY', players: '1', tags: 'words,vocabulary,spelling', playCount: 0 },
+    { name: 'Hangman', slug: 'hangman', category: 'WORD', description: 'Guess the word before the drawing completes. Tech-themed words!', icon: '🪢', difficulty: 'MEDIUM', players: '1', tags: 'words,guessing,classic', playCount: 0 },
+    { name: 'Typing Speed Test', slug: 'typing-speed', category: 'WORD', description: 'Test your typing speed. See your WPM and accuracy in real-time!', icon: '⌨️', difficulty: 'EASY', players: '1', tags: 'typing,speed,keyboard', playCount: 0 },
     // Board
-    { name: 'Tic-Tac-Toe', slug: 'tic-tac-toe', category: 'BOARD', description: 'Classic X and O game. Play vs AI or friend!', icon: '⭕', difficulty: 'EASY', players: '1-2', tags: 'classic,strategy,board', playCount: 19500 },
-    { name: 'Chess', slug: 'chess', category: 'BOARD', description: 'The classic strategy game. Play against AI or a friend locally.', icon: '♟️', difficulty: 'HARD', players: '1-2', tags: 'strategy,classic,board', playCount: 16800 },
-    { name: 'Dice Game', slug: 'dice-game', category: 'BOARD', description: 'Roll dice and score points! Multiple game modes for 1-4 players.', icon: '🎲', difficulty: 'EASY', players: '1-4', tags: 'dice,luck,multiplayer', playCount: 7800 },
-    { name: 'Rock Paper Scissors', slug: 'rock-paper-scissors', category: 'BOARD', description: 'Classic hand game. Beat the AI or challenge a friend!', icon: '✌️', difficulty: 'EASY', players: '1-2', tags: 'classic,luck,quick', playCount: 11200 },
+    { name: 'Tic-Tac-Toe', slug: 'tic-tac-toe', category: 'BOARD', description: 'Classic X and O game. Play vs AI or friend!', icon: '⭕', difficulty: 'EASY', players: '1-2', tags: 'classic,strategy,board', playCount: 0 },
+    { name: 'Chess', slug: 'chess', category: 'BOARD', description: 'The classic strategy game. Play against AI or a friend locally.', icon: '♟️', difficulty: 'HARD', players: '1-2', tags: 'strategy,classic,board', playCount: 0 },
+    { name: 'Dice Game', slug: 'dice-game', category: 'BOARD', description: 'Roll dice and score points! Multiple game modes for 1-4 players.', icon: '🎲', difficulty: 'EASY', players: '1-4', tags: 'dice,luck,multiplayer', playCount: 0 },
+    { name: 'Rock Paper Scissors', slug: 'rock-paper-scissors', category: 'BOARD', description: 'Classic hand game. Beat the AI or challenge a friend!', icon: '✌️', difficulty: 'EASY', players: '1-2', tags: 'classic,luck,quick', playCount: 0 },
     // Quiz
-    { name: 'Trivia Quiz', slug: 'trivia', category: 'QUIZ', description: 'Test your knowledge with 15 questions across various topics. 15-second timer!', icon: '❓', difficulty: 'MEDIUM', players: '1', tags: 'quiz,knowledge,trivia', playCount: 9100 },
-    { name: 'Math Challenge', slug: 'math-challenge', category: 'QUIZ', description: 'Solve math problems against the clock. How many can you get right?', icon: '🔢', difficulty: 'MEDIUM', players: '1', tags: 'math,numbers,quiz', playCount: 8300 },
+    { name: 'Trivia Quiz', slug: 'trivia', category: 'QUIZ', description: 'Test your knowledge with 15 questions across various topics. 15-second timer!', icon: '❓', difficulty: 'MEDIUM', players: '1', tags: 'quiz,knowledge,trivia', playCount: 0 },
+    { name: 'Math Challenge', slug: 'math-challenge', category: 'QUIZ', description: 'Solve math problems against the clock. How many can you get right?', icon: '🔢', difficulty: 'MEDIUM', players: '1', tags: 'math,numbers,quiz', playCount: 0 },
     // Memory
-    { name: 'Memory Sequence', slug: 'memory-sequence', category: 'PUZZLE', description: 'Simon says! Remember and repeat the growing sequence of colors.', icon: '🎵', difficulty: 'MEDIUM', players: '1', tags: 'memory,sequence,colors', playCount: 6700 },
-    { name: 'Color Match', slug: 'color-match', category: 'ARCADE', description: 'Match the color name as fast as you can! Stroop effect challenge.', icon: '🎨', difficulty: 'EASY', players: '1', tags: 'colors,reflex,speed', playCount: 5500 },
-    { name: 'Number Chain', slug: 'number-chain', category: 'PUZZLE', description: 'Connect numbers 1-25 in order as fast as possible!', icon: '🔗', difficulty: 'MEDIUM', players: '1', tags: 'numbers,speed,puzzle', playCount: 4900 },
+    { name: 'Memory Sequence', slug: 'memory-sequence', category: 'PUZZLE', description: 'Simon says! Remember and repeat the growing sequence of colors.', icon: '🎵', difficulty: 'MEDIUM', players: '1', tags: 'memory,sequence,colors', playCount: 0 },
+    { name: 'Color Match', slug: 'color-match', category: 'ARCADE', description: 'Match the color name as fast as you can! Stroop effect challenge.', icon: '🎨', difficulty: 'EASY', players: '1', tags: 'colors,reflex,speed', playCount: 0 },
+    { name: 'Number Chain', slug: 'number-chain', category: 'PUZZLE', description: 'Connect numbers 1-25 in order as fast as possible!', icon: '🔗', difficulty: 'MEDIUM', players: '1', tags: 'numbers,speed,puzzle', playCount: 0 },
   ];
 
   for (const game of games) {

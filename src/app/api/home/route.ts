@@ -53,12 +53,14 @@ export async function GET() {
         prisma.post.count({ where: { status: 'PUBLISHED', postType: 'BLOG' } }),
         prisma.game.count({ where: { isActive: true } }),
         prisma.tool.count({ where: { isActive: true } }),
-        prisma.toolUsage.count(),
-      ]).then(([blogCount, gameCount, toolCount, usageCount]) => ({
+        prisma.pageView.count({
+          where: { visitedAt: { gte: new Date(new Date().setHours(0, 0, 0, 0)) } },
+        }),
+      ]).then(([blogCount, gameCount, toolCount, dailyVisitors]) => ({
         blogCount,
         gameCount,
         toolCount,
-        dailyVisitors: usageCount > 0 ? Math.max(3200, Math.floor(usageCount / 30)) : 3200,
+        dailyVisitors,
       })),
     ]);
 

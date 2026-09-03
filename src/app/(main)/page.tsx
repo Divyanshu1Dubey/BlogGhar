@@ -47,7 +47,7 @@ async function getHomeData(): Promise<HomeData> {
       games: [],
       news: [],
       popularTools: [],
-      stats: { blogCount: 0, gameCount: 0, toolCount: 0, dailyVisitors: 3200 },
+      stats: { blogCount: 0, gameCount: 0, toolCount: 0, dailyVisitors: 0 },
     };
   }
 }
@@ -61,10 +61,10 @@ export default function HomePage() {
   const [breakingNews, setBreakingNews] = useState<any>(null);
   const [popularTools, setPopularTools] = useState<any[]>([]);
   const [siteStats, setSiteStats] = useState({
-    posts: 128,
-    games: 10,
-    tools: 30,
-    dailyVisitors: 3200,
+    posts: 0,
+    games: 0,
+    tools: 0,
+    dailyVisitors: 0,
   });
   const [loading, setLoading] = useState(true);
 
@@ -168,7 +168,7 @@ export default function HomePage() {
             {/* Trust badges */}
             <div className="flex flex-wrap justify-center gap-6 text-sm text-blue-200">
               <span className="flex items-center gap-1.5">
-                <Users className="w-4 h-4" /> {formatNumber(siteStats.dailyVisitors)}+ Daily Readers
+                <Users className="w-4 h-4" /> {siteStats.dailyVisitors > 0 ? `${formatNumber(siteStats.dailyVisitors)} Daily Readers` : 'Reader analytics pending'}
               </span>
               <span className="hidden sm:inline text-blue-400">|</span>
               <span className="flex items-center gap-1.5">
@@ -198,7 +198,7 @@ export default function HomePage() {
             <StatCard icon={<NewspaperIcon className="w-7 h-7" />} value={formatNumber(siteStats.posts)} label="Total Posts" />
             <StatCard icon={<Gamepad2 className="w-7 h-7" />} value={formatNumber(siteStats.games)} label="Games Available" />
             <StatCard icon={<Calculator className="w-7 h-7" />} value={formatNumber(siteStats.tools)} label="Free Tools" />
-            <StatCard icon={<TrendingUp className="w-7 h-7" />} value={formatNumber(siteStats.dailyVisitors)} label="Daily Visitors" />
+            <StatCard icon={<TrendingUp className="w-7 h-7" />} value={formatNumber(siteStats.dailyVisitors)} label="Tracked Visitors Today" />
           </div>
         </div>
       </section>
@@ -416,7 +416,7 @@ export default function HomePage() {
               Never Miss an Update
             </h2>
             <p className="text-blue-100 mb-8">
-              Get the best blogs, games, and tools delivered to your inbox every week. Join {formatNumber(siteStats.dailyVisitors)}+ readers.
+              Get the best blogs, games, and tools delivered to your inbox every week. {siteStats.dailyVisitors > 0 ? `Join ${formatNumber(siteStats.dailyVisitors)} readers.` : 'Subscribe for updates.'}
             </p>
 
             <NewsletterForm />
