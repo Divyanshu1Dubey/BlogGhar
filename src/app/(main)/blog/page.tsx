@@ -25,7 +25,7 @@ export default async function BlogPage({ searchParams }: { searchParams?: Promis
         ...(params?.category ? { category: { slug: params.category } } : {}),
       },
       orderBy: { publishedAt: 'desc' },
-      take: 20,
+      take: 100,
       include: { author: { select: { name: true } }, category: { select: { name: true, slug: true } } },
     });
   } catch { posts = []; }
