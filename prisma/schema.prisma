@@ -222,6 +222,13 @@ model Game {
   category    String
   icon        String?
   isActive    Boolean  @default(true)
+  difficulty  String?  @default("MEDIUM")
+  players     String?  @default("1") // "1", "1-2", "2", "2-4"
+  playCount   Int      @default(0)
+  rating      Float?   @default(0)
+  ratingCount Int      @default(0)
+  tags        String?
+  instructions String? @db.Text
   createdAt   DateTime @default(now())
 
   scores GameScore[]
