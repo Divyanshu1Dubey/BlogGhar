@@ -62,7 +62,7 @@ export default async function GamePage({ params }: { params: GameParams }) {
       </div>
 
       <div className="card overflow-hidden">
-        <GameClient topScores={topScores} />
+        <GameClient topScores={topScores} game={game} />
       </div>
 
       <div className="card p-6 mt-6">
