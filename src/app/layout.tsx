@@ -102,7 +102,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const adSenseClient = process.env.NEXT_PUBLIC_ADSENSE_CLIENT;
+  const adSenseClient = process.env.NEXT_PUBLIC_ADSENSE_CLIENT || 'ca-pub-5456307245130268';
 
   return (
     <html lang="en" suppressHydrationWarning>
