@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Inter, Poppins } from 'next/font/google';
+import { AuthProvider } from '@/components/auth/auth-provider';
 import './globals.css';
 import { ThemeProvider } from '@/components/layout/theme-provider';
 import { Header } from '@/components/layout/header';
@@ -44,13 +45,13 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_IN',
-    url: 'https://blogghar.com',
+    url: 'https://bloghar.com',
     siteName: 'Blog-Ghar',
     title: 'Blog-Ghar - Home of Blogs | Games, News, Tools & More',
     description: 'Your one-stop destination for blogs, games, news, online tools, horoscopes, and more. Discover daily updated content.',
     images: [
       {
-        url: 'https://blogghar.com/og-image.svg',
+        url: 'https://bloghar.com/og-image.svg',
         width: 1200,
         height: 630,
         alt: 'Blog-Ghar - Home of Blogs',
@@ -62,11 +63,11 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Blog-Ghar - Home of Blogs',
     description: 'Your one-stop destination for blogs, games, news, tools & more.',
-    images: ['https://blogghar.com/og-image.svg'],
+    images: ['https://bloghar.com/og-image.svg'],
     creator: '@blogghar',
   },
   alternates: {
-    canonical: 'https://blogghar.com',
+    canonical: 'https://bloghar.com',
   },
   category: 'Lifestyle',
 };
@@ -76,22 +77,22 @@ const jsonLd = {
   '@type': 'WebSite',
   name: 'Blog-Ghar',
   description: 'Your one-stop destination for blogs, games, news, tools & more',
-  url: 'https://blogghar.com',
+  url: 'https://bloghar.com',
   potentialAction: {
     '@type': 'SearchAction',
     target: {
       '@type': 'EntryPoint',
-      urlTemplate: 'https://blogghar.com/search?q={search_term_string}',
+      urlTemplate: 'https://bloghar.com/search?q={search_term_string}',
     },
     'query-input': 'required name=search_term_string',
   },
   publisher: {
     '@type': 'Organization',
     name: 'Blog-Ghar',
-    url: 'https://blogghar.com',
+    url: 'https://bloghar.com',
     logo: {
       '@type': 'ImageObject',
-      url: 'https://blogghar.com/logo.svg',
+      url: 'https://bloghar.com/logo.svg',
     },
   },
   inLanguage: 'en-IN',
@@ -109,11 +110,10 @@ export default function RootLayout({
       <head>
         {/* Google AdSense */}
         {adSenseClient && (
-          <Script
+          <script
             async
             src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adSenseClient}`}
             crossOrigin="anonymous"
-            strategy="afterInteractive"
           />
         )}
 
@@ -156,10 +156,10 @@ export default function RootLayout({
         <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
 
         {/* Hreflang for regional targeting */}
-        <link rel="alternate" hrefLang="en-IN" href="https://blogghar.com" />
-        <link rel="alternate" hrefLang="en-US" href="https://blogghar.com" />
-        <link rel="alternate" hrefLang="en-GB" href="https://blogghar.com" />
-        <link rel="alternate" hrefLang="x-default" href="https://blogghar.com" />
+        <link rel="alternate" hrefLang="en-IN" href="https://bloghar.com" />
+        <link rel="alternate" hrefLang="en-US" href="https://bloghar.com" />
+        <link rel="alternate" hrefLang="en-GB" href="https://bloghar.com" />
+        <link rel="alternate" hrefLang="x-default" href="https://bloghar.com" />
 
         {/* Preconnect for performance */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -171,19 +171,21 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="apple-touch-icon" href="/favicon.svg" />
-        <link rel="canonical" href="https://blogghar.com" />
+        <link rel="canonical" href="https://bloghar.com" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:image:type" content="image/svg+xml" />
       </head>
 
       <body className={`${inter.variable} ${poppins.variable} font-sans min-h-screen flex flex-col bg-white dark:bg-dark-bg text-gray-900 dark:text-gray-100`}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <Header />
-          <main className="flex-1">{children}</main>
-          <Footer />
-          <Toaster />
-        </ThemeProvider>
+        <AuthProvider>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+            <Header />
+            <main className="flex-1">{children}</main>
+            <Footer />
+            <Toaster />
+          </ThemeProvider>
+        </AuthProvider>
       </body>
     </html>
   );
