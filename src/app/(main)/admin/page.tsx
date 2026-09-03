@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import prisma from '@/lib/prisma';
 import Link from 'next/link';
+import AdminSidebar from './components/admin-sidebar';
 
 export const metadata: Metadata = {
   title: 'Admin',
@@ -20,6 +21,7 @@ export default async function AdminDashboard() {
     subscribers: number;
     views: { _sum: { views: number | null } } | null;
   } | null = null;
+  let error: string | null = null;
   try {
     stats = {
       posts: await prisma.post.count(),
@@ -30,27 +32,20 @@ export default async function AdminDashboard() {
       subscribers: await prisma.newsletterSubscriber.count(),
       views: await prisma.post.aggregate({ _sum: { views: true } }),
     };
-  } catch {}
+  } catch (err) {
+    console.error('Admin dashboard metrics failed', err);
+    error = 'Dashboard metrics are temporarily unavailable.';
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-dark-bg">
       <div className="flex">
-        {/* Sidebar */}
-        <aside className="w-64 bg-white dark:bg-dark-card border-r border-gray-200 dark:border-dark-border min-h-screen">
-          <div className="p-4 border-b border-gray-200 dark:border-dark-border">
-            <Link href="/" className="text-xl font-display font-extrabold text-primary-600">🌿 Blog-Ghar</Link>
-            <p className="text-xs text-gray-500">Admin Dashboard</p>
-          </div>
-          <nav className="p-2 space-y-1">
-            {['Dashboard', 'Posts', 'News', 'Users', 'Games', 'Tools', 'Comments', 'Subscribers', 'Settings'].map((item) => (
-              <a key={item} href={`/admin${item === 'Dashboard' ? '' : `/${item.toLowerCase()}`}`} className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm ${item === 'Dashboard' ? 'bg-primary-50 dark:bg-primary-900/20 text-primary-600' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-dark-bg'}`}>{item}</a>
-            ))}
-          </nav>
-        </aside>
+        <AdminSidebar />
 
         {/* Main */}
         <main className="flex-1 p-8">
           <h1 className="text-3xl font-display font-extrabold mb-8">Dashboard</h1>
+          {error && <div className="mb-6 rounded-lg bg-red-100 p-4 text-sm text-red-700">{error}</div>}
 
           {/* Stats */}
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
@@ -77,7 +72,7 @@ export default async function AdminDashboard() {
               <h2 className="font-bold text-lg mb-4">Quick Actions</h2>
               <div className="space-y-2">
                 <Link href="/admin/posts/new" className="block p-3 bg-gray-50 dark:bg-dark-bg rounded-lg hover:bg-primary-50 transition-colors">+ New Blog Post</Link>
-                <Link href="/admin/news/new" className="block p-3 bg-gray-50 dark:bg-dark-bg rounded-lg hover:bg-primary-50 transition-colors">+ Publish News</Link>
+                <Link href="/admin/posts/new" className="block p-3 bg-gray-50 dark:bg-dark-bg rounded-lg hover:bg-primary-50 transition-colors">+ Publish News</Link>
                 <Link href="/admin/games" className="block p-3 bg-gray-50 dark:bg-dark-bg rounded-lg hover:bg-primary-50 transition-colors">Manage Games</Link>
               </div>
             </div>

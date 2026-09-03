@@ -11,14 +11,16 @@ export const dynamic = 'force-dynamic';
 
 export default async function AdminCommentsPage() {
   let comments: any[] = [];
-  try { comments = await prisma.comment.findMany({ orderBy: { createdAt: 'desc' }, take: 50, include: { user: { select: { name: true } } } }); }
-  catch {}
+  let error: string | null = null;
+  try { comments = await prisma.comment.findMany({ orderBy: { createdAt: 'desc' }, take: 50, include: { user: { select: { name: true } }, post: { select: { title: true } } } }); }
+  catch (err) { console.error('Admin comments load failed', err); error = 'Unable to load comments.'; }
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-dark-bg">
       <AdminSidebar />
       <main className="ml-64 p-8">
         <h1 className="text-3xl font-extrabold mb-6">Comments</h1>
+        {error && <div className="mb-4 rounded-lg bg-red-100 p-4 text-sm text-red-700">{error}</div>}
         <div className="card divide-y divide-gray-100 dark:divide-dark-border">
           {comments.length > 0 ? comments.map((c: any) => (
             <div key={c.id} className="p-4 flex items-start gap-3">
@@ -27,7 +29,7 @@ export default async function AdminCommentsPage() {
                 <div className="flex items-center justify-between"><p className="font-medium">{c.user?.name}</p><span className="text-xs text-gray-400">{c.createdAt.toLocaleDateString()}</span></div>
                 <p className="text-sm text-gray-600 mt-1">{c.content}</p>
               </div>
-              <button className="text-xs text-red-500">Delete</button>
+              <form action={`/api/admin/comments?id=${c.id}`} method="post"><button type="submit" className="text-xs text-red-500">Delete</button></form>
             </div>
           )) : <p className="p-8 text-center text-gray-500">No comments yet</p>}
         </div>

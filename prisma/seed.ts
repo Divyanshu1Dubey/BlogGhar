@@ -2,6 +2,7 @@ import { PrismaClient } from '@prisma/client';
 import fs from 'node:fs';
 import path from 'node:path';
 import { parseContent } from '../src/lib/content-parser';
+import { additionalOfficialJobs, expansionJobs, expansionPosts } from './expanded-content';
 
 const prisma = new PrismaClient();
 
@@ -14,6 +15,15 @@ type SourceBlog = {
   author: string;
   date: string;
   status: string;
+  body: string;
+};
+
+type SourceNewsBlog = {
+  title: string;
+  metaDescription: string;
+  slug: string;
+  author: string;
+  date: string;
   body: string;
 };
 
@@ -66,6 +76,28 @@ function parseSourceBlogs(source: string): SourceBlog[] {
       body,
     };
   });
+}
+
+function parseSourceNewsBlogs(source: string): SourceNewsBlog[] {
+  return source
+    .split(/(?=^NEWS BLOG #\d+:)/m)
+    .map(block => block.trim())
+    .filter(block => /^NEWS BLOG #\d+:/.test(block))
+    .map((block, index) => {
+      const lines = block.split(/\r?\n/);
+      const heading = lines.find(line => /^#{1,6}\s+/.test(line))?.replace(/^#{1,6}\s+/, '').trim();
+      const title = lines.find(line => line.startsWith('title:'))?.slice(6).trim().replace(/^"(.*)"$/, '$1') || heading;
+      const metaDescription = lines.find(line => line.startsWith('meta_description:'))?.slice(17).trim().replace(/^"(.*)"$/, '$1') || 'Source-cited news and analysis from Blog-Ghar.';
+      const slug = lines.find(line => line.startsWith('slug:'))?.slice(5).trim() || `news-corpus-${index + 1}`;
+      const author = lines.find(line => line.startsWith('author:'))?.slice(7).trim() || 'Blog-Ghar Editorial';
+      const date = lines.find(line => line.startsWith('date:'))?.slice(5).trim() || '2026-09-03';
+      const bodyStart = lines.findIndex(line => /^#{1,6}\s+/.test(line));
+      const body = bodyStart >= 0
+        ? lines.slice(bodyStart).join('\n').replace(/\n---[\s\S]*$/, '').trim()
+        : `## Source report\n\n${title || `News report ${index + 1}`}\n\n${metaDescription}`;
+      if (!title || !slug) throw new Error(`News blog ${index + 1} is missing a usable title`);
+      return { title, metaDescription, slug, author, date, body };
+    });
 }
 
 function categorySlug(name: string): string {
@@ -302,6 +334,123 @@ async function main() {
   }
 
   console.log(`✅ Imported ${sourceBlogs.length} blogs from Blogs.txt (${addedBlogs} added, ${updatedBlogs} updated)`);
+
+  const expansionAuthor = await prisma.user.upsert({
+    where: { email: 'editorial@bloghar.com' },
+    update: { name: 'Blog-Ghar Editorial' },
+    create: { id: 'seed-author-editorial', name: 'Blog-Ghar Editorial', email: 'editorial@bloghar.com', role: 'AUTHOR' },
+  });
+
+  for (const blog of expansionPosts) {
+    const category = await prisma.category.upsert({
+      where: { slug: categorySlug(blog.category) },
+      update: {},
+      create: { name: blog.category, slug: categorySlug(blog.category), description: `${blog.category} articles and guides` },
+    });
+    const tag = await prisma.tag.upsert({
+      where: { slug: categorySlug(blog.focusKeyword) },
+      update: { name: blog.focusKeyword },
+      create: { name: blog.focusKeyword, slug: categorySlug(blog.focusKeyword) },
+    });
+    const parsed = parseContent(blog.body);
+    await prisma.post.upsert({
+      where: { slug: blog.slug },
+      update: {
+        title: blog.title,
+        content: parsed.content,
+        excerpt: blog.excerpt,
+        postType: 'BLOG',
+        status: 'PUBLISHED',
+        categoryId: category.id,
+        authorId: expansionAuthor.id,
+        tagId: tag.id,
+        focusKeyword: blog.focusKeyword,
+        seoTitle: blog.title,
+        seoDesc: blog.excerpt,
+        readTime: parsed.readTime,
+        publishedAt: new Date('2026-09-03T00:00:00.000Z'),
+      },
+      create: {
+        slug: blog.slug,
+        title: blog.title,
+        content: parsed.content,
+        excerpt: blog.excerpt,
+        postType: 'BLOG',
+        status: 'PUBLISHED',
+        categoryId: category.id,
+        authorId: expansionAuthor.id,
+        tagId: tag.id,
+        focusKeyword: blog.focusKeyword,
+        seoTitle: blog.title,
+        seoDesc: blog.excerpt,
+        readTime: parsed.readTime,
+        publishedAt: new Date('2026-09-03T00:00:00.000Z'),
+      },
+    });
+  }
+  console.log(`✅ Imported ${expansionPosts.length} source-linked expansion blogs`);
+
+  const newsFile = path.join(process.cwd(), 'news_all_unique_complete.txt');
+  if (fs.existsSync(newsFile)) {
+    const newsCategory = await prisma.category.upsert({
+      where: { slug: 'verified-news' },
+      update: {},
+      create: { name: 'Verified News', slug: 'verified-news', description: 'Source-cited news and analysis' },
+    });
+    const newsBlogs = parseSourceNewsBlogs(fs.readFileSync(newsFile, 'utf-8'));
+    for (const news of newsBlogs) {
+      const parsed = parseContent(news.body);
+      await prisma.post.upsert({
+        where: { slug: news.slug },
+        update: {
+          title: news.title,
+          content: parsed.content,
+          excerpt: news.metaDescription,
+          postType: 'BLOG',
+          status: 'PUBLISHED',
+          categoryId: newsCategory.id,
+          authorId: expansionAuthor.id,
+          focusKeyword: news.title,
+          seoTitle: news.title,
+          seoDesc: news.metaDescription,
+          readTime: parsed.readTime,
+          publishedAt: new Date(`${news.date}T00:00:00.000Z`),
+        },
+        create: {
+          slug: news.slug,
+          title: news.title,
+          content: parsed.content,
+          excerpt: news.metaDescription,
+          postType: 'BLOG',
+          status: 'PUBLISHED',
+          categoryId: newsCategory.id,
+          authorId: expansionAuthor.id,
+          focusKeyword: news.title,
+          seoTitle: news.title,
+          seoDesc: news.metaDescription,
+          readTime: parsed.readTime,
+          publishedAt: new Date(`${news.date}T00:00:00.000Z`),
+        },
+      });
+    }
+    console.log(`✅ Imported ${newsBlogs.length} source-cited news blogs`);
+  }
+
+  for (const job of [...expansionJobs, ...additionalOfficialJobs]) {
+    const { category: categoryName, isRemote: _isRemote, ...jobData } = job;
+    const { isRemote, ...safeJobData } = jobData as Record<string, unknown>;
+    const category = await prisma.category.upsert({
+      where: { slug: categorySlug(categoryName) },
+      update: {},
+      create: { name: categoryName, slug: categorySlug(categoryName), description: `${categoryName} opportunities` },
+    });
+    await prisma.jobListing.upsert({
+      where: { id: `seed-job-${categorySlug(job.company)}-${categorySlug(job.title)}` },
+      update: { ...safeJobData, categoryId: category.id, postedAt: new Date('2026-09-03T00:00:00.000Z'), isActive: true },
+      create: { id: `seed-job-${categorySlug(job.company)}-${categorySlug(job.title)}`, ...safeJobData, categoryId: category.id, postedAt: new Date('2026-09-03T00:00:00.000Z'), isActive: true },
+    });
+  }
+  console.log(`✅ Imported ${expansionJobs.length + additionalOfficialJobs.length} official job-board links`);
 
   console.log('🎉 Seeding complete!');
 }

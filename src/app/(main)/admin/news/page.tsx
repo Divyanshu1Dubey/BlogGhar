@@ -11,15 +11,18 @@ export const dynamic = 'force-dynamic';
 
 export default async function AdminNewsPage() {
   let posts: any[] = [];
+  let error: string | null = null;
   try {
     posts = await prisma.post.findMany({ where: { postType: 'NEWS' }, orderBy: { createdAt: 'desc' }, take: 50, include: { author: { select: { name: true } } } });
-  } catch {}
+  } catch (err) { console.error('Admin news load failed', err); error = 'Unable to load news.'; }
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-dark-bg">
       <AdminSidebar />
       <main className="ml-64 p-8">
         <h1 className="text-3xl font-extrabold mb-6">News Articles</h1>
+        <a href="/admin/posts/new" className="mb-4 inline-block rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white">New article</a>
+        {error && <div className="mb-4 rounded-lg bg-red-100 p-4 text-sm text-red-700">{error}</div>}
         <div className="card overflow-hidden">
           <table className="w-full text-sm">
             <thead><tr className="bg-gray-50 dark:bg-dark-bg"><th className="text-left p-3">Title</th><th className="text-left p-3">Author</th><th className="text-left p-3">Status</th><th className="text-left p-3">Views</th></tr></thead>

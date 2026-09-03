@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import {
   ArrowRight,
@@ -17,319 +16,40 @@ import {
   ChevronRight,
   Flame,
   Clock,
-  Eye,
 } from 'lucide-react';
 import { formatDate, formatNumber } from '@/lib/utils';
-import prisma from '@/lib/prisma';
 import { AdSlot } from '@/components/ads/ad-slot';
 import NewsletterForm from '@/components/newsletter-form';
 import { NewsTicker } from '@/components/layout/news-ticker';
 
 export const dynamic = 'force-dynamic';
 
-async function getFeaturedPosts() {
-  try {
-    return await prisma.post.findMany({
-      where: { postType: 'BLOG', status: 'PUBLISHED' },
-      take: 3,
-      orderBy: { publishedAt: 'desc' },
-      include: {
-        author: { select: { name: true, image: true } },
-        category: { select: { name: true, slug: true, icon: true } },
-      },
-    });
-  } catch {
-    return [];
-  }
-}
+const HOME_API = (process.env.NEXT_PUBLIC_API_URL || '').replace(/\/$/, '') + '/api/home';
 
-async function getTrendingPosts() {
-  try {
-    return await prisma.post.findMany({
-      where: { postType: 'BLOG', status: 'PUBLISHED' },
-      take: 6,
-      orderBy: { views: 'desc' },
-      include: {
-        author: { select: { name: true } },
-        category: { select: { name: true, slug: true, icon: true } },
-      },
-    });
-  } catch {
-    return [];
-  }
-}
-
-async function getCategories() {
-  try {
-    return await prisma.category.findMany({
-      take: 20,
-      include: { _count: { select: { posts: true } } },
-      orderBy: { posts: { _count: 'desc' } },
-    });
-  } catch {
-    return [];
-  }
-}
-
-async function getGames() {
-  try {
-    return await prisma.game.findMany({
-      where: { isActive: true },
-      orderBy: { playCount: 'desc' },
-      take: 8,
-    });
-  } catch {
-    return [];
-  }
-}
-
-async function getNews() {
-  try {
-    return await prisma.post.findMany({
-      where: { postType: 'NEWS', status: 'PUBLISHED' },
-      take: 10,
-      orderBy: { publishedAt: 'desc' },
-      include: { category: { select: { name: true, slug: true } } },
-    });
-  } catch {
-    return [];
-  }
-}
-
-async function getBreakingNews() {
-  try {
-    return await prisma.post.findFirst({
-      where: { postType: 'NEWS', status: 'PUBLISHED' },
-      orderBy: { publishedAt: 'desc' },
-      select: { title: true, slug: true, publishedAt: true },
-    });
-  } catch {
-    return null;
-  }
-}
-
-async function getPopularTools() {
-  try {
-    return await prisma.tool.findMany({
-      where: { isActive: true },
-      orderBy: { createdAt: 'desc' },
-      take: 6,
-    });
-  } catch {
-    return [];
-  }
-}
-
-async function getSiteStats() {
-  try {
-    const [postCount, gameCount, toolCount] = await Promise.all([
-      prisma.post.count({ where: { status: 'PUBLISHED', postType: 'BLOG' } }),
-      prisma.game.count({ where: { isActive: true } }),
-      prisma.tool.count({ where: { isActive: true } }),
-    ]);
-
-    const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-    const dailyVisitors = await prisma.toolUsage.count({
-      where: { usedAt: { gte: sevenDaysAgo } },
-    });
-
-    return {
-      posts: postCount,
-      games: gameCount,
-      tools: toolCount,
-      dailyVisitors: Math.max(dailyVisitors, 2500),
-    };
-  } catch {
-    return {
-      posts: 128,
-      games: 10,
-      tools: 30,
-      dailyVisitors: 3200,
-    };
-  }
-}
-
-const GAME_ICONS: Record<string, string> = {
-  TIC_TAC_TOE: '\u{1F3AF}',
-  MEMORY_GAME: '\u{1F9E0}',
-  WORD_SEARCH: '\u{1F524}',
-  SNAKE_GAME: '\u{1F40D}',
-  PUZZLE: '\u{1F9E9}',
-  QUIZ: '\u{2753}',
-  MATH_GAME: '\u{1F9EE}',
-  COLOR_MATCH: '\u{1F308}',
+type HomeData = {
+  featuredPosts: any[];
+  trendingPosts: any[];
+  games: any[];
+  news: any[];
+  popularTools: any[];
+  stats: { blogCount: number; gameCount: number; toolCount: number; dailyVisitors: number };
 };
 
-const TOOL_ICONS: Record<string, string> = {
-  CALCULATOR: '\u{1F5A9}',
-  CONVERTER: '\u{2699}\u{FE0F}',
-  TEXT: '\u{1F4DD}',
-  IMAGE: '\u{1F5BC}',
-  SECURITY: '\u{1F510}',
-  DEVELOPMENT: '\u{1F4BB}',
-};
-
-function StatCard({ icon, value, label, suffix = '' }: { icon: React.ReactNode; value: string | number; label: string; suffix?: string }) {
-  return (
-    <div className="text-center px-4 py-3">
-      <div className="text-primary-600 mb-1">{icon}</div>
-      <div className="text-2xl md:text-3xl font-display font-extrabold text-gray-900 dark:text-white">
-        {value}{suffix}
-      </div>
-      <div className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{label}</div>
-    </div>
-  );
-}
-
-function FeaturedCard({ post }: { post: any }) {
-  const image = post.featuredImage || '/placeholder-blog.jpg';
-
-  return (
-    <article className="card overflow-hidden group cursor-pointer">
-      <Link href={`/blog/${post.slug}`} className="block">
-        <div className="relative h-52 bg-gray-100 dark:bg-dark-border overflow-hidden">
-          <Image
-            src={image}
-            alt={post.title}
-            fill
-            className="object-cover group-hover:scale-105 transition-transform duration-500"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          <div className="absolute top-3 left-3">
-            <span className="px-2.5 py-1 bg-primary-600 text-white text-xs font-semibold rounded-full">
-              {post.category.icon} {post.category.name}
-            </span>
-          </div>
-        </div>
-        <div className="p-5">
-          <h3 className="font-display font-bold text-lg mb-2 line-clamp-2 group-hover:text-primary-600 transition-colors">
-            {post.title}
-          </h3>
-          <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2">
-            {post.excerpt || ''}
-          </p>
-          <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900/40 flex items-center justify-center text-xs font-bold text-primary-700">
-                {(post.author.name || 'A').charAt(0).toUpperCase()}
-              </div>
-              <span>{post.author.name}</span>
-            </div>
-            <span className="flex items-center gap-1">
-              <Clock className="w-3 h-3" />
-              {post.publishedAt && formatDate(new Date(post.publishedAt))}
-            </span>
-          </div>
-        </div>
-      </Link>
-    </article>
-  );
-}
-
-function GameCard({ game }: { game: any }) {
-  const icon = GAME_ICONS[game.category] || game.icon || '\u{1F3AE}';
-  return (
-    <Link href={`/games/${game.slug}`} className="card p-4 flex flex-col items-center text-center gap-2 group hover:border-primary-300 dark:hover:border-primary-700">
-      <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-100 to-primary-50 dark:from-primary-900/40 dark:to-primary-800/30 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-300">
-        {icon}
-      </div>
-      <h4 className="font-display font-bold text-sm line-clamp-1">{game.name}</h4>
-      <p className="text-[11px] text-gray-500 dark:text-gray-400 capitalize">{game.category.replace(/_/g, ' ')}</p>
-      <span className="text-xs text-primary-600 font-medium group-hover:underline">Play Now</span>
-    </Link>
-  );
-}
-
-function ToolCard({ tool }: { tool: any }) {
-  const categoryUpper = (tool.category || '').toUpperCase();
-  const icon = TOOL_ICONS[categoryUpper] || '\u{1F6E0}\u{FE0F}';
-
-  return (
-    <Link href={tool.route} className="card p-5 flex items-start gap-4 group hover:border-primary-300 dark:hover:border-primary-700">
-      <div className="w-12 h-12 rounded-xl bg-primary-50 dark:bg-primary-900/30 flex items-center justify-center text-2xl shrink-0 group-hover:scale-110 transition-transform">
-        {icon}
-      </div>
-      <div className="flex-1 min-w-0">
-        <h4 className="font-display font-bold text-sm group-hover:text-primary-600 transition-colors">{tool.name}</h4>
-        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 line-clamp-2">{tool.description}</p>
-      </div>
-      <ChevronRight className="w-4 h-4 text-gray-400 shrink-0 mt-1 group-hover:text-primary-600 transition-colors" />
-    </Link>
-  );
-}
-
-function TrendingRow({ post, index }: { post: any; index: number }) {
-  return (
-    <Link href={`/blog/${post.slug}`} className="card p-4 flex gap-4 group hover:border-primary-300 dark:hover:border-primary-700">
-      <div className="shrink-0 w-10 h-10 rounded-xl flex items-center justify-center font-display font-extrabold text-lg bg-gray-50 dark:bg-dark-bg text-gray-400 dark:text-gray-600">
-        {String(index + 1).padStart(2, '0')}
-      </div>
-      <div className="flex-1 min-w-0">
-        <h3 className="font-semibold text-sm line-clamp-2 group-hover:text-primary-600 transition-colors">
-          {post.title}
-        </h3>
-        <div className="flex flex-wrap items-center gap-2 mt-2 text-[11px] text-gray-500 dark:text-gray-400">
-          <span className="flex items-center gap-1">
-            {post.category.icon} {post.category.name}
-          </span>
-          <span>&bull;</span>
-          <span>{post.author.name}</span>
-          <span>&bull;</span>
-          <span className="flex items-center gap-1">
-            <Eye className="w-3 h-3" />
-            {formatNumber(post.views)}
-          </span>
-        </div>
-      </div>
-    </Link>
-  );
-}
-
-function CategoryBadge({ category }: { category: any }) {
-  const count = category._count?.posts ?? 0;
-  const baseSize = count > 20 ? 'px-5 py-2.5 text-sm' : count > 10 ? 'px-4 py-2 text-xs' : 'px-3 py-1.5 text-xs';
-  return (
-    <Link
-      href={`/blog?category=${category.slug}`}
-      className={`inline-flex items-center gap-1.5 rounded-full bg-gray-100 dark:bg-dark-card hover:bg-primary-50 dark:hover:bg-primary-900/30 text-gray-700 dark:text-gray-300 hover:text-primary-700 dark:hover:text-primary-300 transition-all hover:shadow-sm ${baseSize}`}
-    >
-      <span>{category.icon}</span>
-      <span className="font-medium">{category.name}</span>
-      <span className="text-gray-400 dark:text-gray-500">{count}</span>
-    </Link>
-  );
-}
-
-function BreakingNewsDismissible({ news }: { news: { title: string; slug: string; publishedAt: string } }) {
-  const [dismissed, setDismissed] = useState(false);
-  if (dismissed) return null;
-
-  return (
-    <div className="max-w-7xl mx-auto px-4 mb-6">
-      <div className="flex items-center gap-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl px-4 py-3">
-        <span className="relative flex h-2.5 w-2.5 shrink-0">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
-          <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-600" />
-        </span>
-        <span className="text-[11px] font-bold uppercase tracking-widest text-red-700 dark:text-red-300 shrink-0">Breaking</span>
-        <Link href={`/news/${news.slug}`} className="text-sm font-medium text-gray-800 dark:text-gray-200 hover:text-red-700 dark:hover:text-red-300 truncate transition-colors">
-          {news.title}
-        </Link>
-        <span className="text-[11px] text-gray-500 dark:text-gray-400 shrink-0 hidden sm:block">
-          {new Date(news.publishedAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}
-        </span>
-        <button
-          onClick={() => setDismissed(true)}
-          className="shrink-0 ml-auto p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded transition-colors"
-          aria-label="Dismiss breaking news"
-        >
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-      </div>
-    </div>
-  );
+async function getHomeData(): Promise<HomeData> {
+  try {
+    const res = await fetch(HOME_API, { next: { revalidate: 120 } });
+    if (!res.ok) throw new Error('Home API failed');
+    return res.json();
+  } catch {
+    return {
+      featuredPosts: [],
+      trendingPosts: [],
+      games: [],
+      news: [],
+      popularTools: [],
+      stats: { blogCount: 0, gameCount: 0, toolCount: 0, dailyVisitors: 3200 },
+    };
+  }
 }
 
 export default function HomePage() {
@@ -350,33 +70,22 @@ export default function HomePage() {
 
   useEffect(() => {
     (async () => {
-      const [
-        fp,
-        tp,
-        cats,
-        gms,
-        nws,
-        bn,
-        pt,
-        stats,
-      ] = await Promise.all([
-        getFeaturedPosts(),
-        getTrendingPosts(),
-        getCategories(),
-        getGames(),
-        getNews(),
-        getBreakingNews(),
-        getPopularTools(),
-        getSiteStats(),
-      ]);
-      setFeaturedPosts(fp);
-      setTrendingPosts(tp);
-      setCategories(cats);
-      setGames(gms);
-      setNews(nws);
-      setBreakingNews(bn);
-      setPopularTools(pt);
-      setSiteStats(stats);
+      try {
+        const data = await getHomeData();
+        setFeaturedPosts(data.featuredPosts);
+        setTrendingPosts(data.trendingPosts);
+        setCategories(data.categories);
+        setGames(data.games);
+        setNews(data.news);
+        setBreakingNews(data.news[0] || null);
+        setPopularTools(data.popularTools);
+        setSiteStats({
+          posts: data.stats.blogCount,
+          games: data.stats.gameCount,
+          tools: data.stats.toolCount,
+          dailyVisitors: data.stats.dailyVisitors,
+        });
+      } catch {}
       setLoading(false);
     })();
   }, []);
@@ -402,7 +111,7 @@ export default function HomePage() {
   return (
     <div>
       {/* ========== BREAKING NEWS BANNER ========== */}
-      {breakingNews && <BreakingNewsDismissible news={breakingNews} />}
+      {breakingNews && (<div className="bg-red-600 text-white text-center py-2 px-4 text-sm font-medium"><Flame className="w-4 h-4 inline mr-1"/> <a href={`/blog/${breakingNews.slug}`} className="underline hover:no-underline">{breakingNews.title}</a> </div>)}
 
       {/* ========== HERO SECTION ========== */}
       <section className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-900 text-white">

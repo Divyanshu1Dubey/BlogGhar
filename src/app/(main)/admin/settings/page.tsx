@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import SettingsForm from './settings-form';
 
 export const metadata: Metadata = {
   title: 'Admin',
@@ -15,7 +16,9 @@ export default function AdminSettingsPage() {
       <main className="ml-64 p-8">
         <h1 className="text-3xl font-extrabold mb-8">⚙️ Settings</h1>
 
-        <div className="grid gap-6 max-w-2xl">
+        <SettingsForm />
+        {/* Legacy static controls are intentionally replaced by the persisted settings form. */}
+        <div className="hidden">
           <div className="bg-white dark:bg-dark-card rounded-xl p-6 border border-gray-200 dark:border-dark-border">
             <h2 className="font-bold text-lg mb-4">General Settings</h2>
             <div className="space-y-4">

@@ -43,10 +43,13 @@ export async function PATCH(
     const data = await request.json();
     const post = await prisma.post.findUnique({ where: { id } });
     if (!post) return NextResponse.json({ error: 'Not found' }, { status: 404 });
-    if (post.authorId !== userId) {
+    if (post.authorId !== userId && (session as any).user.role !== 'ADMIN') {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
-    const updated = await prisma.post.update({ where: { id }, data });
+    const allowed = ['title', 'slug', 'content', 'excerpt', 'featuredImage', 'postType', 'status', 'categoryId', 'readTime', 'seoTitle', 'seoDesc', 'focusKeyword'];
+    const safeData = Object.fromEntries(Object.entries(data).filter(([key]) => allowed.includes(key)));
+    if (safeData.status === 'PUBLISHED' && !post.publishedAt) safeData.publishedAt = new Date();
+    const updated = await prisma.post.update({ where: { id }, data: safeData });
     return NextResponse.json(updated);
   } catch {
     return NextResponse.json({ error: 'Failed' }, { status: 500 });
@@ -65,7 +68,7 @@ export async function DELETE(
     const { id } = await params;
     const post = await prisma.post.findUnique({ where: { id } });
     if (!post) return NextResponse.json({ error: 'Not found' }, { status: 404 });
-    if (post.authorId !== userId) {
+    if (post.authorId !== userId && (session as any).user.role !== 'ADMIN') {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
     await prisma.post.delete({ where: { id } });

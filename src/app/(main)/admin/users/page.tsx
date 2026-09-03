@@ -11,14 +11,16 @@ export const dynamic = 'force-dynamic';
 
 export default async function AdminUsersPage() {
   let users: any[] = [];
-  try { users = await prisma.user.findMany({ orderBy: { createdAt: 'desc' }, take: 50, select: { id: true, name: true, email: true, role: true, createdAt: true, _count: { select: { posts: true } } } }); }
-  catch {}
+  let error: string | null = null;
+  try { users = await prisma.user.findMany({ orderBy: { createdAt: 'desc' }, take: 50, select: { id: true, name: true, email: true, role: true, isBanned: true, createdAt: true, _count: { select: { posts: true } } } }); }
+  catch (err) { console.error('Admin users load failed', err); error = 'Unable to load users.'; }
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-dark-bg">
       <AdminSidebar />
       <main className="ml-64 p-8">
         <h1 className="text-3xl font-extrabold mb-6">Users</h1>
+        {error && <div className="mb-4 rounded-lg bg-red-100 p-4 text-sm text-red-700">{error}</div>}
         <div className="card overflow-hidden">
           <table className="w-full text-sm">
             <thead><tr className="bg-gray-50 dark:bg-dark-bg"><th className="text-left p-3">Name</th><th className="text-left p-3">Email</th><th className="text-left p-3">Role</th><th className="text-left p-3">Posts</th><th className="text-left p-3">Joined</th></tr></thead>
