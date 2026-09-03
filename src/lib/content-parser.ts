@@ -45,6 +45,10 @@ export interface ParsedContent {
   wordCount: number;
 }
 
+export async function readFiles(files: File[]): Promise<string[]> {
+  return Promise.all(files.map(file => file.text()));
+}
+
 export function parseContent(rawText: string): ParsedContent {
   const text = rawText.trim();
   if (!text) {

@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import { SkeletonProps } from './post-card-skeleton';
+type SkeletonProps = React.HTMLAttributes<HTMLDivElement>;
 
 function BaseSkeleton({ className, ...props }: SkeletonProps) {
   return (

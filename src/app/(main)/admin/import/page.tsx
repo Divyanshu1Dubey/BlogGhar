@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback, useEffect, useRef } from 'react';
-import { parseContent, readFiles, generateSlug, type ParsedContent } from '@/lib/content-parser';
+import { parseContent, readFiles, type ParsedContent } from '@/lib/content-parser';
 import { cn } from '@/lib/utils';
 
 const CATEGORIES = [
@@ -106,7 +106,7 @@ export default function AdminImportPage() {
       setBulkFiles(fileArray);
       setToast({ type: 'success', message: `Loaded ${valid.length} file(s). First file loaded into editor.` });
     } catch (err) {
-      setToast({ type: 'error', 'Failed to read files.' });
+      setToast({ type: 'error', message: 'Failed to read files.' });
     } finally {
       setLoading(false);
     }
@@ -172,7 +172,7 @@ export default function AdminImportPage() {
 
       setBulkResults(results);
       if (successCount > 0) {
-        setToast({ type: 'success', `Successfully imported ${successCount} post(s)` });
+        setToast({ type: 'success', message: `Successfully imported ${successCount} post(s)` });
         setContent('');
         setParsed(null);
         setCategory('');
@@ -199,7 +199,7 @@ export default function AdminImportPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           content: content.trim(),
-          title: parsed?.title || title || undefined,
+          title: parsed?.title || undefined,
           excerpt: parsed?.excerpt || undefined,
           categoryId: cat?.slug || undefined,
           tags: tagArr.length > 0 ? tagArr : parsed?.tags,
@@ -228,8 +228,6 @@ export default function AdminImportPage() {
       setLoading(false);
     }
   };
-
-  const showToast = (type: Toast['type'], message: string) => setToast({ type, message });
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-dark-bg">

@@ -1,8 +1,7 @@
 import prisma from '@/lib/prisma';
-import Link from 'next/link';
 import { Metadata } from 'next';
 import { JsonLd } from '@/components/seo/json-ld';
-import MultiplayerLobby from '@/components/games/multiplayer-room';
+import MultiplayerLobby from '@/components/games/multiplayer-lobby';
 
 export const dynamic = 'force-dynamic';
 

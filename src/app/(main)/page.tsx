@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   ArrowRight,
   Gamepad2,
@@ -23,20 +23,9 @@ import { formatDate, formatNumber } from '@/lib/utils';
 import prisma from '@/lib/prisma';
 import { AdSlot } from '@/components/ads/ad-slot';
 import NewsletterForm from '@/components/newsletter-form';
+import { NewsTicker } from '@/components/layout/news-ticker';
 
 export const dynamic = 'force-dynamic';
-
-export async function generateMetadata() {
-  const categories = await getCategories();
-  const categoryKeywords = categories.map((c: any) => c.name).join(', ');
-
-  return {
-    title: 'Blog-Ghar - Your Daily Hub for Blogs, Games, Tools & More',
-    description: 'Discover free blogs, play games, use free online tools, read latest news, check horoscopes and more. Join 10K+ readers at Blog-Ghar.',
-    keywords: ['blog', 'games', 'news', 'online tools', 'calculator', 'horoscope', categoryKeywords],
-    alternates: { canonical: 'https://bloghar.com' },
-  };
-}
 
 async function getFeaturedPosts() {
   try {
@@ -359,7 +348,7 @@ export default function HomePage() {
   });
   const [loading, setLoading] = useState(true);
 
-  useState(() => {
+  useEffect(() => {
     (async () => {
       const [
         fp,

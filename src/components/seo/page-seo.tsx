@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { JsonLd, useJsonLd, BreadcrumbItem } from './json-ld';
+import { JsonLd, useJsonLd, BreadcrumbItem, generateBreadcrumbSchema } from './json-ld';
 
 export interface PageSeoProps {
   title: string;
