@@ -5,7 +5,7 @@ import { JsonLd } from '@/components/seo/json-ld';
 export const metadata: Metadata = {
   title: 'About Blog-Ghar',
   description: 'Learn about Blog-Ghar - your one-stop destination for blogs, games, news, online tools, horoscopes, and more.',
-  alternates: { canonical: 'https://blogghar.com/about' },
+  alternates: { canonical: 'https://bloghar.com/about' },
 };
 
 export default function AboutPage() {
@@ -14,11 +14,11 @@ export default function AboutPage() {
     '@type': 'AboutPage',
     name: 'About Blog-Ghar',
     description: 'Learn about Blog-Ghar - your one-stop destination for blogs, games, news, online tools, and more.',
-    url: 'https://blogghar.com/about',
+    url: 'https://bloghar.com/about',
     mainEntity: {
       '@type': 'Organization',
       name: 'Blog-Ghar',
-      url: 'https://blogghar.com',
+      url: 'https://bloghar.com',
       description: 'Your one-stop destination for blogs, games, news, tools & more.',
     },
   };
@@ -68,7 +68,7 @@ export default function AboutPage() {
         <h2 className="text-2xl font-display font-bold text-gray-900 dark:text-white">Contact Us</h2>
         <p>
           Have questions, feedback, or partnership inquiries? We&apos;d love to hear from you. Reach out at{' '}
-          <Link href="mailto:hello@blogghar.com" className="text-primary-600 hover:underline">hello@blogghar.com</Link>
+          <Link href="mailto:hello@bloghar.com" className="text-primary-600 hover:underline">hello@bloghar.com</Link>
         </p>
 
         <h2 className="text-2xl font-display font-bold text-gray-900 dark:text-white">Join Our Community</h2>

@@ -3,7 +3,7 @@ import { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Terms of Service',
   description: 'Blog-Ghar Terms of Service - Rules and guidelines for using our platform.',
-  alternates: { canonical: 'https://blogghar.com/terms' },
+  alternates: { canonical: 'https://bloghar.com/terms' },
 };
 
 export default function TermsPage() {

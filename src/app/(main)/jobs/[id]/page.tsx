@@ -13,7 +13,7 @@ export async function generateMetadata({ params }: { params: JobParams }) {
   try {
     const job = await prisma.jobListing.findUnique({ where: { id } });
     if (!job) return {};
-    const url = `https://blogghar.com/jobs/${job.id}`;
+    const url = `https://bloghar.com/jobs/${job.id}`;
     return {
       title: `${job.title} at ${job.company} | Blog-Ghar Jobs`,
       description: `${job.title} ${job.location ? `- ${job.location}` : ''}`,
@@ -37,10 +37,10 @@ export default async function JobDetailPage({ params }: { params: JobParams }) {
 
   if (!job || !job.isActive) notFound();
 
-  const url = `https://blogghar.com/jobs/${job.id}`;
+  const url = `https://bloghar.com/jobs/${job.id}`;
   const breadcrumbs = [
-    { name: 'Home', url: 'https://blogghar.com' },
-    { name: 'Jobs', url: 'https://blogghar.com/jobs' },
+    { name: 'Home', url: 'https://bloghar.com' },
+    { name: 'Jobs', url: 'https://bloghar.com/jobs' },
     { name: job.title, url },
   ];
 
@@ -67,10 +67,9 @@ export default async function JobDetailPage({ params }: { params: JobParams }) {
           title: job.title,
           company: job.company,
           location: job.location || 'Remote',
-          type: (job as any).type || 'Full-time',
           description: job.description,
           url,
-          postedAt: (job as any).postedAt || new Date().toISOString(),
+          postedAt: job.postedAt?.toISOString() || new Date().toISOString(),
         })} />
       )}
 
@@ -113,9 +112,9 @@ export default async function JobDetailPage({ params }: { params: JobParams }) {
                 <span className="font-medium text-green-600">{job.salary}</span>
               </span>
             )}
-            {(job as any).postedAt && (
+            {job.postedAt && (
               <span className="flex items-center gap-1.5">
-                <Calendar className="w-4 h-4" /> {formatDate(new Date((job as any).postedAt))}
+                <Calendar className="w-4 h-4" /> {formatDate(new Date(job.postedAt))}
               </span>
             )}
           </div>

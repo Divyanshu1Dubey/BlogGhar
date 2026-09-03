@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: { params: GameParams }): Prom
       title: `${game.name} - Free Online Game`,
       description: game.description,
       openGraph: { title: `${game.name} - Free Online Game`, description: game.description, type: 'website' },
-      alternates: { canonical: `https://blogghar.com/games/${game.slug}` },
+      alternates: { canonical: `https://bloghar.com/games/${game.slug}` },
     };
   } catch { return {}; }
 }
@@ -40,7 +40,7 @@ export default async function GamePage({ params }: { params: GameParams }) {
         '@context': 'https://schema.org',
         name: game.name,
         description: game.description,
-        url: `https://blogghar.com/games/${game.slug}`,
+        url: `https://bloghar.com/games/${game.slug}`,
         applicationCategory: 'Game',
         operatingSystem: 'Web Browser',
         playMode: 'SinglePlayer',

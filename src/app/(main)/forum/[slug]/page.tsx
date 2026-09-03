@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: { params: ForumParams }): Pro
     const { slug } = await params;
     const forum = await prisma.forum.findUnique({ where: { slug }, select: { name: true, description: true } });
     if (!forum) return { title: 'Forum Not Found' };
-    const canonicalUrl = `https://blogghar.com/forum/${slug}`;
+    const canonicalUrl = `https://bloghar.com/forum/${slug}`;
     return {
       title: `${forum.name} - Forum`,
       description: forum.description || `Join the ${forum.name} discussion on Blog-Ghar.`,
@@ -50,10 +50,10 @@ export default async function ForumCategoryPage({ params }: Props) {
   } | null = await prisma.forum.findUnique({
     where: { slug },
     include: {
-      posts: {
-        orderBy: [{ isPinned: 'desc' }, { createdAt: 'desc' }],
-        include: { user: { select: { name: true, image: true } } },
-      },
+        posts: {
+            orderBy: [{ isPinned: 'desc' }, { createdAt: 'desc' }],
+            include: { user: { select: { name: true, image: true } } },
+        },
     },
   });
 
@@ -111,7 +111,7 @@ export default async function ForumCategoryPage({ params }: Props) {
         '@type': 'DiscussionForumPosting',
         name: forum.name,
         description: forum.description || undefined,
-        url: `https://blogghar.com/forum/${slug}`,
+        url: `https://bloghar.com/forum/${slug}`,
         inLanguage: 'en-IN',
       }} />
     </div>

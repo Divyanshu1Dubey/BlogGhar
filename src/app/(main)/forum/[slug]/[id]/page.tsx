@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: { params: PostParams }) {
     return {
       title: `${post.title} | Blog-Ghar Forum`,
       description: post.content?.slice(0, 160) || `Discussion: ${post.title}`,
-      alternates: { canonical: `https://blogghar.com/forum/${slug}/${id}` },
+      alternates: { canonical: `https://bloghar.com/forum/${slug}/${id}` },
     };
   } catch {
     return {};
@@ -57,10 +57,10 @@ export default async function ForumPostPage({ params }: { params: PostParams }) 
         '@context': 'https://schema.org',
         '@type': 'BreadcrumbList',
         itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://blogghar.com' },
-          { '@type': 'ListItem', position: 2, name: 'Forum', item: 'https://blogghar.com/forum' },
-          { '@type': 'ListItem', position: 3, name: post.forum.name, item: `https://blogghar.com/forum/${post.forum.slug}` },
-          { '@type': 'ListItem', position: 4, name: post.title, item: `https://blogghar.com/forum/${slug}/${id}` },
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://bloghar.com' },
+          { '@type': 'ListItem', position: 2, name: 'Forum', item: 'https://bloghar.com/forum' },
+          { '@type': 'ListItem', position: 3, name: post.forum.name, item: `https://bloghar.com/forum/${post.forum.slug}` },
+          { '@type': 'ListItem', position: 4, name: post.title, item: `https://bloghar.com/forum/${slug}/${id}` },
         ],
       }} />
       <Link href={`/forum/${slug}`} className="flex items-center gap-2 text-sm text-gray-500 hover:text-primary-600 mb-6">

@@ -90,7 +90,7 @@ export default async function HoroscopeSignPage({ params }: Props) {
         '@type': 'WebPage',
         name: `${signLower.charAt(0).toUpperCase() + signLower.slice(1)} Horoscope`,
         description: `Daily ${signLower} horoscope with love, career, and health predictions.`,
-        url: `https://blogghar.com/horoscope/${signLower}`,
+        url: `https://bloghar.com/horoscope/${signLower}`,
         inLanguage: 'en-IN',
       }} />
     </div>
@@ -110,6 +110,6 @@ export async function generateMetadata({ params }: Props) {
   return {
     title: `${d.icon} ${d.name} Daily Horoscope | Blog-Ghar`,
     description: `Get your daily ${d.name} horoscope reading. Love, career, health predictions.`,
-    alternates: { canonical: `https://blogghar.com/horoscope/${sign.toLowerCase()}` },
+    alternates: { canonical: `https://bloghar.com/horoscope/${sign.toLowerCase()}` },
   };
 }

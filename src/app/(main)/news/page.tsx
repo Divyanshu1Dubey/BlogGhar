@@ -10,7 +10,7 @@ export async function generateMetadata() {
   return {
     title: 'Latest News',
     description: 'Stay updated with the latest news and trending stories from around the world on Blog-Ghar.',
-    alternates: { canonical: 'https://blogghar.com/news' },
+    alternates: { canonical: 'https://bloghar.com/news' },
   };
 }
 
@@ -34,7 +34,7 @@ export default async function NewsPage() {
     itemListElement: news.map((post, i) => ({
       '@type': 'ListItem',
       position: i + 1,
-      url: `https://blogghar.com/news/${post.slug}`,
+      url: `https://bloghar.com/news/${post.slug}`,
       name: post.title,
     })),
   } : null;
@@ -45,8 +45,8 @@ export default async function NewsPage() {
         '@context': 'https://schema.org',
         '@type': 'BreadcrumbList',
         itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://blogghar.com' },
-          { '@type': 'ListItem', position: 2, name: 'News', item: 'https://blogghar.com/news' },
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://bloghar.com' },
+          { '@type': 'ListItem', position: 2, name: 'News', item: 'https://bloghar.com/news' },
         ],
       }} />
       {newsSchema && <JsonLd type="ItemList" data={newsSchema} />}

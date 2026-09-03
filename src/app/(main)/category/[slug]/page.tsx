@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: { params: CategoryParams }) {
     return {
       title: `${category.name} | Blog-Ghar`,
       description: category.description || `Read ${category.name} articles and posts on Blog-Ghar.`,
-      alternates: { canonical: `https://blogghar.com/category/${category.slug}` },
+      alternates: { canonical: `https://bloghar.com/category/${category.slug}` },
     };
   } catch {
     return {};
@@ -57,9 +57,9 @@ export default async function CategoryPage({ params }: { params: CategoryParams 
         '@context': 'https://schema.org',
         '@type': 'BreadcrumbList',
         itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://blogghar.com' },
-          { '@type': 'ListItem', position: 2, name: 'Blog', item: 'https://blogghar.com/blog' },
-          { '@type': 'ListItem', position: 3, name: category.name, item: `https://blogghar.com/category/${category.slug}` },
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://bloghar.com' },
+          { '@type': 'ListItem', position: 2, name: 'Blog', item: 'https://bloghar.com/blog' },
+          { '@type': 'ListItem', position: 3, name: category.name, item: `https://bloghar.com/category/${category.slug}` },
         ],
       }} />
       <JsonLd type="ItemList" data={{
@@ -69,7 +69,7 @@ export default async function CategoryPage({ params }: { params: CategoryParams 
         itemListElement: postsList.map((post, i) => ({
           '@type': 'ListItem',
           position: i + 1,
-          url: `https://blogghar.com/blog/${post.slug}`,
+          url: `https://bloghar.com/blog/${post.slug}`,
           name: post.title,
         })),
       }} />

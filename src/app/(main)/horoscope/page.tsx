@@ -108,7 +108,7 @@ export default function HoroscopePage() {
 
       <JsonLd type="WebSite" data={{
         name: 'Blog-Ghar Horoscope',
-        url: 'https://blogghar.com/horoscope',
+        url: 'https://bloghar.com/horoscope',
         description: 'Daily horoscope readings for all 12 zodiac signs.',
       }} />
     </div>

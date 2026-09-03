@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: { params: TagParams }) {
     return {
       title: `${tag.name} | Blog-Ghar`,
       description: `Read posts tagged "${tag.name}" on Blog-Ghar.`,
-      alternates: { canonical: `https://blogghar.com/tag/${tag.slug}` },
+      alternates: { canonical: `https://bloghar.com/tag/${tag.slug}` },
     };
   } catch {
     return {};
@@ -53,9 +53,9 @@ export default async function TagPage({ params }: { params: TagParams }) {
         '@context': 'https://schema.org',
         '@type': 'BreadcrumbList',
         itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://blogghar.com' },
-          { '@type': 'ListItem', position: 2, name: 'Blog', item: 'https://blogghar.com/blog' },
-          { '@type': 'ListItem', position: 3, name: tag.name, item: `https://blogghar.com/tag/${tag.slug}` },
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://bloghar.com' },
+          { '@type': 'ListItem', position: 2, name: 'Blog', item: 'https://bloghar.com/blog' },
+          { '@type': 'ListItem', position: 3, name: tag.name, item: `https://bloghar.com/tag/${tag.slug}` },
         ],
       }} />
 

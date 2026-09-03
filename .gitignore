@@ -51,3 +51,8 @@ Thumbs.db
 
 # generated
 src/generated/
+
+# Playwright MCP artifacts
+.playwright-mcp/
+Blogs.txt
+prisma/seed-blogs.ts

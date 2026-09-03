@@ -4,7 +4,7 @@ import { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Privacy Policy',
   description: 'Blog-Ghar Privacy Policy - Learn how we collect, use, and protect your personal information.',
-  alternates: { canonical: 'https://blogghar.com/privacy' },
+  alternates: { canonical: 'https://bloghar.com/privacy' },
 };
 
 export default function PrivacyPage() {
@@ -30,7 +30,7 @@ export default function PrivacyPage() {
         <p>We implement appropriate security measures to protect your personal information. However, no method of transmission over the internet is 100% secure.</p>
 
         <h2>Contact</h2>
-        <p>If you have any questions about this Privacy Policy, please contact us at <Link href="mailto:hello@blogghar.com" className="text-primary-600 hover:underline">hello@blogghar.com</Link>.</p>
+        <p>If you have any questions about this Privacy Policy, please contact us at <Link href="mailto:hello@bloghar.com" className="text-primary-600 hover:underline">hello@bloghar.com</Link>.</p>
       </div>
     </div>
   );

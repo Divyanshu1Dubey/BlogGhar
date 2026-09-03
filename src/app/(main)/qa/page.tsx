@@ -9,7 +9,7 @@ export async function generateMetadata() {
   return {
     title: 'Q&A Community',
     description: 'Ask questions, share knowledge, and help others in the Blog-Ghar Q&A community.',
-    alternates: { canonical: 'https://blogghar.com/qa' },
+    alternates: { canonical: 'https://bloghar.com/qa' },
   };
 }
 
@@ -25,8 +25,8 @@ export default async function QAPage() {
         '@context': 'https://schema.org',
         '@type': 'BreadcrumbList',
         itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://blogghar.com' },
-          { '@type': 'ListItem', position: 2, name: 'Q&A', item: 'https://blogghar.com/qa' },
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://bloghar.com' },
+          { '@type': 'ListItem', position: 2, name: 'Q&A', item: 'https://bloghar.com/qa' },
         ],
       }} />
       {questions.length > 0 && <JsonLd type="ItemList" data={{
@@ -36,7 +36,7 @@ export default async function QAPage() {
         itemListElement: questions.map((q, i) => ({
           '@type': 'ListItem',
           position: i + 1,
-          url: `https://blogghar.com/qa/${q.slug || q.id}`,
+          url: `https://bloghar.com/qa/${q.slug || q.id}`,
           name: q.title,
         })),
       }} />}

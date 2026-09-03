@@ -34,7 +34,7 @@ export function generateArticleSchema(post: {
     '@type': 'Article',
     headline: post.title,
     description: post.excerpt || post.title,
-    url: `https://blogghar.com/blog/${post.slug}`,
+    url: `https://bloghar.com/blog/${post.slug}`,
     datePublished: post.publishedAt || post.updatedAt,
     dateModified: post.updatedAt || post.publishedAt,
     author: {
@@ -44,11 +44,11 @@ export function generateArticleSchema(post: {
     publisher: {
       '@type': 'Organization',
       name: 'Blog-Ghar',
-      url: 'https://blogghar.com',
+      url: 'https://bloghar.com',
     },
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': `https://blogghar.com/blog/${post.slug}`,
+      '@id': `https://bloghar.com/blog/${post.slug}`,
     },
     inLanguage: 'en-IN',
   };
@@ -67,7 +67,7 @@ export function generateToolSchema(tool: {
     '@type': 'WebApplication',
     name: tool.name,
     description: tool.description,
-    url: `https://blogghar.com/tools/${tool.slug}`,
+    url: `https://bloghar.com/tools/${tool.slug}`,
     applicationCategory: 'UtilitiesApplication',
     operatingSystem: 'Web Browser',
     inLanguage: 'en-IN',
@@ -84,7 +84,7 @@ export function generateToolSchema(tool: {
       position: i + 1,
       name: s.name,
       text: s.step,
-      url: s.url || `https://blogghar.com/tools/${tool.slug}`,
+      url: s.url || `https://bloghar.com/tools/${tool.slug}`,
     }));
   }
 
@@ -124,7 +124,7 @@ export function generateJobPostingSchema(job: {
   title: string;
   company: string;
   location: string;
-  type: string;
+  type?: string;
   description: string;
   url: string;
   postedAt?: string;
@@ -138,7 +138,7 @@ export function generateJobPostingSchema(job: {
       name: job.company,
     },
     jobLocationType: job.location.toLowerCase().includes('remote') ? 'TELECOMMUTE' : 'ONSITE',
-    employmentType: job.type.toUpperCase(),
+    employmentType: (job.type || 'FULL_TIME').toUpperCase(),
     description: job.description,
     datePosted: job.postedAt || new Date().toISOString(),
     url: job.url,

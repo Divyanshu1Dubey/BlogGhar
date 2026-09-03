@@ -51,12 +51,12 @@ Set these in Vercel → Settings → Environment Variables:
 
 ```env
 # Site
-NEXT_PUBLIC_SITE_URL=https://blogghar.vercel.app
+NEXT_PUBLIC_SITE_URL=https://bloghar.vercel.app
 NEXT_PUBLIC_SITE_NAME=Blog-Ghar
 
 # Auth
 AUTH_SECRET=<generate-with-openssl-rand-base64-32>
-AUTH_URL=https://blogghar.vercel.app
+AUTH_URL=https://bloghar.vercel.app
 
 # Google OAuth
 GOOGLE_CLIENT_ID=<your-google-client-id>
@@ -68,7 +68,7 @@ GITHUB_CLIENT_SECRET=<your-github-client-secret>
 
 # Email (Resend)
 RESEND_API_KEY=<your-resend-api-key>
-EMAIL_FROM=noreply@blogghar.com
+EMAIL_FROM=noreply@bloghar.com
 
 # Ads
 NEXT_PUBLIC_ADSENSE_CLIENT=ca-pub-XXXXXXXXXXXXXXXX
@@ -90,7 +90,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=<your-supabase-anon-key>
 DATABASE_URL=<same-postgres-url>
 REDIS_URL=<redis-url>
 AUTH_SECRET=<same-as-vercel>
-AUTH_URL=https://blogghar.vercel.app
+AUTH_URL=https://bloghar.vercel.app
 ```
 
 ---
@@ -148,11 +148,11 @@ npx prisma db seed
 
 ## Post-Deployment Checklist
 
-- [ ] Verify homepage loads at https://blogghar.vercel.app
+- [ ] Verify homepage loads at https://bloghar.vercel.app
 - [ ] Test blog, news, games, tools, horoscope, forum, jobs pages
 - [ ] Set up Google Search Console
 - [ ] Set up Google Analytics
 - [ ] Apply for Google AdSense
 - [ ] Configure OAuth providers (Google, GitHub)
-- [ ] Set up custom domain (blogghar.com) in Vercel
+- [ ] Set up custom domain (bloghar.com) in Vercel
 - [ ] Enable automatic database backups on Railway

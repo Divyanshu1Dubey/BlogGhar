@@ -21,7 +21,7 @@ const wallpaperSchema = wallpapers.map((wp, i) => ({
   '@type': 'ListItem',
   position: i + 1,
   name: wp.title,
-  url: `https://blogghar.com/wallpapers#${wp.id}`,
+  url: `https://bloghar.com/wallpapers#${wp.id}`,
 }));
 
 export default function WallpapersPage() {
@@ -132,7 +132,7 @@ export default function WallpapersPage() {
       <JsonLd type="ItemList" data={{
         name: 'Blog-Ghar HD Wallpapers',
         description: 'Free HD wallpapers for phone, tablet, and desktop.',
-        url: 'https://blogghar.com/wallpapers',
+        url: 'https://bloghar.com/wallpapers',
         numberOfItems: wallpapers.length,
         itemListElement: wallpaperSchema,
       }} />

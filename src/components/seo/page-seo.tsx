@@ -26,7 +26,7 @@ export function generateMetadata({
   author,
   tags,
 }: PageSeoProps): Metadata {
-  const url = canonical || 'https://blogghar.com';
+  const url = canonical || 'https://bloghar.com';
 
   return {
     title: `${title} | Blog-Ghar`,
@@ -41,7 +41,7 @@ export function generateMetadata({
       description,
       images: [
         {
-          url: ogImage.startsWith('http') ? ogImage : `https://blogghar.com${ogImage}`,
+          url: ogImage.startsWith('http') ? ogImage : `https://bloghar.com${ogImage}`,
           width: 1200,
           height: 630,
           alt: title,
@@ -55,7 +55,7 @@ export function generateMetadata({
       card: 'summary_large_image',
       title,
       description,
-      images: [ogImage.startsWith('http') ? ogImage : `https://blogghar.com${ogImage}`],
+      images: [ogImage.startsWith('http') ? ogImage : `https://bloghar.com${ogImage}`],
     },
     alternates: {
       canonical: url,
@@ -91,7 +91,7 @@ export function PageSeo({ title, description, canonical, jsonLd, breadcrumbs }: 
       )}
       <meta property="og:title" content={`${title} | Blog-Ghar`} />
       <meta property="og:description" content={description} />
-      <meta property="og:url" content={canonical || 'https://blogghar.com'} />
+      <meta property="og:url" content={canonical || 'https://bloghar.com'} />
       <meta name="twitter:title" content={`${title} | Blog-Ghar`} />
       <meta name="twitter:description" content={description} />
     </>

@@ -2,24 +2,28 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import { Menu, X, Search, Moon, Sun } from 'lucide-react';
+import { useSession, signOut } from 'next-auth/react';
+import { Menu, X, Search, Moon, Sun, LogOut, User, Settings } from 'lucide-react';
 import { useTheme } from 'next-themes';
-import Image from 'next/image';
 
 const categories = [
-  { name: 'Technology', slug: 'technology', icon: '💻', color: 'bg-blue-500' },
-  { name: 'Lifestyle', slug: 'lifestyle', icon: '🌟', color: 'bg-pink-500' },
-  { name: 'Education', slug: 'education', icon: '📚', color: 'bg-green-500' },
-  { name: 'Finance', slug: 'finance', icon: '💰', color: 'bg-yellow-500' },
-  { name: 'Entertainment', slug: 'entertainment', icon: '🎬', color: 'bg-purple-500' },
-  { name: 'Health', slug: 'health', icon: '🏥', color: 'bg-red-500' },
+  { name: 'Technology', slug: 'technology', icon: '💻' },
+  { name: 'Lifestyle', slug: 'lifestyle', icon: '🌟' },
+  { name: 'Education', slug: 'education', icon: '📚' },
+  { name: 'Finance', slug: 'finance', icon: '💰' },
+  { name: 'Entertainment', slug: 'entertainment', icon: '🎬' },
+  { name: 'Health', slug: 'health', icon: '🏥' },
 ];
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { theme, setTheme } = useTheme();
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const { theme, setTheme } = useTheme();
+  const { data: session, status } = useSession();
+
+  const isAdmin = (session?.user as any)?.role === 'ADMIN';
 
   return (
     <header className="sticky top-0 z-50 bg-white dark:bg-dark-bg border-b border-gray-200 dark:border-dark-border">
@@ -81,13 +85,53 @@ export function Header() {
               <Moon className="w-5 h-5 block dark:hidden" />
             </button>
 
-            {/* Auth buttons */}
-            <Link href="/login" className="hidden sm:block text-sm font-medium hover:text-primary-600 transition-colors">
-              Login
-            </Link>
-            <Link href="/register" className="hidden sm:block btn-primary text-sm">
-              Sign Up
-            </Link>
+            {status === 'loading' ? (
+              <div className="hidden sm:block w-8 h-8 animate-pulse bg-gray-200 rounded-full" />
+            ) : session?.user ? (
+              <div className="relative">
+                <button
+                  onClick={() => setUserMenuOpen(!userMenuOpen)}
+                  className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary-50 dark:bg-primary-900/30 text-sm font-medium hover:bg-primary-100 transition-colors"
+                >
+                  <div className="w-6 h-6 rounded-full bg-primary-600 text-white flex items-center justify-center text-xs">
+                    {(session.user.name || session.user.email || 'U').charAt(0).toUpperCase()}
+                  </div>
+                  <span className="max-w-[100px] truncate">{session.user.name || 'User'}</span>
+                </button>
+
+                {userMenuOpen && (
+                  <div className="absolute right-0 top-full mt-1 w-48 bg-white dark:bg-dark-card rounded-xl shadow-lg border border-gray-200 dark:border-dark-border py-1 z-50">
+                    <div className="px-4 py-2 border-b border-gray-100 dark:border-gray-700">
+                      <p className="text-sm font-medium truncate">{session.user.name}</p>
+                      <p className="text-xs text-gray-500 truncate">{session.user.email}</p>
+                    </div>
+                    <Link href="/profile" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-dark-bg">
+                      <User className="w-4 h-4" /> Profile
+                    </Link>
+                    {isAdmin && (
+                      <Link href="/admin" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-dark-bg">
+                        <Settings className="w-4 h-4" /> Admin Dashboard
+                      </Link>
+                    )}
+                    <button
+                      onClick={() => { signOut({ callbackUrl: '/' }); setUserMenuOpen(false); }}
+                      className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
+                    >
+                      <LogOut className="w-4 h-4" /> Logout
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <>
+                <Link href="/login" className="hidden sm:block text-sm font-medium hover:text-primary-600 transition-colors">
+                  Login
+                </Link>
+                <Link href="/register" className="hidden sm:block btn-primary text-sm">
+                  Sign Up
+                </Link>
+              </>
+            )}
 
             {/* Mobile menu toggle */}
             <button
@@ -146,8 +190,25 @@ export function Header() {
             <MobileNavLink href="/qa" onClick={() => setMobileOpen(false)}>❓ Q&A</MobileNavLink>
             <MobileNavLink href="/jobs" onClick={() => setMobileOpen(false)}>💼 Jobs</MobileNavLink>
             <hr className="border-gray-200 dark:border-dark-border" />
-            <MobileNavLink href="/login" onClick={() => setMobileOpen(false)}>🔑 Login</MobileNavLink>
-            <MobileNavLink href="/register" onClick={() => setMobileOpen(false)}>✨ Sign Up Free</MobileNavLink>
+            {session?.user ? (
+              <>
+                <MobileNavLink href="/profile" onClick={() => setMobileOpen(false)}>👤 Profile</MobileNavLink>
+                {isAdmin && (
+                  <MobileNavLink href="/admin" onClick={() => setMobileOpen(false)}>⚙️ Admin Dashboard</MobileNavLink>
+                )}
+                <button
+                  onClick={() => { signOut({ callbackUrl: '/' }); setMobileOpen(false); }}
+                  className="text-left px-4 py-3 text-base font-medium text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg"
+                >
+                  🚪 Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <MobileNavLink href="/login" onClick={() => setMobileOpen(false)}>🔑 Login</MobileNavLink>
+                <MobileNavLink href="/register" onClick={() => setMobileOpen(false)}>✨ Sign Up Free</MobileNavLink>
+              </>
+            )}
           </nav>
         </div>
       )}

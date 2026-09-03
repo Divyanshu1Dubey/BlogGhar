@@ -4,7 +4,7 @@ import { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Contact Us',
   description: 'Get in touch with Blog-Ghar - We are here to help with any questions, feedback, or partnerships.',
-  alternates: { canonical: 'https://blogghar.com/contact' },
+  alternates: { canonical: 'https://bloghar.com/contact' },
 };
 
 export default function ContactPage() {
@@ -17,10 +17,10 @@ export default function ContactPage() {
 
         <div className="grid sm:grid-cols-2 gap-4">
           {[
-            { title: 'General Inquiries', email: 'hello@blogghar.com', icon: '📧' },
-            { title: 'Advertise With Us', email: 'advertise@blogghar.com', icon: '📢' },
-            { title: 'Submit Content', email: 'submit@blogghar.com', icon: '✍️' },
-            { title: 'Press & Media', email: 'press@blogghar.com', icon: '📰' },
+            { title: 'General Inquiries', email: 'hello@bloghar.com', icon: '📧' },
+            { title: 'Advertise With Us', email: 'advertise@bloghar.com', icon: '📢' },
+            { title: 'Submit Content', email: 'submit@bloghar.com', icon: '✍️' },
+            { title: 'Press & Media', email: 'press@bloghar.com', icon: '📰' },
           ].map((c) => (
             <div key={c.title} className="card p-5">
               <span className="text-3xl">{c.icon}</span>
@@ -32,8 +32,8 @@ export default function ContactPage() {
 
         <h2>Other Ways to Reach Us</h2>
         <ul>
-          <li>Twitter: <Link href="https://twitter.com/blogghar" className="text-primary-600 hover:underline">@blogghar</Link></li>
-          <li>GitHub: <Link href="https://github.com/blogghar" className="text-primary-600 hover:underline">github.com/blogghar</Link></li>
+          <li>Twitter: <Link href="https://twitter.com/bloghar" className="text-primary-600 hover:underline">@bloghar</Link></li>
+          <li>GitHub: <Link href="https://github.com/bloghar" className="text-primary-600 hover:underline">github.com/bloghar</Link></li>
         </ul>
       </div>
     </div>

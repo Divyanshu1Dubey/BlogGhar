@@ -58,7 +58,7 @@ export function Footer() {
               <SocialLink href="https://twitter.com" icon={<Twitter className="w-4 h-4" />} />
               <SocialLink href="https://github.com" icon={<Github className="w-4 h-4" />} />
               <SocialLink href="https://linkedin.com" icon={<Linkedin className="w-4 h-4" />} />
-              <SocialLink href="mailto:hello@blogghar.com" icon={<Mail className="w-4 h-4" />} />
+              <SocialLink href="mailto:hello@bloghar.com" icon={<Mail className="w-4 h-4" />} />
             </div>
           </div>
 

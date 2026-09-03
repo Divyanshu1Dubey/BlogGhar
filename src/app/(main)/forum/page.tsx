@@ -10,7 +10,7 @@ export async function generateMetadata() {
   return {
     title: 'Community Forum',
     description: 'Join the Blog-Ghar community forum. Discuss topics, ask questions, and connect with other users.',
-    alternates: { canonical: 'https://blogghar.com/forum' },
+    alternates: { canonical: 'https://bloghar.com/forum' },
   };
 }
 
@@ -33,8 +33,8 @@ export default async function ForumPage() {
         '@context': 'https://schema.org',
         '@type': 'BreadcrumbList',
         itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://blogghar.com' },
-          { '@type': 'ListItem', position: 2, name: 'Forum', item: 'https://blogghar.com/forum' },
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://bloghar.com' },
+          { '@type': 'ListItem', position: 2, name: 'Forum', item: 'https://bloghar.com/forum' },
         ],
       }} />
       <div className="text-center mb-10">

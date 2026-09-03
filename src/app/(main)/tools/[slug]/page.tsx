@@ -782,7 +782,7 @@ export default function ToolPage() {
     '@type': 'HowTo',
     name: tool.name,
     description: tool.desc,
-    url: `https://blogghar.com/tools/${slug}`,
+    url: `https://bloghar.com/tools/${slug}`,
     step: tool.howToSteps.map((s, i) => ({ '@type': 'HowToStep', position: i + 1, name: s.name, text: s.text })),
   };
 

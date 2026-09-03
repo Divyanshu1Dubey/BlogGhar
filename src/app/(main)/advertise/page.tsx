@@ -5,7 +5,7 @@ import { AdSlot } from '@/components/ads/ad-slot';
 export const metadata: Metadata = {
   title: 'Advertise With Us | Blog-Ghar',
   description: 'Reach thousands of daily readers on Blog-Ghar. Advertise your brand, product, or service with our affordable ad packages.',
-  alternates: { canonical: 'https://blogghar.com/advertise' },
+  alternates: { canonical: 'https://bloghar.com/advertise' },
 };
 
 export default function AdvertisePage() {
@@ -69,7 +69,7 @@ export default function AdvertisePage() {
       {/* CTA */}
       <div className="card p-8 bg-gradient-to-r from-primary-600 to-primary-800 text-white text-center">
         <h2 className="text-2xl font-display font-bold mb-2">Ready to Get Started?</h2>
-        <p className="text-primary-100 mb-4">Email us at advertise@blogghar.com or fill out the form below.</p>
+        <p className="text-primary-100 mb-4">Email us at advertise@bloghar.com or fill out the form below.</p>
         <Link href="/contact" className="inline-block bg-white text-primary-700 px-6 py-3 rounded-lg font-semibold hover:bg-primary-50 transition-colors">
           Contact Us →
         </Link>

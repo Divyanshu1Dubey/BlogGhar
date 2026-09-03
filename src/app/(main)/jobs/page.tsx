@@ -11,7 +11,7 @@ export async function generateMetadata() {
   return {
     title: 'Job Board',
     description: 'Find your next career opportunity. Browse latest job listings across tech, design, marketing, and more on Blog-Ghar.',
-    alternates: { canonical: 'https://blogghar.com/jobs' },
+    alternates: { canonical: 'https://bloghar.com/jobs' },
   };
 }
 
@@ -32,7 +32,7 @@ export default async function JobsPage() {
     itemListElement: jobs.map((job, i) => ({
       '@type': 'ListItem',
       position: i + 1,
-      url: `https://blogghar.com/jobs/${job.id}`,
+      url: `https://bloghar.com/jobs/${job.id}`,
       name: `${job.title} at ${job.company}`,
     })),
   } : null;
@@ -43,8 +43,8 @@ export default async function JobsPage() {
         '@context': 'https://schema.org',
         '@type': 'BreadcrumbList',
         itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://blogghar.com' },
-          { '@type': 'ListItem', position: 2, name: 'Jobs', item: 'https://blogghar.com/jobs' },
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://bloghar.com' },
+          { '@type': 'ListItem', position: 2, name: 'Jobs', item: 'https://bloghar.com/jobs' },
         ],
       }} />
       {jobSchema && <JsonLd type="ItemList" data={jobSchema} />}

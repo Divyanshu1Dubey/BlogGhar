@@ -16,7 +16,7 @@ export async function generateMetadata() {
     title: 'Blog-Ghar - Home of Blogs | Games, News, Tools & More',
     description: 'Blog-Ghar is your one-stop destination for blogs, games, news, online tools, horoscopes, and more. Discover daily updated content across technology, lifestyle, entertainment, and more.',
     keywords: ['blog', 'games', 'news', 'online tools', 'calculator', 'horoscope', categoryKeywords],
-    alternates: { canonical: 'https://blogghar.com' },
+    alternates: { canonical: 'https://bloghar.com' },
   };
 }
 

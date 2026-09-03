@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: { params: NewsParams }) {
         images: post.featuredImage ? [post.featuredImage] : undefined,
       },
       twitter: { card: 'summary_large_image', title: post.title, description: post.excerpt || '' },
-      alternates: { canonical: `https://blogghar.com/news/${post.slug}` },
+      alternates: { canonical: `https://bloghar.com/news/${post.slug}` },
     };
   } catch { return {}; }
 }
@@ -56,21 +56,21 @@ export default async function NewsDetailPage({ params }: { params: NewsParams })
     datePublished: post.publishedAt?.toISOString() || post.createdAt?.toISOString() || new Date().toISOString(),
     dateModified: post.publishedAt?.toISOString() || post.createdAt?.toISOString() || new Date().toISOString(),
     author: { '@type': 'Person', name: authorName },
-    publisher: { '@type': 'Organization', name: 'Blog-Ghar', url: 'https://blogghar.com' },
-    mainEntityOfPage: { '@type': 'WebPage', '@id': `https://blogghar.com/news/${post.slug}` },
+    publisher: { '@type': 'Organization', name: 'Blog-Ghar', url: 'https://bloghar.com' },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': `https://bloghar.com/news/${post.slug}` },
     articleSection: post.category?.name || 'General',
     wordCount,
     image: post.featuredImage || undefined,
-    url: `https://blogghar.com/news/${post.slug}`,
+    url: `https://bloghar.com/news/${post.slug}`,
   };
 
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://blogghar.com' },
-      { '@type': 'ListItem', position: 2, name: 'News', item: 'https://blogghar.com/news' },
-      { '@type': 'ListItem', position: 3, name: post.title, item: `https://blogghar.com/news/${post.slug}` },
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://bloghar.com' },
+      { '@type': 'ListItem', position: 2, name: 'News', item: 'https://bloghar.com/news' },
+      { '@type': 'ListItem', position: 3, name: post.title, item: `https://bloghar.com/news/${post.slug}` },
     ],
   };
 

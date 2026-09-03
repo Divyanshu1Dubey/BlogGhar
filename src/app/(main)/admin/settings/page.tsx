@@ -29,7 +29,7 @@ export default function AdminSettingsPage() {
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">Admin Email</label>
-                <input type="email" defaultValue="admin@blogghar.com" className="w-full px-3 py-2 border border-gray-300 dark:border-dark-border rounded-lg dark:bg-dark-bg text-sm" />
+                <input type="email" defaultValue="admin@bloghar.com" className="w-full px-3 py-2 border border-gray-300 dark:border-dark-border rounded-lg dark:bg-dark-bg text-sm" />
               </div>
             </div>
           </div>

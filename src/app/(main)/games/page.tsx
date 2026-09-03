@@ -9,14 +9,19 @@ export async function generateMetadata() {
   return {
     title: 'Free Online Games',
     description: 'Play free online mini-games, puzzles, quizzes, and arcade games on Blog-Ghar. Compete on leaderboards!',
-    alternates: { canonical: 'https://blogghar.com/games' },
+    alternates: { canonical: 'https://bloghar.com/games' },
   };
 }
 
-export default async function GamesPage() {
+export default async function GamesPage({ searchParams }: { searchParams?: Promise<{ category?: string }> }) {
+  const params = await searchParams;
+  const activeCategory = params?.category || 'All';
   let games: any[] = [];
   try {
-    games = await prisma.game.findMany({ orderBy: { createdAt: 'desc' } });
+    games = await prisma.game.findMany({
+      where: activeCategory !== 'All' ? { category: activeCategory } : undefined,
+      orderBy: { createdAt: 'desc' },
+    });
   } catch {}
 
   const featured = games[0];
@@ -27,8 +32,8 @@ export default async function GamesPage() {
         '@context': 'https://schema.org',
         '@type': 'BreadcrumbList',
         itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://blogghar.com' },
-          { '@type': 'ListItem', position: 2, name: 'Games', item: 'https://blogghar.com/games' },
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://bloghar.com' },
+          { '@type': 'ListItem', position: 2, name: 'Games', item: 'https://bloghar.com/games' },
         ],
       }} />
       {games.length > 0 && <JsonLd type="ItemList" data={{
@@ -38,7 +43,7 @@ export default async function GamesPage() {
         itemListElement: games.slice(0, 10).map((game, i) => ({
           '@type': 'ListItem',
           position: i + 1,
-          url: `https://blogghar.com/games/${game.slug}`,
+          url: `https://bloghar.com/games/${game.slug}`,
           name: game.name,
         })),
       }} />}
@@ -68,10 +73,19 @@ export default async function GamesPage() {
       {/* Categories */}
       <section className="mb-8">
         <div className="flex flex-wrap gap-2 justify-center">
-          <span className="px-4 py-1.5 rounded-full text-sm font-medium bg-primary-600 text-white">All Games</span>
-          <span className="px-4 py-1.5 rounded-full text-sm font-medium bg-gray-100 dark:bg-dark-card">Puzzle</span>
-          <span className="px-4 py-1.5 rounded-full text-sm font-medium bg-gray-100 dark:bg-dark-card">Arcade</span>
-          <span className="px-4 py-1.5 rounded-full text-sm font-medium bg-gray-100 dark:bg-dark-card">Word</span>
+          {['All', 'Puzzle', 'Arcade', 'Word'].map((cat) => (
+            <Link
+              key={cat}
+              href={cat === 'All' ? '/games' : `/games?category=${cat.toLowerCase()}`}
+              className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                activeCategory === cat
+                  ? 'bg-primary-600 text-white'
+                  : 'bg-gray-100 dark:bg-dark-card hover:bg-gray-200'
+              }`}
+            >
+              {cat}
+            </Link>
+          ))}
         </div>
       </section>
 

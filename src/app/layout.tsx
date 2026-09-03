@@ -64,7 +64,7 @@ export const metadata: Metadata = {
     title: 'Blog-Ghar - Home of Blogs',
     description: 'Your one-stop destination for blogs, games, news, tools & more.',
     images: ['https://bloghar.com/og-image.svg'],
-    creator: '@blogghar',
+    creator: '@bloghar',
   },
   alternates: {
     canonical: 'https://bloghar.com',
