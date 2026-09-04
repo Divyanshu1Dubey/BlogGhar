@@ -1,10 +1,13 @@
 import prisma from '@/lib/prisma';
 import Link from 'next/link';
-import { Clock, Eye } from 'lucide-react';
-import { readingTime, formatNumber } from '@/lib/utils';
+import { BookOpen, TrendingUp, Sparkles } from 'lucide-react';
+import { formatNumber } from '@/lib/utils';
 import { JsonLd } from '@/components/seo/json-ld';
+import { BlogCard } from '@/components/blog/blog-card';
+import { CategoryFilter } from '@/components/blog/category-filter';
 
 export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export async function generateMetadata() {
   return {
@@ -18,6 +21,7 @@ export default async function BlogPage({ searchParams }: { searchParams?: Promis
   const params = await searchParams;
   let posts: any[] = [];
   let totalPosts = 0;
+  let categoriesWithCount: { id: string; name: string; slug: string; icon: string | null; _count: { posts: number } }[] = [];
 
   const whereCondition = {
     postType: 'BLOG',
@@ -26,7 +30,7 @@ export default async function BlogPage({ searchParams }: { searchParams?: Promis
   };
 
   try {
-    [posts, totalPosts] = await Promise.all([
+    const result = await Promise.all([
       prisma.post.findMany({
         where: whereCondition,
         orderBy: { publishedAt: 'desc' },
@@ -36,24 +40,35 @@ export default async function BlogPage({ searchParams }: { searchParams?: Promis
           category: { select: { name: true, slug: true, icon: true } },
         },
       }),
-      prisma.post.count({
-        where: whereCondition,
+      prisma.post.count({ where: whereCondition }),
+      prisma.category.findMany({
+        select: { id: true, name: true, slug: true, icon: true, _count: { select: { posts: true } } },
       }),
     ]);
+    posts = result[0] as any[];
+    totalPosts = result[1];
+    categoriesWithCount = result[2] as any;
   } catch (primaryErr) {
     console.error('Failed to load blog posts with full query:', primaryErr);
     try {
-      // Resilient fallback: load posts without extra filters if primary query failed
-      posts = await prisma.post.findMany({
-        where: { status: 'PUBLISHED', postType: 'BLOG' },
-        orderBy: { createdAt: 'desc' },
-        take: 30,
-        include: {
-          author: { select: { name: true } },
-          category: { select: { name: true, slug: true, icon: true } },
-        },
-      });
-      totalPosts = posts.length;
+      const result = await Promise.all([
+        prisma.post.findMany({
+          where: { status: 'PUBLISHED', postType: 'BLOG' },
+          orderBy: { createdAt: 'desc' },
+          take: 30,
+          include: {
+            author: { select: { name: true } },
+            category: { select: { name: true, slug: true, icon: true } },
+          },
+        }),
+        prisma.post.count({ where: { status: 'PUBLISHED', postType: 'BLOG' } }),
+        prisma.category.findMany({
+          select: { id: true, name: true, slug: true, icon: true, _count: { select: { posts: true } } },
+        }),
+      ]);
+      posts = result[0] as any[];
+      totalPosts = result[1];
+      categoriesWithCount = result[2] as any;
     } catch (fallbackErr) {
       console.error('Failed to load blog posts fallback:', fallbackErr);
       posts = [];
@@ -76,7 +91,7 @@ export default async function BlogPage({ searchParams }: { searchParams?: Promis
   } : null;
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-dark-bg">
+    <div className="min-h-screen bg-gray-50/50 dark:bg-dark-bg">
       <JsonLd type="BreadcrumbList" data={{
         '@context': 'https://schema.org',
         '@type': 'BreadcrumbList',
@@ -88,115 +103,139 @@ export default async function BlogPage({ searchParams }: { searchParams?: Promis
       {blogSchema && <JsonLd type="Blog" data={blogSchema} />}
 
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-primary-600 to-indigo-700 text-white py-16">
-        <div className="absolute inset-0 opacity-10 pointer-events-none" aria-hidden="true">
-          <div className="absolute top-10 right-20 text-8xl animate-bounce">📝</div>
-          <div className="absolute bottom-10 left-20 text-7xl animate-pulse">✍️</div>
+      <section className="relative overflow-hidden bg-gradient-to-br from-primary-600 via-primary-700 to-indigo-800 text-white">
+        {/* Animated background elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute -top-20 -right-20 w-96 h-96 bg-white/5 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute -bottom-32 -left-32 w-[500px] h-[500px] bg-indigo-400/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+          <div className="absolute top-20 left-1/4 text-6xl opacity-10 animate-bounce">📝</div>
+          <div className="absolute bottom-20 right-1/4 text-5xl opacity-10 animate-pulse">✍️</div>
+          <div className="absolute top-32 right-1/3 text-4xl opacity-5 animate-bounce" style={{ animationDelay: '0.5s' }}>📰</div>
         </div>
-        <div className="relative max-w-4xl mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-display font-extrabold mb-4">📝 Our Blog</h1>
-          <p className="text-lg text-blue-100 max-w-2xl mx-auto">
+
+        <div className="relative max-w-6xl mx-auto px-4 pt-20 pb-16 text-center">
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 backdrop-blur-md rounded-full text-sm text-blue-100 border border-white/10 mb-6">
+            <Sparkles className="w-4 h-4" />
+            <span>Curated articles for curious minds</span>
+          </div>
+
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-display font-extrabold mb-6 leading-tight">
+            Our <span className="bg-gradient-to-r from-blue-200 to-indigo-200 bg-clip-text text-transparent">Blog</span>
+          </h1>
+
+          <p className="text-lg md:text-xl text-blue-100 max-w-2xl mx-auto mb-8 leading-relaxed">
             Discover stories, tutorials, and insights across technology, lifestyle, education, finance, and more.
           </p>
+
           {totalPosts > 0 && (
-            <div className="mt-3 inline-flex items-center gap-1.5 px-3 py-1 bg-white/10 backdrop-blur-sm rounded-full text-xs text-blue-100">
-              <span>📚</span> {totalPosts} Published Articles
+            <div className="flex items-center justify-center gap-6">
+              <div className="inline-flex items-center gap-1.5 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-sm text-blue-100 border border-white/10">
+                <BookOpen className="w-4 h-4" />
+                <span>{totalPosts} Published Articles</span>
+              </div>
+              <div className="inline-flex items-center gap-1.5 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-sm text-blue-100 border border-white/10">
+                <TrendingUp className="w-4 h-4" />
+                <span>Updated Daily</span>
+              </div>
             </div>
           )}
+
           {params?.category && (
-            <div className="mt-4">
-              <Link href="/blog" className="text-sm text-blue-200 hover:text-white underline">
+            <div className="mt-6">
+              <Link href="/blog" className="inline-flex items-center gap-1 text-sm text-blue-200 hover:text-white underline underline-offset-4 transition-colors">
                 ← Clear category filter
               </Link>
             </div>
           )}
         </div>
+
+        {/* Bottom wave */}
+        <div className="absolute bottom-0 left-0 right-0">
+          <svg viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full">
+            <path d="M0 60V30C240 10 480 0 720 0C960 0 1200 10 1440 30V60H0Z" fill="currentColor" className="text-gray-50/50 dark:text-dark-bg" />
+          </svg>
+        </div>
+      </section>
+
+      {/* Category Filter */}
+      <section className="max-w-7xl mx-auto px-4 -mt-2 relative z-10">
+        <div className="py-6">
+          <CategoryFilter categories={categoriesWithCount} currentSlug={params?.category} />
+        </div>
       </section>
 
       {/* Featured Posts Banner */}
       {posts.length > 0 && (
-        <section className="max-w-7xl mx-auto px-4 -mt-6 relative z-10">
-          <div className="card p-1">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {posts.slice(0, 3).map((post) => (
-                <Link
-                  key={post.id}
-                  href={`/blog/${post.slug}`}
-                  className="group relative h-48 rounded-xl overflow-hidden bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-900 dark:to-primary-800 flex items-end p-5 hover:shadow-lg transition-all"
-                >
-                  <div className="absolute top-3 left-3 text-4xl opacity-80 group-hover:scale-110 transition-transform">
-                    {post.category?.icon || '📝'}
-                  </div>
-                  <div className="relative z-10">
-                    <span className="inline-block px-2.5 py-1 bg-white/90 dark:bg-dark-bg/90 backdrop-blur-sm rounded-full text-xs font-medium mb-2">
-                      {post.category?.name || 'Blog'}
-                    </span>
-                    <h3 className="font-display font-bold text-base line-clamp-2 group-hover:text-primary-600 transition-colors">
-                      {post.title}
-                    </h3>
-                  </div>
-                </Link>
-              ))}
+        <section className="max-w-7xl mx-auto px-4 mb-8">
+          <div className="flex items-center gap-2 mb-4">
+            <Sparkles className="w-5 h-5 text-yellow-500" />
+            <h2 className="text-lg font-display font-bold text-gray-900 dark:text-white">Featured Stories</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
+            {posts.slice(0, 3).map((post) => (
+              <BlogCard key={post.id} post={post} variant="featured" />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Stats Bar */}
+      {posts.length > 0 && (
+        <section className="max-w-7xl mx-auto px-4 mb-8">
+          <div className="bg-white dark:bg-dark-card rounded-2xl border border-gray-100 dark:border-dark-border p-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              <div className="text-center">
+                <div className="text-2xl md:text-3xl font-display font-extrabold text-gray-900 dark:text-white">{totalPosts}</div>
+                <div className="text-sm text-gray-500 mt-1">Total Articles</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl md:text-3xl font-display font-extrabold text-gray-900 dark:text-white">{categoriesWithCount.length}</div>
+                <div className="text-sm text-gray-500 mt-1">Categories</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl md:text-3xl font-display font-extrabold text-gray-900 dark:text-white">
+                  {formatNumber(posts.reduce((sum, p) => sum + (p.views || 0), 0))}
+                </div>
+                <div className="text-sm text-gray-500 mt-1">Total Views</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl md:text-3xl font-display font-extrabold text-gray-900 dark:text-white">
+                  {new Set(posts.map(p => p.author?.name).filter(Boolean)).size}
+                </div>
+                <div className="text-sm text-gray-500 mt-1">Authors</div>
+              </div>
             </div>
           </div>
         </section>
       )}
 
       {/* Main Blog Grid */}
-      <section className="max-w-7xl mx-auto px-4 py-12">
+      <section className="max-w-7xl mx-auto px-4 pb-20">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-display font-bold text-gray-900 dark:text-white">
+            {params?.category
+              ? `${categoriesWithCount.find(c => c.slug === params.category)?.name || ''} Articles`
+              : 'Latest Articles'}
+          </h2>
+          {posts.length > 0 && (
+            <span className="text-sm text-gray-500">
+              Showing {posts.length} {posts.length === 1 ? 'article' : 'articles'}
+            </span>
+          )}
+        </div>
+
         {posts.length > 0 ? (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {posts.map((post, index) => (
-              <article key={post.id} className="card overflow-hidden group hover:shadow-lg transition-all">
-                <Link href={`/blog/${post.slug}`} className="block">
-                  <div className="aspect-video bg-gray-200 dark:bg-dark-bg relative overflow-hidden">
-                    {post.featuredImage ? (
-                      <img src={post.featuredImage} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-6xl bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-900 dark:to-primary-800">
-                        {post.category?.icon || '📝'}
-                      </div>
-                    )}
-                    {post.category && (
-                      <span className="absolute top-3 left-3 px-2.5 py-1 bg-white/90 dark:bg-dark-bg/90 backdrop-blur-sm rounded-full text-xs font-medium">
-                        {post.category.icon} {post.category.name}
-                      </span>
-                    )}
-                    {index < 3 && (
-                      <span className="absolute top-3 right-3 px-2 py-1 bg-yellow-500 text-white text-[10px] font-bold rounded-full">
-                        ⭐ Featured
-                      </span>
-                    )}
-                  </div>
-                  <div className="p-5">
-                    <Link href={`/blog/${post.slug}`}>
-                      <h3 className="font-bold text-lg mb-2 group-hover:text-primary-600 transition-colors line-clamp-2 leading-tight">
-                        {post.title}
-                      </h3>
-                    </Link>
-                    {post.excerpt && <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-2 mb-3 leading-relaxed">{post.excerpt}</p>}
-                    <div className="flex items-center justify-between text-xs text-gray-400 pt-3 border-t border-gray-100 dark:border-dark-border">
-                      <div className="flex items-center gap-2">
-                        <div className="w-6 h-6 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center text-[10px] font-medium text-primary-700">
-                          {(post.author?.name || '?').charAt(0).toUpperCase()}
-                        </div>
-                        <span>{post.author?.name || 'Anonymous'}</span>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {post.readTime || readingTime(post.content)}m</span>
-                        <span className="flex items-center gap-1"><Eye className="w-3 h-3" /> {formatNumber(post.views || 0)}</span>
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              </article>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-7">
+            {posts.map((post) => (
+              <BlogCard key={post.id} post={post} variant="default" />
             ))}
           </div>
         ) : (
-          <div className="card p-16 text-center">
+          <div className="bg-white dark:bg-dark-card rounded-2xl border border-gray-100 dark:border-dark-border p-16 text-center">
             <div className="text-6xl mb-4">📝</div>
-            <h3 className="text-xl font-display font-bold mb-2">No blog posts yet</h3>
-            <p className="text-gray-500 mb-4">Check back soon for amazing content!</p>
+            <h3 className="text-xl font-display font-bold mb-2 text-gray-900 dark:text-white">No blog posts yet</h3>
+            <p className="text-gray-500 mb-6">Check back soon for amazing content!</p>
             <Link href="/admin/blogs/import" className="btn-primary">Create First Post</Link>
           </div>
         )}

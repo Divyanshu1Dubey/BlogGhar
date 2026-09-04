@@ -54,7 +54,7 @@ async function getHomeData(): Promise<HomeData> {
       games: [],
       news: [],
       popularTools: [],
-      stats: { blogCount: 0, gameCount: 0, toolCount: 0, dailyVisitors: 3200 },
+      stats: { blogCount: 0, gameCount: 0, toolCount: 0, dailyVisitors: 0 },
     };
   }
 }
@@ -233,11 +233,13 @@ export default function HomePage() {
   const [breakingNews, setBreakingNews] = useState<any>(null);
   const [popularTools, setPopularTools] = useState<any[]>([]);
   const [siteStats, setSiteStats] = useState({
-    posts: 128,
-    games: 10,
-    tools: 30,
-    dailyVisitors: 3200,
+    posts: 0,
+    games: 0,
+    tools: 0,
+    dailyVisitors: 0,
   });
+  const [recentPosts, setRecentPosts] = useState<any[]>([]);
+  const [totalViews, setTotalViews] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -308,7 +310,7 @@ export default function HomePage() {
             {/* Badge */}
             <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 backdrop-blur-sm rounded-full text-sm mb-8 border border-white/10">
               <Sparkles className="w-4 h-4 text-yellow-300" />
-              Your Daily Hub for Free Content
+              {loading ? 'Loading...' : `${formatNumber(siteStats.posts)}+ Blogs &amp; ${formatNumber(siteStats.games)}+ Free Games`}
             </div>
 
             {/* Heading */}
@@ -367,10 +369,10 @@ export default function HomePage() {
       <section className="max-w-7xl mx-auto px-4 -mt-2 relative z-10">
         <div className="card shadow-xl border-gray-200 dark:border-dark-border p-2">
           <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-gray-200 dark:divide-dark-border">
-            <StatCard icon={<NewspaperIcon className="w-7 h-7" />} value={formatNumber(siteStats.posts)} label="Total Posts" />
-            <StatCard icon={<Gamepad2 className="w-7 h-7" />} value={formatNumber(siteStats.games)} label="Games Available" />
-            <StatCard icon={<Calculator className="w-7 h-7" />} value={formatNumber(siteStats.tools)} label="Free Tools" />
-            <StatCard icon={<TrendingUp className="w-7 h-7" />} value={formatNumber(siteStats.dailyVisitors)} label="Daily Visitors" />
+            <StatCard icon={<NewspaperIcon className="w-7 h-7" />} value={loading ? '...' : formatNumber(siteStats.posts)} label="Total Posts" />
+            <StatCard icon={<Gamepad2 className="w-7 h-7" />} value={loading ? '...' : formatNumber(siteStats.games)} label="Games Available" />
+            <StatCard icon={<Calculator className="w-7 h-7" />} value={loading ? '...' : formatNumber(siteStats.tools)} label="Free Tools" />
+            <StatCard icon={<TrendingUp className="w-7 h-7" />} value={loading ? '...' : formatNumber(siteStats.dailyVisitors)} label="Daily Visitors" />
           </div>
         </div>
       </section>
