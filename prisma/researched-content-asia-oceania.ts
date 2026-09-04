@@ -1,4 +1,4 @@
-export type ResearchedContentPost = {
+﻿export type ResearchedContentPost = {
   title: string;
   slug: string;
   category: string;
@@ -48,22 +48,22 @@ The Bangladesh Public Service Commission (BPSC) publishes BCS circulars, instruc
 
 ## Preparing without guessing
 
-Break the official syllabus into Bangladesh affairs, international affairs, language, mathematics, science, ICT, ethics, geography, and the subjects actually listed in the notice. Make a one-page error log and revisit questions you miss. Do not treat an unofficial “cut-off” as a promise: BPSC controls selection and publishes later notices.
+Break the official syllabus into Bangladesh affairs, international affairs, language, mathematics, science, ICT, ethics, geography, and the subjects actually listed in the notice. Make a one-page error log and revisit questions you miss. Do not treat an unofficial ΓÇ£cut-offΓÇ¥ as a promise: BPSC controls selection and publishes later notices.
 
 ## Common mistakes
 
-Applicants often use an old circular, miss a corrigendum, upload an invalid image, or assume one cadre’s qualification applies to every cadre. Check the BPSC notice page again before each deadline and use only the official domain for payment or admit-card instructions.`,
+Applicants often use an old circular, miss a corrigendum, upload an invalid image, or assume one cadreΓÇÖs qualification applies to every cadre. Check the BPSC notice page again before each deadline and use only the official domain for payment or admit-card instructions.`,
   ),
   record(
     'Bangladesh e-Passport Application: Online Enrollment and Police Verification Checklist',
     'bangladesh-e-passport-online-application-guide',
     'South Asia Government Services',
     'Bangladesh e-passport application',
-    'How to prepare identity documents and follow Bangladesh’s official e-passport process without relying on agents.',
+    'How to prepare identity documents and follow BangladeshΓÇÖs official e-passport process without relying on agents.',
     'https://www.epassport.gov.bd/',
     `## What the official portal does
 
-Bangladesh’s e-passport portal provides the online application and appointment workflow. The exact fee, delivery option, office, and document requirement depend on the applicant and service selected, so check the live portal rather than copying an old social-media list.
+BangladeshΓÇÖs e-passport portal provides the online application and appointment workflow. The exact fee, delivery option, office, and document requirement depend on the applicant and service selected, so check the live portal rather than copying an old social-media list.
 
 ### Before opening the form
 
@@ -85,7 +85,7 @@ Use the official status or contact route and quote your application or delivery 
     'pakistan-css-exam-fpsc-official-guide',
     'South Asia Exams',
     'Pakistan CSS exam',
-    'Use FPSC’s current CSS rules to map the screening test, written papers, medical examination, and interview stages.',
+    'Use FPSCΓÇÖs current CSS rules to map the screening test, written papers, medical examination, and interview stages.',
     'https://www.fpsc.gov.pk/',
     `## Find the authoritative CSS material
 
@@ -101,11 +101,11 @@ The Federal Public Service Commission (FPSC) publishes CSS rules, advertisements
 
 ## Preparation that survives rule changes
 
-Build a syllabus matrix for compulsory and optional subjects. Practise timed answers, précis, essays, and evidence-based current-affairs analysis. For optional subjects, use the official syllabus and past papers; do not select solely because a forum calls a subject “scoring.”
+Build a syllabus matrix for compulsory and optional subjects. Practise timed answers, pr├⌐cis, essays, and evidence-based current-affairs analysis. For optional subjects, use the official syllabus and past papers; do not select solely because a forum calls a subject ΓÇ£scoring.ΓÇ¥
 
 ## Cautions
 
-FPSC can issue corrigenda and change dates. A social-media schedule, unofficial eligibility calculator, or claimed passing mark is not an FPSC decision. Recheck the commission’s notice page before travelling to a centre, paying a fee, or sending documents.`,
+FPSC can issue corrigenda and change dates. A social-media schedule, unofficial eligibility calculator, or claimed passing mark is not an FPSC decision. Recheck the commissionΓÇÖs notice page before travelling to a centre, paying a fee, or sending documents.`,
   ),
   record(
     'Pakistan Ehsaas and BISP Payment Status: Official Verification Steps',
@@ -120,33 +120,33 @@ The Benazir Income Support Programme (BISP) publishes programme information and 
 
 ### Safe verification checklist
 
-- Confirm the official SMS short code or helpline from BISP’s website.
+- Confirm the official SMS short code or helpline from BISPΓÇÖs website.
 - Keep your CNIC details private when speaking to an authorised channel.
 - Ask whether the message concerns a survey, eligibility decision, or payment collection.
 - Record the complaint number if a payment point refuses or deducts money.
 
 ## If someone asks for a fee
 
-Do not pay a person who claims to “unlock” a BISP payment, and never disclose an OTP, PIN, or bank credential. BISP announcements can change collection arrangements and schedules. A beneficiary should follow the instructions issued by BISP and the authorised payment provider, not a shopkeeper’s printed list.
+Do not pay a person who claims to ΓÇ£unlockΓÇ¥ a BISP payment, and never disclose an OTP, PIN, or bank credential. BISP announcements can change collection arrangements and schedules. A beneficiary should follow the instructions issued by BISP and the authorised payment provider, not a shopkeeperΓÇÖs printed list.
 
 ## Resolving a mismatch
 
-If your identity, household information, or payment record is wrong, use the complaint or registration route listed on the official site. Keep the receipt and date of every visit. Avoid submitting duplicate forms through multiple agents, because conflicting records can make verification harder. This guide cannot confirm an individual’s entitlement; only BISP can do so.`,
+If your identity, household information, or payment record is wrong, use the complaint or registration route listed on the official site. Keep the receipt and date of every visit. Avoid submitting duplicate forms through multiple agents, because conflicting records can make verification harder. This guide cannot confirm an individualΓÇÖs entitlement; only BISP can do so.`,
   ),
   record(
     'Sri Lanka A/L University Admissions: UGC Handbook and Z-Score Choices',
     'sri-lanka-al-university-admissions-ugc-guide',
     'South Asia Admissions',
     'Sri Lanka university admissions',
-    'A practical way to read Sri Lanka’s UGC admissions handbook, compare course choices, and avoid deadline errors.',
+    'A practical way to read Sri LankaΓÇÖs UGC admissions handbook, compare course choices, and avoid deadline errors.',
     'https://www.ugc.ac.lk/',
     `## Read the handbook for your examination year
 
-Sri Lanka’s University Grants Commission (UGC) publishes admissions handbooks and notices for state university selection. Course availability, minimum requirements, preference rules, and application dates are cycle-specific. Start with the handbook for the relevant G.C.E. Advanced Level year and district system.
+Sri LankaΓÇÖs University Grants Commission (UGC) publishes admissions handbooks and notices for state university selection. Course availability, minimum requirements, preference rules, and application dates are cycle-specific. Start with the handbook for the relevant G.C.E. Advanced Level year and district system.
 
 ### Choosing preferences
 
-Make a table with the course code, university, subject prerequisites, and any aptitude or practical test described by UGC. Enter preferences only after checking that your A/L subject combination and results meet the handbook’s conditions. A popular course is not automatically the best fit; consider the published curriculum, location, language, and progression requirements.
+Make a table with the course code, university, subject prerequisites, and any aptitude or practical test described by UGC. Enter preferences only after checking that your A/L subject combination and results meet the handbookΓÇÖs conditions. A popular course is not automatically the best fit; consider the published curriculum, location, language, and progression requirements.
 
 ## Submission checklist
 
@@ -157,18 +157,18 @@ Make a table with the course code, university, subject prerequisites, and any ap
 
 ### Avoid these errors
 
-Do not calculate admission from a social-media “Z-score list,” use an old handbook, or pay an unofficial person to change preferences. UGC publishes selection outcomes and instructions; universities may separately publish registration information. Verify both sources before travel or payment.`,
+Do not calculate admission from a social-media ΓÇ£Z-score list,ΓÇ¥ use an old handbook, or pay an unofficial person to change preferences. UGC publishes selection outcomes and instructions; universities may separately publish registration information. Verify both sources before travel or payment.`,
   ),
   record(
     'Nepal Lok Sewa Aayog Officer Exam: Vacancy Notice and Application Steps',
     'nepal-lok-sewa-aayog-exam-guide',
     'South Asia Exams',
     'Nepal Lok Sewa Aayog exam',
-    'How to use Nepal’s Public Service Commission notices to verify posts, inclusion groups, documents, and exam stages.',
+    'How to use NepalΓÇÖs Public Service Commission notices to verify posts, inclusion groups, documents, and exam stages.',
     'https://psc.gov.np/',
     `## Vacancy notice first
 
-Nepal’s Public Service Commission, commonly called Lok Sewa Aayog, publishes advertisements, syllabi, schedules, and results at psc.gov.np. A post’s service, group, level, open or inclusive category, education, age, and experience are defined in its individual notice.
+NepalΓÇÖs Public Service Commission, commonly called Lok Sewa Aayog, publishes advertisements, syllabi, schedules, and results at psc.gov.np. A postΓÇÖs service, group, level, open or inclusive category, education, age, and experience are defined in its individual notice.
 
 ### Application workflow
 
@@ -180,14 +180,14 @@ Use the official syllabus as a boundary. Divide general awareness, governance, l
 
 ## Caveats
 
-Schedules can be revised. A preparation centre’s vacancy count or claimed “sure question” has no official force. Revisit PSC notices before downloading an admit card, appearing at an examination, or submitting a recommendation-related document.`,
+Schedules can be revised. A preparation centreΓÇÖs vacancy count or claimed ΓÇ£sure questionΓÇ¥ has no official force. Revisit PSC notices before downloading an admit card, appearing at an examination, or submitting a recommendation-related document.`,
   ),
   record(
     'India DigiLocker Marksheets: How to Fetch and Share Verified Documents',
     'india-digilocker-marksheet-download-guide',
     'South Asia Digital Services',
     'DigiLocker marksheet download',
-    'A step-by-step, privacy-conscious guide to retrieving issuer documents through India’s official DigiLocker service.',
+    'A step-by-step, privacy-conscious guide to retrieving issuer documents through IndiaΓÇÖs official DigiLocker service.',
     'https://www.digilocker.gov.in/',
     `## What DigiLocker can verify
 
@@ -197,24 +197,24 @@ DigiLocker is an Indian government digital document platform. Issuer availabilit
 
 1. Sign in through the official DigiLocker website or app.
 2. Complete the identity step requested by the service.
-3. Open “Browse Documents” and select the relevant issuer.
+3. Open ΓÇ£Browse DocumentsΓÇ¥ and select the relevant issuer.
 4. Enter the requested roll number, year, or record details exactly.
-5. Use “Issued Documents” to view the fetched record and its verification details.
+5. Use ΓÇ£Issued DocumentsΓÇ¥ to view the fetched record and its verification details.
 
 ## Sharing safely
 
-Share only the document or link required by the recipient. Check the recipient’s acceptance policy: some institutions require a hard copy, a portal upload, or an original certificate. Do not publish your Aadhaar number, OTP, QR code, or access credentials in a public post.
+Share only the document or link required by the recipient. Check the recipientΓÇÖs acceptance policy: some institutions require a hard copy, a portal upload, or an original certificate. Do not publish your Aadhaar number, OTP, QR code, or access credentials in a public post.
 
 ### If no record appears
 
-Check spelling and issuer selection, then contact the issuing board or DigiLocker support through the official help route. DigiLocker cannot invent a missing mark sheet or correct an issuer’s source data. Do not pay an agent who promises to create a “verified” record; report suspicious requests and keep the transaction evidence.`,
+Check spelling and issuer selection, then contact the issuing board or DigiLocker support through the official help route. DigiLocker cannot invent a missing mark sheet or correct an issuerΓÇÖs source data. Do not pay an agent who promises to create a ΓÇ£verifiedΓÇ¥ record; report suspicious requests and keep the transaction evidence.`,
   ),
   record(
     'India NATS Apprenticeship Registration: Graduate and Diploma Candidate Checklist',
     'india-nats-apprenticeship-registration-guide',
     'South Asia Careers',
     'NATS apprenticeship registration',
-    'A source-linked guide to registering on India’s National Apprenticeship Training Scheme portal and evaluating openings.',
+    'A source-linked guide to registering on IndiaΓÇÖs National Apprenticeship Training Scheme portal and evaluating openings.',
     'https://www.nats.education.gov.in/',
     `## Understand what NATS does
 
@@ -222,7 +222,7 @@ The National Apprenticeship Training Scheme (NATS) portal connects eligible grad
 
 ### Prepare your profile
 
-Keep qualification certificates, identity information, bank details, category information where applicable, and a clear résumé ready. Register on the official portal, verify contact details, enter education exactly as shown on certificates, and complete the profile before applying. Read the employer’s advertisement rather than assuming every opening has the same stipend or duration.
+Keep qualification certificates, identity information, bank details, category information where applicable, and a clear r├⌐sum├⌐ ready. Register on the official portal, verify contact details, enter education exactly as shown on certificates, and complete the profile before applying. Read the employerΓÇÖs advertisement rather than assuming every opening has the same stipend or duration.
 
 ## Applying responsibly
 
@@ -230,18 +230,18 @@ Filter by discipline and location, open the full opportunity, and note the closi
 
 ### Red flags and follow-up
 
-NATS registration should not require payment to a recruiter for a guaranteed seat. Never share an OTP or pay for an interview. Ask the employer about attendance, training location, contract terms, and certificate issuance. For portal or contract questions, use the support contact shown on the official NATS site. Rules and listings change, so treat a current posting—not this article—as controlling.`,
+NATS registration should not require payment to a recruiter for a guaranteed seat. Never share an OTP or pay for an interview. Ask the employer about attendance, training location, contract terms, and certificate issuance. For portal or contract questions, use the support contact shown on the official NATS site. Rules and listings change, so treat a current postingΓÇönot this articleΓÇöas controlling.`,
   ),
   record(
     'Bhutan Civil Service Examination: RCSC Vacancy and Eligibility Workflow',
     'bhutan-rcsc-civil-service-exam-guide',
     'South Asia Careers',
     'Bhutan civil service examination',
-    'Use Bhutan’s Royal Civil Service Commission notices to verify vacancies, professional requirements, and selection stages.',
+    'Use BhutanΓÇÖs Royal Civil Service Commission notices to verify vacancies, professional requirements, and selection stages.',
     'https://www.rcsc.gov.bt/',
     `## Find the vacancy announcement
 
-Bhutan’s Royal Civil Service Commission (RCSC) publishes vacancy announcements, rules, schedules, and results. The announcement for a position controls citizenship, qualification, age, experience, documents, and whether the recruitment includes a preliminary test, written examination, interview, or other assessment.
+BhutanΓÇÖs Royal Civil Service Commission (RCSC) publishes vacancy announcements, rules, schedules, and results. The announcement for a position controls citizenship, qualification, age, experience, documents, and whether the recruitment includes a preliminary test, written examination, interview, or other assessment.
 
 ### Candidate checklist
 
@@ -253,7 +253,7 @@ Bhutan’s Royal Civil Service Commission (RCSC) publishes vacancy announcements
 
 ## Preparing and verifying
 
-Build study notes from the syllabus and Bhutanese public-service context in the announcement. Do not substitute a private institute’s eligibility table for the RCSC rules. If a qualification is unclear, ask RCSC or the recruiting agency before applying and retain the written response.
+Build study notes from the syllabus and Bhutanese public-service context in the announcement. Do not substitute a private instituteΓÇÖs eligibility table for the RCSC rules. If a qualification is unclear, ask RCSC or the recruiting agency before applying and retain the written response.
 
 ### Mistakes to avoid
 
@@ -268,7 +268,7 @@ Using an expired vacancy, selecting the wrong position title, and uploading an u
     'https://www.immigration.gov.mv/',
     `## Separate the job from permission to work
 
-A Maldives job offer is not itself permission to work. Maldives Immigration publishes visa and work-related information, while the employer has responsibilities in the official process. Requirements can differ by nationality, occupation, and current policy; read the live government instructions and the employer’s approved documentation.
+A Maldives job offer is not itself permission to work. Maldives Immigration publishes visa and work-related information, while the employer has responsibilities in the official process. Requirements can differ by nationality, occupation, and current policy; read the live government instructions and the employerΓÇÖs approved documentation.
 
 ### Before travelling
 
@@ -280,45 +280,45 @@ Keep copies of the passport, contract, application reference, receipts, and entr
 
 ### Urgent problems
 
-For withheld passports, unpaid wages, threats, or suspected trafficking, contact the relevant Maldivian authorities and your embassy. Do not pay an unofficial “release fee” or surrender an OTP. Immigration rules and forms change, so use immigration.gov.mv and official employer instructions for the current cycle.`,
+For withheld passports, unpaid wages, threats, or suspected trafficking, contact the relevant Maldivian authorities and your embassy. Do not pay an unofficial ΓÇ£release feeΓÇ¥ or surrender an OTP. Immigration rules and forms change, so use immigration.gov.mv and official employer instructions for the current cycle.`,
   ),
   record(
     'Japan EJU Examination: JASSO Registration, Subjects, and University Matching',
     'japan-eju-jasso-exam-guide',
     'East Asia Admissions',
     'Japan EJU exam',
-    'A practical guide to using JASSO and university pages when planning Japan’s Examination for Japanese University Admission for International Students.',
+    'A practical guide to using JASSO and university pages when planning JapanΓÇÖs Examination for Japanese University Admission for International Students.',
     'https://www.jasso.go.jp/en/ryugaku/eju/',
     `## What the EJU does
 
-The Japan Student Services Organization (JASSO) administers the Examination for Japanese University Admission for International Students (EJU). Japanese universities decide which EJU subjects, language, score use, and additional tests they require. Start with the target programme’s admission guide, then use JASSO for dates, application instructions, subjects, and results information.
+The Japan Student Services Organization (JASSO) administers the Examination for Japanese University Admission for International Students (EJU). Japanese universities decide which EJU subjects, language, score use, and additional tests they require. Start with the target programmeΓÇÖs admission guide, then use JASSO for dates, application instructions, subjects, and results information.
 
 ### Planning steps
 
-1. List each university and the faculty’s required EJU subjects.
+1. List each university and the facultyΓÇÖs required EJU subjects.
 2. Check whether the programme uses Japanese or English instruction.
-3. Read JASSO’s current examination guide for identification, venue, payment, and score reporting.
+3. Read JASSOΓÇÖs current examination guide for identification, venue, payment, and score reporting.
 4. Register before the cycle deadline and save the confirmation.
 5. Apply to universities separately where their rules require it.
 
 ## Preparation
 
-Use the published subject syllabus and sample questions. Practise time management in the language of the test and review the university’s minimum or screening rules, without assuming a single national passing score.
+Use the published subject syllabus and sample questions. Practise time management in the language of the test and review the universityΓÇÖs minimum or screening rules, without assuming a single national passing score.
 
 ### Common traps
 
-An EJU result does not automatically create admission, a scholarship, or a visa. Universities may require transcripts, recommendation letters, interviews, or proof of Japanese/English ability. Never book travel based only on a forum schedule; verify JASSO and the institution’s current page.`,
+An EJU result does not automatically create admission, a scholarship, or a visa. Universities may require transcripts, recommendation letters, interviews, or proof of Japanese/English ability. Never book travel based only on a forum schedule; verify JASSO and the institutionΓÇÖs current page.`,
   ),
   record(
     'Japan MEXT Scholarship: Embassy and University Recommendation Routes',
     'japan-mext-scholarship-official-guide',
     'East Asia Scholarships',
     'MEXT scholarship Japan',
-    'How applicants can distinguish Japan’s embassy recommendation and university recommendation routes using official sources.',
+    'How applicants can distinguish JapanΓÇÖs embassy recommendation and university recommendation routes using official sources.',
     'https://www.mext.go.jp/en/policy/education/highered/title02/detail02/1373833.htm',
     `## Two routes, different instructions
 
-Japan’s Ministry of Education, Culture, Sports, Science and Technology (MEXT) describes scholarship categories and application routes. Embassy-recommended applications normally begin with the Japanese embassy or consulate, while university-recommended applications depend on a participating university and its own call. The relevant embassy or university notice controls the cycle’s dates and documents.
+JapanΓÇÖs Ministry of Education, Culture, Sports, Science and Technology (MEXT) describes scholarship categories and application routes. Embassy-recommended applications normally begin with the Japanese embassy or consulate, while university-recommended applications depend on a participating university and its own call. The relevant embassy or university notice controls the cycleΓÇÖs dates and documents.
 
 ### Build a reliable file
 
@@ -326,7 +326,7 @@ Check the category, nationality, academic level, field, age condition, health fo
 
 ## Applying
 
-Follow the embassy’s selection timetable or the university’s application portal; do not submit the same route through an unverified consultant. Keep a complete copy and confirmation. A nomination is not the same as a final award: screening, placement, and acceptance steps may follow.
+Follow the embassyΓÇÖs selection timetable or the universityΓÇÖs application portal; do not submit the same route through an unverified consultant. Keep a complete copy and confirmation. A nomination is not the same as a final award: screening, placement, and acceptance steps may follow.
 
 ### Avoid misinformation
 
@@ -339,7 +339,7 @@ Scholarship benefits and arrival arrangements are category-specific. Do not repe
     'TOPIK registration',
     'A current-cycle-aware workflow for registering for the Test of Proficiency in Korean and checking how institutions use scores.',
     'https://www.topik.go.kr/',
-    `## Start at TOPIK’s official site
+    `## Start at TOPIKΓÇÖs official site
 
 The Test of Proficiency in Korean (TOPIK) portal publishes registration notices, test locations, identification rules, results, and score services. Dates and overseas registration arrangements can differ by country. Check the notice for your location and the institution or immigration authority that will receive the score.
 
@@ -368,7 +368,7 @@ Do not buy a certificate, rely on an old test calendar, or miss the local regist
     'https://www.hikorea.go.kr/',
     `## Confirm the correct status
 
-HiKorea is South Korea’s official online immigration service. Visa and residence procedures depend on status, purpose, address, employer, and nationality. Before starting, read the current notice and confirm whether your request is an extension, change of status, workplace report, address update, or another service.
+HiKorea is South KoreaΓÇÖs official online immigration service. Visa and residence procedures depend on status, purpose, address, employer, and nationality. Before starting, read the current notice and confirm whether your request is an extension, change of status, workplace report, address update, or another service.
 
 ### Prepare before the deadline
 
@@ -380,7 +380,7 @@ Use the official login, complete the form, pay only through the displayed channe
 
 ### Urgent caveat
 
-Do not overstay because an agent says an application is “in process.” Contact the immigration contact centre or office through official details if timing is unclear. Never give a broker your password, OTP, or passport without a documented authorised reason.`,
+Do not overstay because an agent says an application is ΓÇ£in process.ΓÇ¥ Contact the immigration contact centre or office through official details if timing is unclear. Never give a broker your password, OTP, or passport without a documented authorised reason.`,
   ),
   record(
     'China CSC Scholarship: Campus and Bilateral Application Routes',
@@ -391,15 +391,15 @@ Do not overstay because an agent says an application is “in process.” Contac
     'https://www.campuschina.org/',
     `## Identify the route
 
-The China Scholarship Council’s Campus China portal lists scholarship information and application guidance. Depending on the programme, applicants may apply through a Chinese embassy or other dispatching authority, a university, or a specified route. The current call defines agency numbers, host institutions, degree level, language, and documents.
+The China Scholarship CouncilΓÇÖs Campus China portal lists scholarship information and application guidance. Depending on the programme, applicants may apply through a Chinese embassy or other dispatching authority, a university, or a specified route. The current call defines agency numbers, host institutions, degree level, language, and documents.
 
 ### Documents to map
 
-Create a table for passport, degree and transcripts, language proof, recommendation letters, physical examination form, research plan, and pre-admission or supervisor material where requested. Use the portal’s current forms and check translation or notarisation instructions. A university’s own admission application may be separate from the scholarship form.
+Create a table for passport, degree and transcripts, language proof, recommendation letters, physical examination form, research plan, and pre-admission or supervisor material where requested. Use the portalΓÇÖs current forms and check translation or notarisation instructions. A universityΓÇÖs own admission application may be separate from the scholarship form.
 
 ## Submission and follow-up
 
-Submit through the route stated in the call and retain the application number. Verify any pre-admission letter with the university’s official domain. Selection or nomination is not the same as final admission; wait for the official award and visa documentation.
+Submit through the route stated in the call and retain the application number. Verify any pre-admission letter with the universityΓÇÖs official domain. Selection or nomination is not the same as final admission; wait for the official award and visa documentation.
 
 ### Safety notes
 
@@ -422,7 +422,7 @@ Record the programme name, teaching language, required HSK or English evidence, 
 
 ## Submit carefully
 
-Use the university’s official application system, upload legible files, and retain the confirmation. Ask admissions through the published address if the portal and PDF conflict. Do not send tuition or deposits to a personal account; verify payment instructions on the official notice.
+Use the universityΓÇÖs official application system, upload legible files, and retain the confirmation. Ask admissions through the published address if the portal and PDF conflict. Do not send tuition or deposits to a personal account; verify payment instructions on the official notice.
 
 ### Caveats
 
@@ -433,15 +433,15 @@ University accreditation, recognition, and professional licensing can matter mor
     'taiwan-employment-gold-card-application',
     'East Asia Careers',
     'Taiwan Employment Gold Card',
-    'A practical checklist for professionals assessing Taiwan’s combined work permit, residence visa, and ARC application.',
+    'A practical checklist for professionals assessing TaiwanΓÇÖs combined work permit, residence visa, and ARC application.',
     'https://goldcard.nat.gov.tw/en/',
     `## What the Gold Card combines
 
-Taiwan’s Employment Gold Card portal explains the combined application for eligible foreign professionals. Eligibility is category-specific and may involve salary, achievement, field, or professional evidence. The current portal and reviewing authority determine whether your evidence qualifies.
+TaiwanΓÇÖs Employment Gold Card portal explains the combined application for eligible foreign professionals. Eligibility is category-specific and may involve salary, achievement, field, or professional evidence. The current portal and reviewing authority determine whether your evidence qualifies.
 
 ### Prepare evidence
 
-Select the correct professional category, then list the criterion and the document proving it. Prepare passport, résumé, employment or achievement evidence, translations, and other files requested in the live checklist. Do not claim an award, salary, or qualification without documentary proof.
+Select the correct professional category, then list the criterion and the document proving it. Prepare passport, r├⌐sum├⌐, employment or achievement evidence, translations, and other files requested in the live checklist. Do not claim an award, salary, or qualification without documentary proof.
 
 ## Application workflow
 
@@ -449,7 +449,7 @@ Create an account on the official portal, complete the form, upload documents, a
 
 ### Mistakes to avoid
 
-Applying under the wrong category, uploading an expired passport, and confusing a job offer with Gold Card eligibility are common errors. Processing times and fees can change. Do not use a recruiter’s “guaranteed approval” claim; the National Immigration Agency and reviewing ministry make the decision.`,
+Applying under the wrong category, uploading an expired passport, and confusing a job offer with Gold Card eligibility are common errors. Processing times and fees can change. Do not use a recruiterΓÇÖs ΓÇ£guaranteed approvalΓÇ¥ claim; the National Immigration Agency and reviewing ministry make the decision.`,
   ),
   record(
     'Singapore SkillsFuture Courses and Funding: How Adults Verify Eligibility',
@@ -471,26 +471,26 @@ SkillsFuture Singapore publishes course and funding information. A course title 
 
 ## Claiming support
 
-Follow the provider’s official registration and claim process. Keep the invoice, attendance record, assessment outcome, and communication about any subsidy. Do not assume that completing a course guarantees a job or professional registration.
+Follow the providerΓÇÖs official registration and claim process. Keep the invoice, attendance record, assessment outcome, and communication about any subsidy. Do not assume that completing a course guarantees a job or professional registration.
 
 ### Red flags
 
-Be cautious of pressure to pay a deposit to a personal account or claims of an automatic cash payout. SkillsFuture rules and funding windows can change. If a provider’s advertisement conflicts with the official course listing, pause payment and ask SkillsFuture Singapore or the provider for written clarification.`,
+Be cautious of pressure to pay a deposit to a personal account or claims of an automatic cash payout. SkillsFuture rules and funding windows can change. If a providerΓÇÖs advertisement conflicts with the official course listing, pause payment and ask SkillsFuture Singapore or the provider for written clarification.`,
   ),
   record(
     'Singapore Work Pass Check: MOM Services for Employment Offer Verification',
     'singapore-mom-work-pass-check',
     'Southeast Asia Government Services',
     'Singapore work pass check',
-    'How workers can distinguish a real employment offer from an unverified promise using Singapore’s Ministry of Manpower services.',
+    'How workers can distinguish a real employment offer from an unverified promise using SingaporeΓÇÖs Ministry of Manpower services.',
     'https://www.mom.gov.sg/passes-and-permits',
     `## A pass is tied to conditions
 
-Singapore’s Ministry of Manpower (MOM) publishes work-pass types and employer obligations. The employer, occupation, salary, nationality, and sector affect the applicable pass. A recruiter cannot turn a tourist entry into work authorisation.
+SingaporeΓÇÖs Ministry of Manpower (MOM) publishes work-pass types and employer obligations. The employer, occupation, salary, nationality, and sector affect the applicable pass. A recruiter cannot turn a tourist entry into work authorisation.
 
 ### Verify before travel
 
-Request a written contract and the employer’s legal name. Check the pass type on MOM’s official information and ask which party submits the application. Never pay a person for a “guaranteed approval,” and do not surrender your passport except where an official, documented process requires temporary presentation.
+Request a written contract and the employerΓÇÖs legal name. Check the pass type on MOMΓÇÖs official information and ask which party submits the application. Never pay a person for a ΓÇ£guaranteed approval,ΓÇ¥ and do not surrender your passport except where an official, documented process requires temporary presentation.
 
 ## After an application
 
@@ -498,18 +498,18 @@ Keep the application or approval reference and check the issued pass details. Co
 
 ### If something feels wrong
 
-Contact MOM using the official contact route and your embassy for urgent welfare or trafficking concerns. Do not share Singpass credentials or OTPs. Rules and processing steps are updated, so this article is a checklist—not a substitute for the current MOM notice.`,
+Contact MOM using the official contact route and your embassy for urgent welfare or trafficking concerns. Do not share Singpass credentials or OTPs. Rules and processing steps are updated, so this article is a checklistΓÇönot a substitute for the current MOM notice.`,
   ),
   record(
     'Indonesia CPNS Recruitment: SSCASN Registration and Document Checklist',
     'indonesia-cpns-sscasn-registration-guide',
     'Southeast Asia Careers',
     'CPNS SSCASN registration',
-    'A source-first guide to Indonesia’s civil-service recruitment portal, document uploads, and announcement checks.',
+    'A source-first guide to IndonesiaΓÇÖs civil-service recruitment portal, document uploads, and announcement checks.',
     'https://sscasn.bkn.go.id/',
     `## Use SSCASN and the announcement
 
-Indonesia’s State Civil Service Agency (BKN) operates the SSCASN recruitment portal. Each CPNS or PPPK cycle publishes an announcement with formations, qualifications, document formats, selection stages, and dates. Availability and requirements must be checked for the current cycle.
+IndonesiaΓÇÖs State Civil Service Agency (BKN) operates the SSCASN recruitment portal. Each CPNS or PPPK cycle publishes an announcement with formations, qualifications, document formats, selection stages, and dates. Availability and requirements must be checked for the current cycle.
 
 ### Registration workflow
 
@@ -532,7 +532,7 @@ Using a wrong formation, mismatched NIK or name, an expired certificate, or an u
     'https://kip-kuliah.kemdikbud.go.id/',
     `## Register before choosing assumptions
 
-KIP Kuliah is Indonesia’s official higher-education aid information and registration service. The current cycle sets dates, eligible pathways, documents, and selection rules. Registration does not guarantee aid; the university verifies admission and eligibility.
+KIP Kuliah is IndonesiaΓÇÖs official higher-education aid information and registration service. The current cycle sets dates, eligible pathways, documents, and selection rules. Registration does not guarantee aid; the university verifies admission and eligibility.
 
 ### Prepare the account
 
@@ -540,11 +540,11 @@ Use the official site, enter the national education and identity details exactly
 
 ## Link admission and aid
 
-Apply to the university pathway named in the KIP Kuliah instructions and complete the institution’s verification. Save screenshots or printouts of the registration and admission submissions. Ask the university’s aid office about additional documents, interview arrangements, and disbursement status.
+Apply to the university pathway named in the KIP Kuliah instructions and complete the institutionΓÇÖs verification. Save screenshots or printouts of the registration and admission submissions. Ask the universityΓÇÖs aid office about additional documents, interview arrangements, and disbursement status.
 
 ### Avoid scams
 
-No private agent can guarantee KIP Kuliah approval. Do not pay to “activate” a benefit or share an OTP. Benefits and participating institutions can change; check KIP Kuliah and the university notice for the current cycle before making enrollment or housing decisions.`,
+No private agent can guarantee KIP Kuliah approval. Do not pay to ΓÇ£activateΓÇ¥ a benefit or share an OTP. Benefits and participating institutions can change; check KIP Kuliah and the university notice for the current cycle before making enrollment or housing decisions.`,
   ),
   record(
     'Malaysia SPA9 Government Jobs: Online Profile and Assessment Checklist',
@@ -555,7 +555,7 @@ No private agent can guarantee KIP Kuliah approval. Do not pay to “activate”
     'https://spa9.spa.gov.my/',
     `## Build one accurate SPA9 profile
 
-Malaysia’s Public Service Commission uses SPA9 for applications and candidate information. A vacancy announcement defines nationality, education, age, language, registration, and assessment conditions. Read the specific posting before selecting a job.
+MalaysiaΓÇÖs Public Service Commission uses SPA9 for applications and candidate information. A vacancy announcement defines nationality, education, age, language, registration, and assessment conditions. Read the specific posting before selecting a job.
 
 ### Application steps
 
@@ -567,14 +567,14 @@ Monitor SPA9 for screening, online assessment, interview, and document instructi
 
 ### Safety and caveats
 
-SPA does not turn a paid “registration service” into an official advantage. Ignore messages asking for money or OTPs. Vacancies, assessment dates, and document rules change, so verify the dashboard and SPA notices for the current application.`,
+SPA does not turn a paid ΓÇ£registration serviceΓÇ¥ into an official advantage. Ignore messages asking for money or OTPs. Vacancies, assessment dates, and document rules change, so verify the dashboard and SPA notices for the current application.`,
   ),
   record(
     'Philippines Civil Service Exam: CSC Eligibility, Application, and Rating Records',
     'philippines-civil-service-exam-csc-guide',
     'Southeast Asia Exams',
     'Philippines civil service exam',
-    'Use the Philippine Civil Service Commission’s regional notices to plan the Career Service Examination and preserve official records.',
+    'Use the Philippine Civil Service CommissionΓÇÖs regional notices to plan the Career Service Examination and preserve official records.',
     'https://www.csc.gov.ph/',
     `## Check the CSC announcement
 
@@ -586,7 +586,7 @@ Read the official announcement, choose the correct examination level, prepare th
 
 ## After the exam
 
-Use the CSC’s official results and certification services to verify a rating or eligibility. An examination pass is not the same as appointment: agencies publish vacancies and may require additional qualification standards.
+Use the CSCΓÇÖs official results and certification services to verify a rating or eligibility. An examination pass is not the same as appointment: agencies publish vacancies and may require additional qualification standards.
 
 ### Avoid bad advice
 
@@ -597,15 +597,15 @@ Do not use an old form, pay a reviewer who promises a passing rating, or share a
     'vietnam-vneid-digital-identity-guide',
     'Southeast Asia Digital Services',
     'Vietnam VNeID account',
-    'A practical, privacy-aware explanation of checking VNeID activation and using Vietnam’s official digital public-service channels.',
+    'A practical, privacy-aware explanation of checking VNeID activation and using VietnamΓÇÖs official digital public-service channels.',
     'https://vneid.gov.vn/',
     `## Use the official identity app and portal
 
-VNeID is Vietnam’s digital identity platform. Available functions and verification requirements depend on identity status and the service being used. Use the official application and government portal, not an APK or link sent by an unknown person.
+VNeID is VietnamΓÇÖs digital identity platform. Available functions and verification requirements depend on identity status and the service being used. Use the official application and government portal, not an APK or link sent by an unknown person.
 
 ### Activation checklist
 
-Keep the identity document and registered phone available. Follow the app’s current identity-verification prompts, review the personal details shown, and protect the device, PIN, and OTP. If a record is wrong, use the correction or support route rather than opening a duplicate identity.
+Keep the identity document and registered phone available. Follow the appΓÇÖs current identity-verification prompts, review the personal details shown, and protect the device, PIN, and OTP. If a record is wrong, use the correction or support route rather than opening a duplicate identity.
 
 ## Using a service
 
@@ -628,7 +628,7 @@ The Thai University Central Admission System (TCAS) portal publishes the cycle c
 
 ### Make a course matrix
 
-For every programme, record required GPAX or subjects, TGAT/TPAT or A-Level components where applicable, portfolio format, interview, fees, and confirmation date. Use the university’s official announcement to explain details that the central portal does not contain.
+For every programme, record required GPAX or subjects, TGAT/TPAT or A-Level components where applicable, portfolio format, interview, fees, and confirmation date. Use the universityΓÇÖs official announcement to explain details that the central portal does not contain.
 
 ## Submission and confirmation
 
@@ -636,7 +636,7 @@ Register on myTCAS, verify personal and school data, upload files in the specifi
 
 ### Common mistakes
 
-Do not rely on an old score calculator, assume every round uses the same weighting, or pay a person to “reserve” a seat. Admission and later enrolment are separate steps. Recheck myTCAS and the university page before submitting preferences.`,
+Do not rely on an old score calculator, assume every round uses the same weighting, or pay a person to ΓÇ£reserveΓÇ¥ a seat. Admission and later enrolment are separate steps. Recheck myTCAS and the university page before submitting preferences.`,
   ),
   record(
     'Australia Skills Assessment for Skilled Migration: Authority-by-Occupation Checklist',
@@ -647,7 +647,7 @@ Do not rely on an old score calculator, assume every round uses the same weighti
     'https://immi.homeaffairs.gov.au/visas/working-in-australia/skills-assessment',
     `## There is no single skills assessor
 
-Australia’s Department of Home Affairs explains the skills-assessment requirement for relevant skilled visas. The assessing authority depends on the nominated occupation. Home Affairs’ occupation list and the authority’s own criteria must both be checked for the current visa pathway.
+AustraliaΓÇÖs Department of Home Affairs explains the skills-assessment requirement for relevant skilled visas. The assessing authority depends on the nominated occupation. Home AffairsΓÇÖ occupation list and the authorityΓÇÖs own criteria must both be checked for the current visa pathway.
 
 ### Evidence plan
 
@@ -655,11 +655,11 @@ Create a chronology of education and employment with dates, duties, employer det
 
 ## Sequence matters
 
-Read the authority’s application guide, submit the assessment, and retain the outcome letter. A positive assessment does not guarantee an invitation, points outcome, visa, or employment. Check English evidence, registration, health, character, and state or territory nomination conditions separately.
+Read the authorityΓÇÖs application guide, submit the assessment, and retain the outcome letter. A positive assessment does not guarantee an invitation, points outcome, visa, or employment. Check English evidence, registration, health, character, and state or territory nomination conditions separately.
 
 ### Avoid expensive mistakes
 
-Using the wrong occupation, omitting paid-work evidence, or relying on a migration agent’s old occupation list can invalidate planning. Fees and processing times change. Use Home Affairs and the named authority, and obtain registered migration or legal advice for personal circumstances.`,
+Using the wrong occupation, omitting paid-work evidence, or relying on a migration agentΓÇÖs old occupation list can invalidate planning. Fees and processing times change. Use Home Affairs and the named authority, and obtain registered migration or legal advice for personal circumstances.`,
   ),
   record(
     'New Zealand NZQA Qualification Recognition: International Credential Assessment Steps',
@@ -670,7 +670,7 @@ Using the wrong occupation, omitting paid-work evidence, or relying on a migrati
     'https://www2.nzqa.govt.nz/international/recognise-overseas-qualifications/',
     `## Choose the right assessment
 
-New Zealand Qualifications Authority (NZQA) explains recognition of overseas qualifications and the International Qualification Assessment process. An assessment for immigration may not answer a university’s admission question or a professional regulator’s licensing requirement. Identify the purpose first.
+New Zealand Qualifications Authority (NZQA) explains recognition of overseas qualifications and the International Qualification Assessment process. An assessment for immigration may not answer a universityΓÇÖs admission question or a professional regulatorΓÇÖs licensing requirement. Identify the purpose first.
 
 ### Document checklist
 
@@ -682,7 +682,7 @@ The assessment compares a qualification to the New Zealand framework; it does no
 
 ### Caveats
 
-Do not rely on a recruiter’s claim that every overseas degree is “automatically accepted.” Fees, document rules, and processing instructions change. Check NZQA, Immigration New Zealand, the education provider, and the professional regulator relevant to your goal.`,
+Do not rely on a recruiterΓÇÖs claim that every overseas degree is ΓÇ£automatically accepted.ΓÇ¥ Fees, document rules, and processing instructions change. Check NZQA, Immigration New Zealand, the education provider, and the professional regulator relevant to your goal.`,
   ),
   record(
     'Australia Medicare Enrolment for New Arrivals: Eligibility and Document Checklist',
@@ -714,7 +714,7 @@ For urgent medical care, contact emergency services rather than waiting for an e
     'Fiji TELS application',
     'How Fijian students can prepare a TELS application and verify institution, programme, and document requirements.',
     'https://tsls.com.fj/',
-    `## Start with TSLS’s current call
+    `## Start with TSLSΓÇÖs current call
 
 The Tertiary Scholarships and Loans Service (TSLS) publishes Fiji funding calls, application information, and updates. Scholarship and loan schemes have different eligibility, priority fields, bond, repayment, and document rules. Read the current scheme notice and the approved programme list.
 
@@ -728,7 +728,7 @@ Before accepting funding, read the conditions on attendance, progress, service o
 
 ### Avoid mistakes
 
-Do not pay a consultant to “secure” a TELS place, submit conflicting applications, or treat an old field-priority list as current. Keep copies of every declaration. TSLS announcements and deadlines can change, so check the official portal before submitting or signing.`,
+Do not pay a consultant to ΓÇ£secureΓÇ¥ a TELS place, submit conflicting applications, or treat an old field-priority list as current. Keep copies of every declaration. TSLS announcements and deadlines can change, so check the official portal before submitting or signing.`,
   ),
   record(
     'Samoa Seasonal Worker Preparation: Verify Employer, Visa, and Welfare Contacts',
@@ -762,19 +762,19 @@ Contact the labour or immigration authority and your embassy before accepting a 
     'https://www.interpol.int/en/Crimes/Financial-crime/Online-scams',
     `## Stop the loss first
 
-If money or account access is at risk, stop replying, do not send another “release” payment, and contact your bank or payment provider immediately using the number on its official website or card. Ask whether a transfer can be recalled or an account frozen. Change compromised passwords from a clean device and enable multi-factor authentication.
+If money or account access is at risk, stop replying, do not send another ΓÇ£releaseΓÇ¥ payment, and contact your bank or payment provider immediately using the number on its official website or card. Ask whether a transfer can be recalled or an account frozen. Change compromised passwords from a clean device and enable multi-factor authentication.
 
 ### Preserve useful evidence
 
-Keep screenshots, profile links, phone numbers, email headers, invoices, wallet addresses, transaction IDs, contracts, and the exact timeline. Do not edit the originals. Never publish a victim’s identity document while warning others.
+Keep screenshots, profile links, phone numbers, email headers, invoices, wallet addresses, transaction IDs, contracts, and the exact timeline. Do not edit the originals. Never publish a victimΓÇÖs identity document while warning others.
 
 ## Report locally and across borders
 
-Report to the police or cybercrime authority in the country where you live, and to the platform or bank involved. For cross-border fraud, use the national authority’s official reporting route; INTERPOL explains why local police coordination matters but does not replace a local report.
+Report to the police or cybercrime authority in the country where you live, and to the platform or bank involved. For cross-border fraud, use the national authorityΓÇÖs official reporting route; INTERPOL explains why local police coordination matters but does not replace a local report.
 
 ### Recruitment and visa scams
 
-A real job or scholarship can still be impersonated. Verify the employer, university, embassy, or ministry independently. No legitimate official needs an OTP or a fee for a guaranteed visa. Keep case numbers and follow up through the authority—not through the scammer.`,
+A real job or scholarship can still be impersonated. Verify the employer, university, embassy, or ministry independently. No legitimate official needs an OTP or a fee for a guaranteed visa. Keep case numbers and follow up through the authorityΓÇönot through the scammer.`,
   ),
   record(
     'Hong Kong HKPFS Fellowship: RGC Nomination and Research Proposal Workflow',
@@ -785,15 +785,15 @@ A real job or scholarship can still be impersonated. Verify the employer, univer
     'https://cerg1.ugc.edu.hk/hkpfs/index.html',
     `## Understand nomination and admission
 
-The Research Grants Council’s Hong Kong PhD Fellowship Scheme (HKPFS) portal explains the fellowship and participating universities. Applicants usually complete a fellowship process and a university PhD application; each university sets its own admission, supervisor, language, and document rules.
+The Research Grants CouncilΓÇÖs Hong Kong PhD Fellowship Scheme (HKPFS) portal explains the fellowship and participating universities. Applicants usually complete a fellowship process and a university PhD application; each university sets its own admission, supervisor, language, and document rules.
 
 ### Proposal and evidence checklist
 
-Read the current call, identify a participating department, and map your research question to its expertise. Prepare transcripts, references, publications or project evidence, research proposal, language result, and identity documents in the university’s format. Contact prospective supervisors professionally and never pay for a nomination.
+Read the current call, identify a participating department, and map your research question to its expertise. Prepare transcripts, references, publications or project evidence, research proposal, language result, and identity documents in the universityΓÇÖs format. Contact prospective supervisors professionally and never pay for a nomination.
 
 ## Submit in the right sequence
 
-Record the RGC reference and the university application number separately. Upload consistent versions of your name, dates, and proposal. A fellowship nomination is not final admission; wait for the university’s decision and follow visa instructions after acceptance.
+Record the RGC reference and the university application number separately. Upload consistent versions of your name, dates, and proposal. A fellowship nomination is not final admission; wait for the universityΓÇÖs decision and follow visa instructions after acceptance.
 
 ### Caveats
 
@@ -808,11 +808,11 @@ Awards, stipends, quotas, and deadlines are cycle-specific. Do not repeat figure
     'https://www.dses.gov.mo/',
     `## Start with DSES and the institution
 
-Macau’s Higher Education Bureau (DSES) publishes higher-education information and notices. Programme admission, language, entrance tests, tuition, and scholarship conditions remain institution-specific. Check whether the programme is recognised and whether professional practice requires another authority.
+MacauΓÇÖs Higher Education Bureau (DSES) publishes higher-education information and notices. Programme admission, language, entrance tests, tuition, and scholarship conditions remain institution-specific. Check whether the programme is recognised and whether professional practice requires another authority.
 
 ### Compare before applying
 
-Make a worksheet for programme title, award level, teaching language, deadline, identity and academic documents, entrance assessment, fee, refund rule, accommodation, and scholarship route. Confirm the institution’s official application portal from DSES or its own domain.
+Make a worksheet for programme title, award level, teaching language, deadline, identity and academic documents, entrance assessment, fee, refund rule, accommodation, and scholarship route. Confirm the institutionΓÇÖs official application portal from DSES or its own domain.
 
 ## Application and arrival
 

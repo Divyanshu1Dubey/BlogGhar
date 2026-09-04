@@ -1,6 +1,8 @@
 import prisma from '@/lib/prisma';
 import { notFound } from 'next/navigation';
 import GameClient from './game-client';
+import { GameModeManager } from '@/components/games/game-mode-manager';
+import { GameProgressTracker } from '@/components/games/game-progress-tracker';
 import Link from 'next/link';
 import { ArrowLeft, Share2 } from 'lucide-react';
 import { Metadata } from 'next';
@@ -61,8 +63,34 @@ export default async function GamePage({ params }: { params: GameParams }) {
         <p className="text-gray-500 mt-1">{game.description}</p>
       </div>
 
-      <div className="card overflow-hidden">
-        <GameClient topScores={topScores} game={game} />
+      <div className="grid lg:grid-cols-3 gap-6">
+        {/* Main game area */}
+        <div className="lg:col-span-2 space-y-6">
+          <GameModeManager gameSlug={slug} gameName={game.name} />
+          <div className="card overflow-hidden">
+            <GameClient topScores={topScores} game={game} />
+          </div>
+        </div>
+
+        {/* Sidebar: Progress & Mode Selection */}
+        <div className="space-y-6">
+          <GameProgressTracker gameSlug={slug} />
+          <div className="card p-6">
+            <h3 className="font-bold text-gray-900 dark:text-white mb-3">🎮 Game Mode</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400">Choose how you want to play this game.</p>
+            <div className="mt-4 space-y-2">
+              <button className="w-full px-4 py-2 bg-primary-600 text-white rounded-lg font-semibold text-sm hover:bg-primary-700 transition-colors">
+                🎯 Single Player
+              </button>
+              <button className="w-full px-4 py-2 bg-purple-600 text-white rounded-lg font-semibold text-sm hover:bg-purple-700 transition-colors">
+                👥 Multiplayer
+              </button>
+              <button className="w-full px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg font-semibold text-sm hover:bg-gray-300 transition-colors">
+                ⚡ Quick Match
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="card p-6 mt-6">

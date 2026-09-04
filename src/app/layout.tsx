@@ -98,6 +98,8 @@ const jsonLd = {
   inLanguage: 'en-IN',
 };
 
+import { AdSenseProvider } from '@/components/ads/AdSenseProvider';
+
 export default function RootLayout({
   children,
 }: {
@@ -179,12 +181,14 @@ export default function RootLayout({
 
       <body className={`${inter.variable} ${poppins.variable} font-sans min-h-screen flex flex-col bg-white dark:bg-dark-bg text-gray-900 dark:text-gray-100`}>
         <AuthProvider>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-            <Header />
-            <main className="flex-1">{children}</main>
-            <Footer />
-            <Toaster />
-          </ThemeProvider>
+          <AdSenseProvider>
+            <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+              <Header />
+              <main className="flex-1">{children}</main>
+              <Footer />
+              <Toaster />
+            </ThemeProvider>
+          </AdSenseProvider>
         </AuthProvider>
       </body>
     </html>

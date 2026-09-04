@@ -1,150 +1,88 @@
-import { NextResponse } from 'next/server';
-import { cleanupRooms, rooms, type GameRoom } from '@/lib/multiplayer-room-store';
+import { NextRequest, NextResponse } from 'next/server';
+import { WebSocket } from 'ws';
 
-const GAME_TYPES = [
-  { name: 'Tic-Tac-Toe', slug: 'tic-tac-toe', players: '2', maxPlayers: 2, icon: '❌⭕' },
-  { name: 'Chess', slug: 'chess', players: '2', maxPlayers: 2, icon: '♟️' },
-  { name: 'Snake Race', slug: 'snake', players: '2-4', maxPlayers: 4, icon: '🐍' },
-  { name: '2048 Battle', slug: '2048', players: '2', maxPlayers: 2, icon: '🔢' },
-  { name: 'Dice Duel', slug: 'dice', players: '2-6', maxPlayers: 6, icon: '🎲' },
-  { name: 'Rock Paper Scissors', slug: 'rps', players: '2', maxPlayers: 2, icon: '✂️' },
-];
-
-function generateRoomCode(): string {
-  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  let code = '';
-  for (let i = 0; i < 6; i++) {
-    code += chars[Math.floor(Math.random() * chars.length)];
-  }
-  return code;
+// Simple in-memory room store
+interface Room {
+  id: string;
+  game: string;
+  mode: 'local' | 'online';
+  players: Array<{ id: string; name: string; ready: boolean; score: number }>;
+  status: 'waiting' | 'playing' | 'finished';
+  createdAt: number;
+  gameState: Record<string, unknown>;
 }
 
+const rooms = new Map<string, Room>();
+const connections = new Map<string, { ws: any; roomId: string; playerId: string }>();
+
 function generateRoomId(): string {
-  return `room_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  return Math.random().toString(36).substring(2, 8).toUpperCase();
 }
 
 function generatePlayerId(): string {
-  return `player_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  return Math.random().toString(36).substring(2, 10);
 }
 
-// ─── Helpers ───────────────────────────────────────────────────────────────
+export async function GET(request: NextRequest) {
+  const game = request.nextUrl.searchParams.get('game');
 
-function getRoomsList() {
-  return Array.from(rooms.values()).map((room) => ({
-    id: room.id,
-    code: room.code,
-    gameType: room.gameType,
-    gameSlug: room.gameSlug,
-    mode: room.mode,
-    playerCount: room.players.length,
-    maxPlayers: room.maxPlayers,
-    status: room.status,
-    hostName: room.players.find((p) => p.isHost)?.name || 'Unknown',
-    createdAt: room.createdAt,
-  }));
+  const availableRooms = Array.from(rooms.values())
+    .filter(r => r.mode === 'online' && r.status === 'waiting')
+    .filter(r => !game || r.game === game)
+    .slice(0, 20)
+    .map(r => ({
+      id: r.id,
+      game: r.game,
+      players: r.players.length,
+      maxPlayers: r.game === 'tic-tac-toe' ? 2 : 4,
+      status: r.status,
+    }));
+
+  return NextResponse.json({ rooms: availableRooms, totalPlayers: connections.size });
 }
 
-// ─── Route Handlers ────────────────────────────────────────────────────────
-
-export async function GET() {
-  try {
-    cleanupRooms();
-    const list = getRoomsList();
-    return NextResponse.json({ rooms: list, gameTypes: GAME_TYPES });
-  } catch {
-    return NextResponse.json({ rooms: [], gameTypes: GAME_TYPES });
-  }
-}
-
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { gameSlug, mode, playerName } = body as {
-      gameSlug?: string;
-      mode?: string;
-      playerName?: string;
-    };
+    const { game, mode, playerName } = body;
 
-    if (!gameSlug || !playerName) {
-      return NextResponse.json({ error: 'Missing required fields: gameSlug, playerName' }, { status: 400 });
+    if (!game || !mode) {
+      return NextResponse.json({ error: 'Game and mode are required' }, { status: 400 });
     }
 
-    const gameType = GAME_TYPES.find((g) => g.slug === gameSlug);
-    if (!gameType) {
-      return NextResponse.json({ error: 'Invalid game type' }, { status: 400 });
-    }
-
-    const validMode = mode === 'ranked' ? 'ranked' : 'casual';
     const roomId = generateRoomId();
-    const code = generateRoomCode();
     const playerId = generatePlayerId();
 
-    // Ensure unique code
-    let finalCode = code;
-    let attempts = 0;
-    while (Array.from(rooms.values()).some((r) => r.code === finalCode) && attempts < 10) {
-      finalCode = generateRoomCode();
-      attempts++;
-    }
-
-    const room: GameRoom = {
+    const room: Room = {
       id: roomId,
-      code: finalCode,
-      gameType: gameType.name,
-      gameSlug: gameType.slug,
-      mode: validMode,
-      players: [
-        {
-          id: playerId,
-          name: playerName.trim().slice(0, 20) || 'Player 1',
-          isReady: false,
-          isHost: true,
-          joinedAt: Date.now(),
-        },
-      ],
+      game,
+      mode,
+      players: [{
+        id: playerId,
+        name: playerName || `Player ${playerId.slice(0, 4)}`,
+        ready: true,
+        score: 0,
+      }],
       status: 'waiting',
       createdAt: Date.now(),
-      maxPlayers: gameType.maxPlayers,
+      gameState: {},
     };
 
     rooms.set(roomId, room);
 
-    return NextResponse.json({ room, playerId }, { status: 201 });
+    return NextResponse.json({
+      roomId,
+      playerId,
+      room: {
+        id: room.id,
+        game: room.game,
+        mode: room.mode,
+        players: room.players,
+        status: room.status,
+        maxPlayers: room.game === 'tic-tac-toe' ? 2 : 4,
+      },
+    });
   } catch {
-    return NextResponse.json({ error: 'Failed to create room' }, { status: 500 });
-  }
-}
-
-export async function DELETE(request: Request) {
-  try {
-    const { searchParams } = new URL(request.url);
-    const roomId = searchParams.get('roomId');
-    const playerId = searchParams.get('playerId');
-
-    if (!roomId || !playerId) {
-      return NextResponse.json({ error: 'Missing roomId or playerId' }, { status: 400 });
-    }
-
-    const room = rooms.get(roomId);
-    if (!room) {
-      return NextResponse.json({ error: 'Room not found' }, { status: 404 });
-    }
-
-    const playerIndex = room.players.findIndex((p) => p.id === playerId);
-    if (playerIndex === -1) {
-      return NextResponse.json({ error: 'Player not in room' }, { status: 403 });
-    }
-
-    if (room.players[playerIndex].isHost) {
-      // Host leaving - dissolve room
-      rooms.delete(roomId);
-      return NextResponse.json({ success: true, dissolved: true });
-    }
-
-    room.players.splice(playerIndex, 1);
-    rooms.set(roomId, room);
-    return NextResponse.json({ success: true, dissolved: false });
-  } catch {
-    return NextResponse.json({ error: 'Failed to leave room' }, { status: 500 });
+    return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
   }
 }

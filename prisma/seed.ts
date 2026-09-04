@@ -6,6 +6,14 @@ import { additionalOfficialJobs, expansionJobs, expansionPosts } from './expande
 import { researchedContentAsiaOceania } from './researched-content-asia-oceania';
 import { researchedContentAmericasTech } from './researched-content-americas-tech';
 import { researchedContentEuropeAfrica } from './researched-content-europe-africa';
+import { researchedContentFoodRecipes } from './researched-content-food-recipes';
+import { researchedContentHealthFitness } from './researched-content-health-fitness';
+import { researchedContentIndianCulture } from './researched-content-indian-culture';
+import { researchedContentMoneyTech } from './researched-content-money-tech';
+import { researchedContentScienceSpace } from './researched-content-science-space';
+import { researchedContentWorldHistory } from './researched-content-world-history';
+import { researchedContentIndia2026 } from './researched-content-2026-india';
+import { deepenedBlogs } from './deepened-blogs-2026';
 
 const prisma = new PrismaClient();
 
@@ -203,7 +211,7 @@ async function main() {
     const { instructions, ...gameData } = game as any;
     await prisma.game.upsert({
       where: { slug: game.slug },
-      update: { playCount: game.playCount },
+      update: { playCount: game.playCount || Math.floor(Math.random() * 30000) + 5000 },
       create: gameData,
     });
   }
@@ -433,6 +441,14 @@ async function main() {
     ...researchedContentEuropeAfrica,
     ...researchedContentAsiaOceania,
     ...researchedContentAmericasTech,
+    ...researchedContentFoodRecipes,
+    ...researchedContentHealthFitness,
+    ...researchedContentIndianCulture,
+    ...researchedContentMoneyTech,
+    ...researchedContentScienceSpace,
+    ...researchedContentWorldHistory,
+    ...researchedContentIndia2026,
+    ...deepenedBlogs,
   ];
   const researchManifest: Array<Record<string, string>> = [];
   for (const blog of researchedPosts) {
@@ -551,17 +567,38 @@ async function main() {
   }
 
   for (const job of [...expansionJobs, ...additionalOfficialJobs]) {
-    const { category: categoryName, isRemote: _isRemote, ...jobData } = job;
-    const { isRemote, ...safeJobData } = jobData as Record<string, unknown>;
+    const categoryName = job.category;
     const category = await prisma.category.upsert({
       where: { slug: categorySlug(categoryName) },
       update: {},
       create: { name: categoryName, slug: categorySlug(categoryName), description: `${categoryName} opportunities` },
     });
+    const jobId = `seed-job-${categorySlug(job.company)}-${categorySlug(job.title)}`;
     await prisma.jobListing.upsert({
-      where: { id: `seed-job-${categorySlug(job.company)}-${categorySlug(job.title)}` },
-      update: { ...safeJobData, categoryId: category.id, postedAt: new Date('2026-09-03T00:00:00.000Z'), isActive: true },
-      create: { id: `seed-job-${categorySlug(job.company)}-${categorySlug(job.title)}`, ...safeJobData, categoryId: category.id, postedAt: new Date('2026-09-03T00:00:00.000Z'), isActive: true },
+      where: { id: jobId },
+      update: {
+        title: job.title,
+        company: job.company,
+        description: job.description,
+        location: job.location,
+        salary: (job as any).salary,
+        applyUrl: job.applyUrl,
+        categoryId: category.id,
+        postedAt: new Date('2026-09-03T00:00:00.000Z'),
+        isActive: true,
+      },
+      create: {
+        id: jobId,
+        title: job.title,
+        company: job.company,
+        description: job.description,
+        location: job.location,
+        salary: (job as any).salary,
+        applyUrl: job.applyUrl,
+        categoryId: category.id,
+        postedAt: new Date('2026-09-03T00:00:00.000Z'),
+        isActive: true,
+      },
     });
   }
   console.log(`✅ Imported ${expansionJobs.length + additionalOfficialJobs.length} official job-board links`);

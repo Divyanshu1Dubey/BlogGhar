@@ -17,7 +17,11 @@ import {
   Flame,
   Clock,
   Eye,
+  Award,
+  Star,
+  Crown,
 } from 'lucide-react';
+import TestimonialsSection from '@/components/home/testimonials-section';
 import { formatDate, formatNumber } from '@/lib/utils';
 import { AdSlot } from '@/components/ads/ad-slot';
 import NewsletterForm from '@/components/newsletter-form';
@@ -110,14 +114,57 @@ function FeaturedCard({ post }: { post: any }) {
 }
 
 function GameCard({ game }: { game: any }) {
+  const level = Math.floor(Math.random() * 5) + 1;
+  const xp = Math.floor(Math.random() * 100);
+  const isFeatured = game.featured || false;
+
   return (
-    <Link href={`/games/${game.slug}`} className="card p-4 flex flex-col items-center text-center gap-2 group hover:border-primary-300 dark:hover:border-primary-700">
-      <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-100 to-primary-50 dark:from-primary-900/40 dark:to-primary-800/30 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-300">
+    <Link href={`/games/${game.slug}`} className="card p-5 flex flex-col items-center text-center gap-3 group hover:border-primary-300 dark:hover:border-primary-700 relative">
+      {/* Featured Badge */}
+      {isFeatured && (
+        <span className="absolute top-3 right-3 bg-gradient-to-br from-yellow-400 to-orange-500 text-white text-[10px] px-2 py-0.5 rounded-full font-bold flex items-center gap-1">
+          <Star className="w-3 h-3" /> Featured
+        </span>
+      )}
+      <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary-100 to-primary-50 dark:from-primary-900/40 dark:to-primary-800/30 flex items-center justify-center text-4xl group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-sm">
         {game.icon || game.emoji || '🎮'}
       </div>
-      <h4 className="font-display font-bold text-sm line-clamp-1">{game.name}</h4>
-      <p className="text-[11px] text-gray-500 dark:text-gray-400 capitalize">{game.category?.replace(/_/g, ' ') || 'Game'}</p>
-      <span className="text-xs text-primary-600 font-medium group-hover:underline">Play Now</span>
+      <h4 className="font-display font-bold text-base line-clamp-1">{game.name}</h4>
+
+      {/* Difficulty Badge */}
+      <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${
+        game.difficulty === 'easy' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300' :
+        game.difficulty === 'medium' ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300' :
+        game.difficulty === 'hard' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300' :
+        'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300'
+      }`}>
+        {game.difficulty ? game.difficulty.toUpperCase() : 'MEDIUM'}
+      </span>
+
+      {/* Level & XP Bar */}
+      <div className="w-full">
+        <div className="flex justify-between text-[11px] text-gray-500 dark:text-gray-400 mb-1">
+          <span className="flex items-center gap-1">
+            <Crown className="w-3 h-3 text-yellow-500" />
+            Level {level}
+          </span>
+          <span>{xp}% XP</span>
+        </div>
+        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
+          <div
+            className="bg-gradient-to-r from-primary-500 to-primary-400 h-1.5 rounded-full transition-all duration-500"
+            style={{ width: `${xp}%` }}
+          />
+        </div>
+      </div>
+
+      {/* Achievement preview */}
+      <div className="flex items-center gap-1 text-[11px] text-gray-500">
+        <Award className="w-3 h-3 text-yellow-500" />
+        <span>{game.achievements || game.category?.replace(/_/g, ' ') || 'Game'} • {game.players || '1K'}+ players</span>
+      </div>
+
+      <span className="text-xs text-primary-600 font-semibold group-hover:underline">Play Now →</span>
     </Link>
   );
 }
@@ -443,6 +490,9 @@ export default function HomePage() {
       <div className="max-w-7xl mx-auto px-4 py-6">
         <AdSlot slot="home-news-ad" format="auto" className="w-full flex justify-center" style={{ minHeight: '90px' }} />
       </div>
+
+      {/* ========== SOCIAL PROOF / TESTIMONIALS ========== */}
+      <TestimonialsSection />
 
       {/* ========== TOOLS SHOWCASE ========== */}
       <section className="max-w-7xl mx-auto px-4 py-16">
