@@ -15,6 +15,7 @@ import { researchedContentWorldHistory } from './researched-content-world-histor
 import { researchedContentIndia2026 } from './researched-content-2026-india';
 import { deepenedBlogs } from './deepened-blogs-2026';
 import { deepenedExamBlogs } from '../deepening/batch1-exams';
+import { deepenedExpansionPosts } from '../deepening/batch2-expansion';
 
 const prisma = new PrismaClient();
 
@@ -451,6 +452,7 @@ async function main() {
     ...researchedContentIndia2026,
     ...deepenedBlogs,
     ...deepenedExamBlogs,
+    ...deepenedExpansionPosts,
   ];
   const researchManifest: Array<Record<string, string>> = [];
   for (const blog of researchedPosts) {
