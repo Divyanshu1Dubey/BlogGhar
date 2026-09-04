@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
-import { Sparkles, Loader2, CheckCircle, AlertCircle, FileText, Upload, X } from 'lucide-react';
+import { useState, useRef } from 'react';
+import { Sparkles, Loader2, CheckCircle, AlertCircle, FileText, Upload } from 'lucide-react';
 import { create } from 'zustand';
 
 type ImpStep = 'input' | 'processing' | 'review' | 'done';

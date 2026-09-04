@@ -2,11 +2,16 @@ import type { Metadata } from 'next';
 import prisma from '@/lib/prisma';
 import AdminSidebar from '../components/admin-sidebar';
 
+type JobWithRelations = Awaited<ReturnType<typeof prisma.jobListing.findMany>>[number] & {
+  category: { name: string };
+  _count: { applications: number };
+};
+
 export const metadata: Metadata = { title: 'Admin Jobs', robots: { index: false, follow: false } };
 export const dynamic = 'force-dynamic';
 
 export default async function AdminJobsPage() {
-  let jobs: Awaited<ReturnType<typeof prisma.jobListing.findMany>> = [];
+  let jobs: JobWithRelations[] = [];
   let error = '';
   try {
     jobs = await prisma.jobListing.findMany({ orderBy: { postedAt: 'desc' }, take: 100, include: { category: { select: { name: true } }, _count: { select: { applications: true } } } });

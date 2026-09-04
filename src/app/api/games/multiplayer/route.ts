@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { WebSocket } from 'ws';
 
 // Simple in-memory room store
 interface Room {

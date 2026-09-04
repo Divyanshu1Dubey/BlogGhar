@@ -20,21 +20,32 @@ export default async function AdminDashboard() {
     comments: number;
     subscribers: number;
     views: { _sum: { views: number | null } } | null;
-  } | null = null;
+  } = {
+    posts: 0,
+    users: 0,
+    games: 0,
+    tools: 0,
+    comments: 0,
+    subscribers: 0,
+    views: null,
+  };
   let error: string | null = null;
-  try {
-    stats = {
-      posts: await prisma.post.count(),
-      users: await prisma.user.count(),
-      games: await prisma.game.count(),
-      tools: await prisma.tool.count(),
-      comments: await prisma.comment.count(),
-      subscribers: await prisma.newsletterSubscriber.count(),
-      views: await prisma.post.aggregate({ _sum: { views: true } }),
-    };
-  } catch (err) {
-    console.error('Admin dashboard metrics failed', err);
-    error = 'Dashboard metrics are temporarily unavailable.';
+  if (prisma) {
+    try {
+      const [posts, users, games, tools, comments, subscribers, views] = await Promise.all([
+        prisma.post.count(),
+        prisma.user.count(),
+        prisma.game.count(),
+        prisma.tool.count(),
+        prisma.comment.count(),
+        prisma.newsletterSubscriber.count(),
+        prisma.post.aggregate({ _sum: { views: true } }),
+      ]);
+      stats = { posts, users, games, tools, comments, subscribers, views };
+    } catch (err) {
+      console.error('Admin dashboard metrics failed', err);
+      error = 'Dashboard metrics are temporarily unavailable.';
+    }
   }
 
   return (

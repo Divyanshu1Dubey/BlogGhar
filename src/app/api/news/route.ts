@@ -1,11 +1,14 @@
-import prisma from '@/lib/prisma';
 import { NextResponse } from 'next/server';
+import { db, getAvailable } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 
 export async function GET() {
+  if (!getAvailable()) {
+    return NextResponse.json([]);
+  }
   try {
-    const posts = await prisma.post.findMany({
+    const posts = await db.post.findMany({
       where: { status: 'PUBLISHED' },
       orderBy: { publishedAt: 'desc' },
       take: 50,
@@ -25,7 +28,7 @@ export async function POST(request: Request) {
     }
     const authorId = (session as any).user.id;
     const data = await request.json();
-    const post = await prisma.post.create({ data: { ...data, authorId } });
+    const post = await db.post.create({ data: { ...data, authorId } });
     return NextResponse.json(post);
   } catch {
     return NextResponse.json({ error: 'Failed' }, { status: 500 });

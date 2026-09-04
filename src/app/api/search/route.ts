@@ -1,7 +1,10 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
+import { db, getAvailable } from '@/lib/prisma';
 
 export async function GET(request: Request) {
+  if (!getAvailable()) {
+    return NextResponse.json({ results: [] });
+  }
   try {
     const { searchParams } = new URL(request.url);
     const query = searchParams.get('q') || '';
@@ -13,9 +16,8 @@ export async function GET(request: Request) {
 
     const results: any[] = [];
 
-    // Search posts
     if (type === 'all' || type === 'post') {
-      const posts = await prisma.post.findMany({
+      const posts = await db.post.findMany({
         where: {
           status: 'PUBLISHED',
           OR: [
@@ -32,9 +34,8 @@ export async function GET(request: Request) {
       });
     }
 
-    // Search games
     if (type === 'all' || type === 'game') {
-      const games = await prisma.game.findMany({
+      const games = await db.game.findMany({
         where: {
           OR: [
             { name: { contains: query, mode: 'insensitive' } },
@@ -48,9 +49,8 @@ export async function GET(request: Request) {
       });
     }
 
-    // Search news
     if (type === 'all' || type === 'news') {
-      const news = await prisma.post.findMany({
+      const news = await db.post.findMany({
         where: {
           postType: 'NEWS',
           status: 'PUBLISHED',

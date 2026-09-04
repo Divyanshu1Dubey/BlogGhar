@@ -1,4 +1,4 @@
-import prisma from '@/lib/prisma';
+import { db } from '@/lib/prisma';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { formatDate } from '@/lib/utils';
@@ -17,7 +17,7 @@ interface Props {
 export async function generateMetadata({ params }: { params: ForumParams }): Promise<Metadata> {
   try {
     const { slug } = await params;
-    const forum = await prisma.forum.findUnique({ where: { slug }, select: { name: true, description: true } });
+    const forum = await db.forum.findUnique({ where: { slug }, select: { name: true, description: true } });
     if (!forum) return { title: 'Forum Not Found' };
     const canonicalUrl = `https://bloghar.com/forum/${slug}`;
     return {
@@ -47,7 +47,7 @@ export default async function ForumCategoryPage({ params }: Props) {
       isLocked: boolean;
       user: { name: string | null; image: string | null };
     }>;
-  } | null = await prisma.forum.findUnique({
+  } | null = await db.forum.findUnique({
     where: { slug },
     include: {
         posts: {

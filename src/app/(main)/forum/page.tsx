@@ -1,4 +1,4 @@
-import prisma from '@/lib/prisma';
+import { db } from '@/lib/prisma';
 import Link from 'next/link';
 import { MessageCircle } from 'lucide-react';
 import { formatDate } from '@/lib/utils';
@@ -18,8 +18,8 @@ export default async function ForumPage() {
   let forums: any[] = [];
   let recentPosts: any[] = [];
   try {
-    forums = await prisma.forum.findMany({ include: { _count: { select: { posts: true } } } });
-    recentPosts = await prisma.forumPost.findMany({
+    forums = await db.forum.findMany({ include: { _count: { select: { posts: true } } } });
+    recentPosts = await db.forumPost.findMany({
       where: { parentId: null },
       take: 20,
       orderBy: { createdAt: 'desc' },

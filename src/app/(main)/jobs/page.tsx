@@ -1,4 +1,4 @@
-import prisma from '@/lib/prisma';
+import { db } from '@/lib/prisma';
 import Link from 'next/link';
 import { MapPin, DollarSign, ExternalLink } from 'lucide-react';
 import { formatDate } from '@/lib/utils';
@@ -17,7 +17,7 @@ export async function generateMetadata() {
 export default async function JobsPage() {
   let jobs: any[] = [];
   try {
-    jobs = await prisma.jobListing.findMany({
+    jobs = await db.jobListing.findMany({
       where: { isActive: true },
       orderBy: { postedAt: 'desc' },
       include: { category: { select: { name: true } } },

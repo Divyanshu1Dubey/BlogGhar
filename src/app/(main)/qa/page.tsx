@@ -1,4 +1,4 @@
-import prisma from '@/lib/prisma';
+import { db } from '@/lib/prisma';
 import Link from 'next/link';
 import { MessageSquare, ThumbsUp, Eye } from 'lucide-react';
 import { JsonLd } from '@/components/seo/json-ld';
@@ -16,7 +16,7 @@ export async function generateMetadata() {
 export default async function QAPage() {
   let questions: any[] = [];
   try {
-    questions = await prisma.qnAQuestion.findMany({ orderBy: { createdAt: 'desc' }, take: 30, include: { user: { select: { name: true } }, _count: { select: { answers: true } } } });
+    questions = await db.qnaQuestion.findMany({ orderBy: { createdAt: 'desc' }, take: 30, include: { user: { select: { name: true } }, _count: { select: { answers: true } } } });
   } catch {}
 
   return (

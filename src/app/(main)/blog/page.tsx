@@ -1,6 +1,6 @@
-import prisma from '@/lib/prisma';
+import { db, getAvailable } from '@/lib/prisma';
 import Link from 'next/link';
-import { BookOpen, TrendingUp, Sparkles } from 'lucide-react';
+import { BookOpen, TrendingUp, Sparkles, Eye, User } from 'lucide-react';
 import { formatNumber } from '@/lib/utils';
 import { JsonLd } from '@/components/seo/json-ld';
 import { BlogCard } from '@/components/blog/blog-card';
@@ -31,48 +31,60 @@ export default async function BlogPage({ searchParams }: { searchParams?: Promis
   };
 
   try {
-    const result = await Promise.all([
-      prisma.post.findMany({
-        where: whereCondition,
-        orderBy: { publishedAt: 'desc' },
-        take: 60,
-        include: {
-          author: { select: { name: true } },
-          category: { select: { name: true, slug: true, icon: true } },
-        },
-      }),
-      prisma.post.count({ where: whereCondition }),
-      prisma.category.findMany({
-        select: { id: true, name: true, slug: true, icon: true, _count: { select: { posts: true } } },
-      }),
-    ]);
-    posts = result[0] as any[];
-    totalPosts = result[1];
-    categoriesWithCount = result[2] as any;
-  } catch (primaryErr) {
-    console.error('Failed to load blog posts with full query:', primaryErr);
-    try {
+    if (!getAvailable()) {
+      posts = [];
+      totalPosts = 0;
+      categoriesWithCount = [];
+    } else {
       const result = await Promise.all([
-        prisma.post.findMany({
-          where: { status: 'PUBLISHED', postType: 'BLOG' },
-          orderBy: { createdAt: 'desc' },
-          take: 30,
+        db.post.findMany({
+          where: whereCondition,
+          orderBy: { publishedAt: 'desc' },
+          take: 60,
           include: {
             author: { select: { name: true } },
             category: { select: { name: true, slug: true, icon: true } },
           },
         }),
-        prisma.post.count({ where: { status: 'PUBLISHED', postType: 'BLOG' } }),
-        prisma.category.findMany({
+        db.post.count({ where: whereCondition }),
+        db.category.findMany({
           select: { id: true, name: true, slug: true, icon: true, _count: { select: { posts: true } } },
         }),
       ]);
       posts = result[0] as any[];
       totalPosts = result[1];
       categoriesWithCount = result[2] as any;
-    } catch (fallbackErr) {
-      console.error('Failed to load blog posts fallback:', fallbackErr);
+    }
+  } catch (primaryErr) {
+    console.error('Failed to load blog posts with full query:', primaryErr);
+    if (!getAvailable()) {
       posts = [];
+      totalPosts = 0;
+      categoriesWithCount = [];
+    } else {
+      try {
+        const result = await Promise.all([
+          db.post.findMany({
+            where: { status: 'PUBLISHED', postType: 'BLOG' },
+            orderBy: { createdAt: 'desc' },
+            take: 30,
+            include: {
+              author: { select: { name: true } },
+              category: { select: { name: true, slug: true, icon: true } },
+            },
+          }),
+          db.post.count({ where: { status: 'PUBLISHED', postType: 'BLOG' } }),
+          db.category.findMany({
+            select: { id: true, name: true, slug: true, icon: true, _count: { select: { posts: true } } },
+          }),
+        ]);
+        posts = result[0] as any[];
+        totalPosts = result[1];
+        categoriesWithCount = result[2] as any;
+      } catch (fallbackErr) {
+        console.error('Failed to load blog posts fallback:', fallbackErr);
+        posts = [];
+      }
     }
   }
 

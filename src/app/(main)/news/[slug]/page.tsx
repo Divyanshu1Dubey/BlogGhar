@@ -1,4 +1,4 @@
-import prisma from '@/lib/prisma';
+import { db } from '@/lib/prisma';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { formatDate } from '@/lib/utils';
@@ -12,7 +12,7 @@ type NewsParams = Promise<{ slug: string }>;
 export async function generateMetadata({ params }: { params: NewsParams }) {
   try {
     const { slug } = await params;
-    const post = await prisma.post.findUnique({
+    const post = await db.post.findUnique({
       where: { slug },
       include: { author: { select: { name: true } } },
     });
@@ -39,14 +39,14 @@ export default async function NewsDetailPage({ params }: { params: NewsParams })
   const { slug } = await params;
   let post;
   try {
-    post = await prisma.post.findUnique({
+    post = await db.post.findUnique({
       where: { slug },
       include: { author: { select: { name: true } }, category: { select: { name: true, slug: true } } },
     });
   } catch { post = null; }
   if (!post) notFound();
 
-  try { await prisma.post.update({ where: { id: post.id }, data: { views: { increment: 1 } } }); } catch {}
+  try { await db.post.update({ where: { id: post.id }, data: { views: { increment: 1 } } }); } catch {}
 
   const authorName = post.author?.name || 'Blog-Ghar';
   const contentText = post.content?.replace(/<[^>]*>/g, '') || '';

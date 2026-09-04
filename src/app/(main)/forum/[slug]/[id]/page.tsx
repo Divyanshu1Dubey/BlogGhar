@@ -1,7 +1,7 @@
-import prisma from '@/lib/prisma';
+import { db } from '@/lib/prisma';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, Eye, MessageSquare } from 'lucide-react';
+import { ArrowLeft, MessageSquare, Eye } from 'lucide-react';
 import { formatDate } from '@/lib/utils';
 import { JsonLd } from '@/components/seo/json-ld';
 
@@ -10,9 +10,9 @@ export const dynamic = 'force-dynamic';
 type PostParams = Promise<{ slug: string; id: string }>;
 
 export async function generateMetadata({ params }: { params: PostParams }) {
-  const { slug, id } = await params;
   try {
-    const post = await prisma.forumPost.findUnique({
+    const { slug, id } = await params;
+    const post = await db.forumPost.findUnique({
       where: { id },
       select: { title: true, content: true },
     });
@@ -32,7 +32,7 @@ export default async function ForumPostPage({ params }: { params: PostParams }) 
   let post: any = null;
   let replies: any[] = [];
   try {
-    post = await prisma.forumPost.findUnique({
+    const result = await db.forumPost.findUnique({
       where: { id },
       include: {
         user: { select: { name: true, image: true } },
@@ -44,6 +44,7 @@ export default async function ForumPostPage({ params }: { params: PostParams }) 
         },
       },
     });
+    post = result;
     if (post) {
       replies = post.replies;
     }

@@ -1,16 +1,16 @@
-import prisma from '@/lib/prisma';
+import { db } from '@/lib/prisma';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { readingTime } from '@/lib/utils';
-import { ArrowLeft, Clock, Eye } from 'lucide-react';
+import { ArrowLeft, Eye, Clock } from 'lucide-react';
 import { JsonLd } from '@/components/seo/json-ld';
 
 type TagParams = Promise<{ slug: string }>;
 
 export async function generateMetadata({ params }: { params: TagParams }) {
-  const { slug } = await params;
   try {
-    const tag = await prisma.tag.findUnique({ where: { slug } });
+    const { slug } = await params;
+    const tag = await db.tag.findUnique({ where: { slug } });
     if (!tag) return {};
     return {
       title: `${tag.name} | Blog-Ghar`,
@@ -24,25 +24,20 @@ export async function generateMetadata({ params }: { params: TagParams }) {
 
 export default async function TagPage({ params }: { params: TagParams }) {
   const { slug } = await params;
-  let tag;
-  try {
-    tag = await prisma.tag.findUnique({
-      where: { slug },
-      include: {
-        posts: {
-          where: { status: 'PUBLISHED', postType: 'BLOG' },
-          orderBy: { publishedAt: 'desc' },
-          take: 20,
-          include: {
-            author: { select: { name: true } },
-            category: { select: { name: true, slug: true } },
-          },
+  let tag = await db.tag.findUnique({
+    where: { slug },
+    include: {
+      posts: {
+        where: { status: 'PUBLISHED', postType: 'BLOG' },
+        orderBy: { publishedAt: 'desc' },
+        take: 20,
+        include: {
+          author: { select: { name: true } },
+          category: { select: { name: true, slug: true } },
         },
       },
-    });
-  } catch {
-    tag = null;
-  }
+    },
+  });
 
   if (!tag) notFound();
 
@@ -72,7 +67,7 @@ export default async function TagPage({ params }: { params: TagParams }) {
 
         {tag.posts.length > 0 ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {tag.posts.map((post) => (
+            {tag.posts.map((post: any) => (
               <article key={post.id} className="card overflow-hidden group">
                 <div className="aspect-video bg-gray-200 dark:bg-dark-bg relative">
                   {post.featuredImage ? (

@@ -1,4 +1,4 @@
-import prisma from '@/lib/prisma';
+import { db } from '@/lib/prisma';
 import Link from 'next/link';
 import { JsonLd } from '@/components/seo/json-ld';
 import { formatDate } from '@/lib/utils';
@@ -16,7 +16,7 @@ export async function generateMetadata() {
 export default async function NewsPage() {
   let news: any[] = [];
   try {
-    news = await prisma.post.findMany({
+    news = await db.post.findMany({
       where: { postType: 'NEWS', status: 'PUBLISHED' },
       orderBy: { publishedAt: 'desc' },
       take: 30,

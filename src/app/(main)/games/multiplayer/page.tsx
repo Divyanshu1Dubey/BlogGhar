@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
-import { Users, Trophy, Play, Copy, Check, RefreshCw } from 'lucide-react';
+import { Users, Trophy, Play, Copy, Check } from 'lucide-react';
 
 type Player = { id: string; name: string; ready: boolean; score: number };
 type GameMode = 'ludo' | 'chess' | 'tic-tac-toe' | 'dice' | 'connect-4';
@@ -254,7 +254,7 @@ export default function MultiplayerLobby() {
               </div>
             ) : (
               <div className="space-y-2">
-                {players.map((player, i) => (
+                {players.map((player, _idx) => (
                   <div
                     key={player.id}
                     className="flex items-center justify-between p-3 bg-gray-50 dark:bg-dark-bg rounded-lg"

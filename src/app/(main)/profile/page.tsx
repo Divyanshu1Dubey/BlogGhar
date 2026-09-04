@@ -1,4 +1,4 @@
-import prisma from '@/lib/prisma';
+import { db } from '@/lib/prisma';
 import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { formatDate } from '@/lib/utils';
@@ -123,13 +123,13 @@ export default async function ProfilePage({ searchParams }: Props) {
   let comments: any[] = [];
   let scores: any[] = [];
   try {
-    user = await prisma.user.findUnique({
+    user = await db.user.findUnique({
       where: { id: userId },
       include: {
         _count: { select: { posts: true, comments: true, gameScores: true, bookmarks: true } },
       },
-    });
-    bookmarks = await prisma.bookmark.findMany({
+    }, { fallback: null });
+    bookmarks = await db.bookmark.findMany({
       where: { userId },
       orderBy: { createdAt: 'desc' },
       take: 20,
@@ -150,7 +150,7 @@ export default async function ProfilePage({ searchParams }: Props) {
         },
       },
     });
-    comments = await prisma.comment.findMany({
+    comments = await db.comment.findMany({
       where: { userId },
       orderBy: { createdAt: 'desc' },
       take: 20,
@@ -165,7 +165,7 @@ export default async function ProfilePage({ searchParams }: Props) {
         },
       },
     });
-    scores = await prisma.gameScore.findMany({
+    scores = await db.gameScore.findMany({
       where: { userId },
       orderBy: { score: 'desc' },
       take: 20,

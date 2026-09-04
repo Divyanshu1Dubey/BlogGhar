@@ -1,9 +1,9 @@
-import prisma from '@/lib/prisma';
+import { db } from '@/lib/prisma';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import {
   Clock, Eye, Calendar, Tag, Bookmark, Share2, ArrowLeft, Home,
-  ChevronRight, TrendingUp, BookOpen, User, Sparkles
+  ChevronRight, TrendingUp, BookOpen, User /* Sparkles */
 } from 'lucide-react';
 import { Metadata } from 'next';
 import { readingTime, formatNumber } from '@/lib/utils';
@@ -11,7 +11,7 @@ import { JsonLd } from '@/components/seo/json-ld';
 import { BlogCard } from '@/components/blog/blog-card';
 import { ReadingProgressBar } from '@/components/ui/reading-progress-bar';
 import { TableOfContents } from '@/components/blog/table-of-contents';
-import { InArticleAd } from '@/components/ads/ad-slot';
+import { InArticleAd as _InArticleAd } from '@/components/ads/ad-slot';
 
 type Params = Promise<{ slug: string }>;
 
@@ -20,7 +20,7 @@ export const revalidate = 0;
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const { slug } = await params;
-  const post = await prisma.post.findUnique({
+  const post = await db.post.findUnique({
     where: { slug },
     include: { author: { select: { name: true } }, category: { select: { name: true, icon: true } } },
   });
@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
 
 export default async function BlogPostPage({ params }: { params: Params }) {
   const { slug } = await params;
-  const post = await prisma.post.findUnique({
+  const post = await db.post.findUnique({
     where: { slug },
     include: {
       author: { select: { name: true, image: true } },
@@ -46,14 +46,14 @@ export default async function BlogPostPage({ params }: { params: Params }) {
   if (!post) notFound();
 
   try {
-    await prisma.post.update({ where: { id: post.id }, data: { views: { increment: 1 } } });
+    await db.post.update({ where: { id: post.id }, data: { views: { increment: 1 } } });
   } catch (err) {
     console.error('Failed to increment post view count:', err);
   }
 
   let relatedPosts: any[] = [];
   try {
-    relatedPosts = await prisma.post.findMany({
+    relatedPosts = await db.post.findMany({
       where: {
         categoryId: post.categoryId,
         NOT: { id: post.id },
@@ -80,7 +80,7 @@ export default async function BlogPostPage({ params }: { params: Params }) {
   // Inject heading IDs for TOC anchor links
   const contentWithIds = post.content?.replace(
     /<h([23])([^>]*)>([\s\S]*?)<\/h\1>/g,
-    (match, level, attrs, inner) => {
+    (match: string, level: string, attrs: string, inner: string) => {
       const existingId = attrs.match(/id="([^"]+)"/);
       if (existingId) return match;
       const text = inner.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim();

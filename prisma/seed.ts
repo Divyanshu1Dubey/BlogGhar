@@ -16,6 +16,15 @@ import { researchedContentIndia2026 } from './researched-content-2026-india';
 import { deepenedBlogs } from './deepened-blogs-2026';
 import { deepenedExamBlogs } from '../deepening/batch1-exams';
 import { deepenedExpansionPosts } from '../deepening/batch2-expansion';
+import { deepenedAsiaPosts } from '../deepening/batch3-asia-oceania';
+import { deepenedAmericasPosts } from '../deepening/batch4-americas-tech';
+import { deepenedEuropeAfricaPosts } from '../deepening/batch5-europe-africa';
+import { deepenedRegionalV2Posts } from '../deepening/batch6-regional-v2';
+import { deepenedAsiaRemaining1Posts } from '../deepening/batch7-asia-remaining1';
+import { deepenedAsiaFix2Posts } from '../deepening/batch7-fixed2';
+import { deepenedExpansionRemainingPosts } from '../deepening/batch8-expansion-remaining';
+import { deepenedExpansionFixedPosts } from '../deepening/batch8-fixed';
+import { deepenedOuterPosts } from '../deepening/batch9-deep-outer';
 
 const prisma = new PrismaClient();
 
@@ -453,6 +462,15 @@ async function main() {
     ...deepenedBlogs,
     ...deepenedExamBlogs,
     ...deepenedExpansionPosts,
+    ...deepenedAsiaPosts,
+    ...deepenedAmericasPosts,
+    ...deepenedEuropeAfricaPosts,
+    ...deepenedRegionalV2Posts,
+    ...deepenedAsiaRemaining1Posts,
+    ...deepenedAsiaFix2Posts,
+    ...deepenedExpansionRemainingPosts,
+    ...deepenedExpansionFixedPosts,
+    ...deepenedOuterPosts.filter(p => !p.slug.startsWith('_placeholder')),
   ];
   const researchManifest: Array<Record<string, string>> = [];
   for (const blog of researchedPosts) {

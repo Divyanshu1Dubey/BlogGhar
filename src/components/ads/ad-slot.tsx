@@ -8,6 +8,7 @@ interface AdSlotProps {
   style?: React.CSSProperties;
   className?: string;
   label?: string;
+  responsive?: boolean;
 }
 
 export function AdSlot({ slot, format = 'auto', style, className = '', label }: AdSlotProps) {

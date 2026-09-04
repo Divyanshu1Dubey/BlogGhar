@@ -7,7 +7,6 @@ import {
   Gamepad2,
   Calculator,
   Newspaper,
-  TrendingUp,
   Users,
   Zap,
   Shield,
@@ -18,14 +17,13 @@ import {
   Clock,
   Eye,
   Star,
+  TrendingUp,
 } from 'lucide-react';
 import TestimonialsSection from '@/components/home/testimonials-section';
 import { formatDate, formatNumber } from '@/lib/utils';
 import { AdSlot } from '@/components/ads/ad-slot';
 import NewsletterForm from '@/components/newsletter-form';
-import { NewsTicker } from '@/components/layout/news-ticker';
-
-export const dynamic = 'force-dynamic';
+// NewsTicker can be added back when needed
 
 const HOME_API = (process.env.NEXT_PUBLIC_API_URL || '').replace(/\/$/, '') + '/api/home';
 
@@ -231,8 +229,7 @@ export default function HomePage() {
     tools: 0,
     dailyVisitors: 0,
   });
-  const [recentPosts, setRecentPosts] = useState<any[]>([]);
-  const [totalViews, setTotalViews] = useState(0);
+  const [, _setSiteStatsUnused] = useState({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

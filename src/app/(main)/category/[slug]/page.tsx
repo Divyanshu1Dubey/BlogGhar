@@ -1,4 +1,4 @@
-import prisma from '@/lib/prisma';
+import { db } from '@/lib/prisma';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { readingTime } from '@/lib/utils';
@@ -8,9 +8,9 @@ import { JsonLd } from '@/components/seo/json-ld';
 type CategoryParams = Promise<{ slug: string }>;
 
 export async function generateMetadata({ params }: { params: CategoryParams }) {
-  const { slug } = await params;
   try {
-    const category = await prisma.category.findUnique({ where: { slug } });
+    const { slug } = await params;
+    const category = await db.category.findUnique({ where: { slug } });
     if (!category) return {};
     return {
       title: `${category.name} | Blog-Ghar`,
@@ -27,7 +27,7 @@ export default async function CategoryPage({ params }: { params: CategoryParams 
   let category;
   let posts: any[] = [];
   try {
-    category = await prisma.category.findUnique({
+    category = await db.category.findUnique({
       where: { slug },
       include: {
         posts: {
@@ -65,7 +65,7 @@ export default async function CategoryPage({ params }: { params: CategoryParams 
         '@context': 'https://schema.org',
         '@type': 'ItemList',
         numberOfItems: postsList.length,
-        itemListElement: postsList.map((post, i) => ({
+        itemListElement: postsList.map((post: any, i: number) => ({
           '@type': 'ListItem',
           position: i + 1,
           url: `https://bloghar.com/blog/${post.slug}`,
@@ -88,7 +88,7 @@ export default async function CategoryPage({ params }: { params: CategoryParams 
 
         {postsList.length > 0 ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {postsList.map((post) => (
+            {postsList.map((post: any) => (
               <article key={post.id} className="card overflow-hidden group">
                 <div className="aspect-video bg-gray-200 dark:bg-dark-bg relative">
                   {post.featuredImage ? (

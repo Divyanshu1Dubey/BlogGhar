@@ -1,4 +1,4 @@
-import prisma from '@/lib/prisma';
+import { db } from '@/lib/prisma';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { formatDate } from '@/lib/utils';
@@ -9,9 +9,9 @@ import { PageSeo } from '@/components/seo/page-seo';
 type JobParams = Promise<{ id: string }>;
 
 export async function generateMetadata({ params }: { params: JobParams }) {
-  const { id } = await params;
   try {
-    const job = await prisma.jobListing.findUnique({ where: { id } });
+    const { id } = await params;
+    const job = await db.jobListing.findUnique({ where: { id } });
     if (!job) return {};
     const url = `https://bloghar.com/jobs/${job.id}`;
     return {
@@ -26,14 +26,9 @@ export async function generateMetadata({ params }: { params: JobParams }) {
 
 export default async function JobDetailPage({ params }: { params: JobParams }) {
   const { id } = await params;
-  let job;
-  try {
-    job = await prisma.jobListing.findUnique({
-      where: { id },
-    });
-  } catch {
-    job = null;
-  }
+  const job = await db.jobListing.findUnique({
+    where: { id },
+  });
 
   if (!job || !job.isActive) notFound();
 

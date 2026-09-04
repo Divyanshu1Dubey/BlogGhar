@@ -611,10 +611,10 @@ BlogGhar will auto-format everything into a beautiful blog post!"
                 <textarea
                   value={formData.content}
                   onChange={(e) => {
-                    setFormData((prev) => ({ ...prev, content: e.target.value }));
-                    // Auto-update excerpt
-                    if (!formData.excerpt || formData.excerpt === generateExcerpt(prev.content, prev.title)) {
-                      const newExcerpt = generateExcerpt(e.target.value, prev.title);
+                    const content = e.target.value;
+                    setFormData((prev) => ({ ...prev, content }));
+                    if (!formData.excerpt || formData.excerpt === generateExcerpt(formData.content, formData.title)) {
+                      const newExcerpt = generateExcerpt(content, formData.title);
                       setFormData((p) => ({ ...p, excerpt: newExcerpt }));
                     }
                   }}
