@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "npm run db:push && npm run db:seed && next build",
+    "build": "if [ -n \"$DATABASE_URL\" ]; then npm run db:push && npm run db:seed; else echo \"Skipping db:push and db:seed (no DATABASE_URL)\"; fi && next build",
     "start": "next start",
     "lint": "next lint",
     "db:generate": "prisma migrate dev --name init",
