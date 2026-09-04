@@ -46,7 +46,7 @@ export async function GET() {
       }),
       prisma.tool.findMany({
         where: { isActive: true },
-        orderBy: { usageCount: 'desc' },
+        orderBy: { usages: { _count: 'desc' } },
         take: 8,
       }),
       Promise.all([

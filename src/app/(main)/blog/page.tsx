@@ -1,6 +1,6 @@
 import prisma from '@/lib/prisma';
 import Link from 'next/link';
-import { Clock, Eye, TrendingUp } from 'lucide-react';
+import { Clock, Eye } from 'lucide-react';
 import { readingTime, formatNumber } from '@/lib/utils';
 import { JsonLd } from '@/components/seo/json-ld';
 
@@ -18,30 +18,47 @@ export default async function BlogPage({ searchParams }: { searchParams?: Promis
   const params = await searchParams;
   let posts: any[] = [];
   let totalPosts = 0;
-  let featuredCount = 0;
+
+  const whereCondition = {
+    postType: 'BLOG',
+    status: 'PUBLISHED',
+    ...(params?.category ? { category: { slug: params.category } } : {}),
+  };
 
   try {
     [posts, totalPosts] = await Promise.all([
       prisma.post.findMany({
-        where: {
-          postType: 'BLOG',
-          status: 'PUBLISHED',
-          ...(params?.category ? { category: { slug: params.category } } : {}),
-        },
+        where: whereCondition,
         orderBy: { publishedAt: 'desc' },
-        take: 50,
-        include: { author: { select: { name: true } }, category: { select: { name: true, slug: true, icon: true } } },
+        take: 60,
+        include: {
+          author: { select: { name: true } },
+          category: { select: { name: true, slug: true, icon: true } },
+        },
       }),
       prisma.post.count({
-        where: {
-          postType: 'BLOG',
-          status: 'PUBLISHED',
-          featured: true,
-        },
+        where: whereCondition,
       }),
     ]);
-    featuredCount = totalPosts;
-  } catch { posts = []; }
+  } catch (primaryErr) {
+    console.error('Failed to load blog posts with full query:', primaryErr);
+    try {
+      // Resilient fallback: load posts without extra filters if primary query failed
+      posts = await prisma.post.findMany({
+        where: { status: 'PUBLISHED', postType: 'BLOG' },
+        orderBy: { createdAt: 'desc' },
+        take: 30,
+        include: {
+          author: { select: { name: true } },
+          category: { select: { name: true, slug: true, icon: true } },
+        },
+      });
+      totalPosts = posts.length;
+    } catch (fallbackErr) {
+      console.error('Failed to load blog posts fallback:', fallbackErr);
+      posts = [];
+    }
+  }
 
   const blogSchema = posts.length > 0 ? {
     '@context': 'https://schema.org',
@@ -81,6 +98,11 @@ export default async function BlogPage({ searchParams }: { searchParams?: Promis
           <p className="text-lg text-blue-100 max-w-2xl mx-auto">
             Discover stories, tutorials, and insights across technology, lifestyle, education, finance, and more.
           </p>
+          {totalPosts > 0 && (
+            <div className="mt-3 inline-flex items-center gap-1.5 px-3 py-1 bg-white/10 backdrop-blur-sm rounded-full text-xs text-blue-100">
+              <span>📚</span> {totalPosts} Published Articles
+            </div>
+          )}
           {params?.category && (
             <div className="mt-4">
               <Link href="/blog" className="text-sm text-blue-200 hover:text-white underline">
@@ -124,7 +146,7 @@ export default async function BlogPage({ searchParams }: { searchParams?: Promis
       <section className="max-w-7xl mx-auto px-4 py-12">
         {posts.length > 0 ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {posts.map((post) => (
+            {posts.map((post, index) => (
               <article key={post.id} className="card overflow-hidden group hover:shadow-lg transition-all">
                 <Link href={`/blog/${post.slug}`} className="block">
                   <div className="aspect-video bg-gray-200 dark:bg-dark-bg relative overflow-hidden">
@@ -140,7 +162,7 @@ export default async function BlogPage({ searchParams }: { searchParams?: Promis
                         {post.category.icon} {post.category.name}
                       </span>
                     )}
-                    {post.featured && (
+                    {index < 3 && (
                       <span className="absolute top-3 right-3 px-2 py-1 bg-yellow-500 text-white text-[10px] font-bold rounded-full">
                         ⭐ Featured
                       </span>

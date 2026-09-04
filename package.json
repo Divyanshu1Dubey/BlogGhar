@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "if [ -n \"$DATABASE_URL\" ]; then npm run db:push && npm run db:seed; else echo \"Skipping db:push and db:seed (no DATABASE_URL)\"; fi && next build",
+    "build": "if [ -n \"$DATABASE_URL\" ]; then npm run db:push && npm run db:seed && npm run test:queries; else echo \"Skipping db:push, db:seed, and query verification (no DATABASE_URL)\"; fi && next build",
+    "test:queries": "tsx scripts/verify-queries.ts",
     "start": "next start",
     "lint": "next lint",
     "db:generate": "prisma migrate dev --name init",
