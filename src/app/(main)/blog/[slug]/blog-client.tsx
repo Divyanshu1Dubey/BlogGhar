@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-export default function BlogClient({ content, excerpt }: { content: string; excerpt?: string }) {
+export default function BlogClient({ content }: { content: string; excerpt?: string }) {
   const [showFull, setShowFull] = useState(false);
 
   return (

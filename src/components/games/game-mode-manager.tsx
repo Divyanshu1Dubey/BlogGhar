@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Users, Trophy, Play, Zap, Crown, Star, Timer } from 'lucide-react';
+import { Trophy, Play, Crown, Star, Timer } from 'lucide-react';
 
 type GameMode = {
   id: string;
@@ -21,14 +21,10 @@ const GAME_MODES: GameMode[] = [
   { id: 'ludo', name: 'Ludo', icon: '🎯', players: '2-4', color: 'from-yellow-500 to-amber-600', description: 'Race your tokens home in this classic game' },
 ];
 
-type Difficulty = 'easy' | 'medium' | 'hard' | 'time-attack';
-
-export function GameModeManager({ gameSlug }: { gameSlug: string }) {
+export function GameModeManager(_gameSlug: string) {
   const [selectedMode, setSelectedMode] = useState<string>('medium');
   const [selectedGame, setSelectedGame] = useState<string>(GAME_MODES[0].id);
   const [playerCount, setPlayerCount] = useState<number>(2);
-
-  const game = GAME_MODES.find((g) => g.id === selectedGame);
 
   return (
     <div className="bg-white dark:bg-dark-card rounded-2xl border border-gray-200 dark:border-dark-border p-6">

@@ -1,6 +1,6 @@
 import prisma from '@/lib/prisma';
 import Link from 'next/link';
-import { Trophy, Play, Search, Flame, Star, Users, Zap, Crown, Medal, Timer } from 'lucide-react';
+import { Trophy, Play, Search, Flame, Star, Users, Zap, Crown, Medal } from 'lucide-react';
 import { JsonLd } from '@/components/seo/json-ld';
 
 export const dynamic = 'force-dynamic';
@@ -47,27 +47,29 @@ export default async function GamesPage({ searchParams }: { searchParams?: Promi
   const query = params?.q || '';
 
   let games: any[] = [];
-  try {
-    games = await prisma.game.findMany({
-      where: {
-        AND: [
-          activeCategory !== 'All' ? { category: activeCategory.toUpperCase() } : {},
-          query ? {
-            OR: [
-              { name: { contains: query, mode: 'insensitive' } },
-              { description: { contains: query, mode: 'insensitive' } },
-              { tags: { contains: query, mode: 'insensitive' } },
-            ],
-          } : {},
-        ],
-      },
-      orderBy: { playCount: 'desc' },
-    });
-  } catch {}
+  if (prisma) {
+    try {
+      games = await prisma.game.findMany({
+        where: {
+          AND: [
+            activeCategory !== 'All' ? { category: activeCategory.toUpperCase() } : {},
+            query ? {
+              OR: [
+                { name: { contains: query, mode: 'insensitive' } },
+                { description: { contains: query, mode: 'insensitive' } },
+                { tags: { contains: query, mode: 'insensitive' } },
+              ],
+            } : {},
+          ],
+        },
+        orderBy: { playCount: 'desc' },
+      });
+    } catch { games = []; }
+  }
 
   const featured = games[0];
   const multiplayerGames = games.filter(g => g.players?.includes('-') || g.players === '2' || g.players === '2-4');
-  const trending = games.slice(1, 7);
+  (games.slice(1, 7));
 
   return (
     <div className="min-h-screen">

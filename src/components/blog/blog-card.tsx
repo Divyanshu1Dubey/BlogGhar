@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Clock, Eye, Calendar, Tag } from 'lucide-react';
+import { Clock, Eye, Calendar } from 'lucide-react';
 import { formatDate, formatNumber } from '@/lib/utils';
 
 type Post = {
@@ -24,7 +24,7 @@ type BlogCardProps = {
 export function BlogCard({ post, variant = 'default' }: BlogCardProps) {
   const imageUrl = post.featuredImage;
   const categoryName = post.category?.name || '';
-  const categorySlug = post.category?.slug || '';
+  const _categorySlug = post.category?.slug || '';
   const categoryIcon = post.category?.icon || '';
   const displayDate = post.publishedAt
     ? formatDate(new Date(post.publishedAt))

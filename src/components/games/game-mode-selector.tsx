@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Users, Bot, UserPlus, Globe, Trophy, ArrowRight, Sparkles } from 'lucide-react';
+import { Users, Bot, UserPlus, Globe, Trophy, Sparkles } from 'lucide-react';
 
 type GameMode = 'solo' | 'ai' | 'local' | 'online';
 
@@ -23,6 +23,7 @@ export default function GameModeSelector({ gameName, gameIcon, supportedModes, o
   ];
 
   const isMultiplayer = supportedModes.some(m => m === 'local' || m === 'online');
+  void isMultiplayer;
 
   return (
     <div className="max-w-3xl mx-auto py-8">
@@ -37,7 +38,7 @@ export default function GameModeSelector({ gameName, gameIcon, supportedModes, o
 
       {/* Game Mode Selection */}
       <div className="grid grid-cols-2 gap-4 mb-8">
-        {modes.map(({ id, icon: Icon, label, desc, color, disabled }) => (
+        {modes.map(({ id, icon: Icon, label, desc, color }) => (
           <button
             key={id}
             onClick={() => onSelectMode(id)}

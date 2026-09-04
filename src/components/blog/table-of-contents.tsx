@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { usePathname } from 'next/navigation';
 
 interface TocItem {
   id: string;
@@ -12,7 +11,6 @@ interface TocItem {
 export function TableOfContents({ html }: { html: string }) {
   const [headings, setHeadings] = useState<TocItem[]>([]);
   const [activeId, setActiveId] = useState<string>('');
-  const pathname = usePathname();
 
   useEffect(() => {
     const items: TocItem[] = [];

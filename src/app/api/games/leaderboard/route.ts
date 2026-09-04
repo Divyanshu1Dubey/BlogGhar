@@ -20,6 +20,7 @@ export async function GET(request: NextRequest) {
       take: 50,
       include: {
         user: { select: { name: true, image: true } },
+        game: { select: { name: true } },
       },
     });
 
@@ -27,11 +28,12 @@ export async function GET(request: NextRequest) {
       leaderboard: scores.map((s, i) => ({
         rank: i + 1,
         id: s.id,
-        playerName: s.playerName || s.user?.name || 'Anonymous',
+        playerName: s.user?.name || 'Anonymous',
         playerImage: s.user?.image || null,
-        game: s.game,
+        game: s.gameId,
+        gameName: (s as any).game?.name,
         score: s.score,
-        playedAt: s.createdAt,
+        playedAt: s.playedAt.toISOString(),
       })),
     });
   } catch {
@@ -42,14 +44,9 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { game, score, playerName, userId } = body;
-
-    if (!game || score === undefined) {
-      return NextResponse.json({ error: 'Game and score required' }, { status: 400 });
-    }
-
+    const { game, score, userId } = body;
     const entry = await prisma.gameScore.create({
-      data: { game, score: Number(score), playerName: playerName || null, userId: userId || null },
+      data: { game, score: Number(score), userId: userId || null } as any,
     });
 
     return NextResponse.json({ success: true, id: entry.id });

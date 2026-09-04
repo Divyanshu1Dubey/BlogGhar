@@ -2,8 +2,6 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { ChevronDown } from 'lucide-react';
-import { cn } from '@/lib/utils';
 
 const footerSections = [
   {
@@ -55,11 +53,6 @@ export function Footer() {
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
-  const [mobileOpenSections, setMobileOpenSections] = useState<Record<string, boolean>>({});
-
-  const toggleSection = (title: string) => {
-    setMobileOpenSections((prev) => ({ ...prev, [title]: !prev[title] }));
-  };
 
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -77,7 +70,7 @@ export function Footer() {
         setError('Subscription failed. Please try again.');
       }
     } catch {
-      setError('Network error. Please try again.');
+      setError('Subscription failed. Please try again.');
     }
   };
 

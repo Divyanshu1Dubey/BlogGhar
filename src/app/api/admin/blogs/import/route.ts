@@ -21,7 +21,6 @@ export async function POST(request: Request) {
       tags,
       coverImage,
       isPublished = true,
-      isFeatured = false,
       seoTitle,
       seoDescription,
       postType = 'BLOG',

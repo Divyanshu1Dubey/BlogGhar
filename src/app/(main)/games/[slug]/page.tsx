@@ -12,6 +12,7 @@ type GameParams = Promise<{ slug: string }>;
 
 export async function generateMetadata({ params }: { params: GameParams }): Promise<Metadata> {
   try {
+    if (!prisma) return {};
     const { slug } = await params;
     const game = await prisma.game.findUnique({ where: { slug } });
     if (!game) return {};
@@ -26,6 +27,9 @@ export async function generateMetadata({ params }: { params: GameParams }): Prom
 
 export default async function GamePage({ params }: { params: GameParams }) {
   const { slug } = await params;
+
+  if (!prisma) notFound();
+
   const game = await prisma.game.findUnique({ where: { slug } });
   if (!game) notFound();
 
@@ -66,7 +70,7 @@ export default async function GamePage({ params }: { params: GameParams }) {
       <div className="grid lg:grid-cols-3 gap-6">
         {/* Main game area */}
         <div className="lg:col-span-2 space-y-6">
-          <GameModeManager gameSlug={slug} gameName={game.name} />
+          <GameModeManager gameSlug={slug} />
           <div className="card overflow-hidden">
             <GameClient topScores={topScores} game={game} />
           </div>
