@@ -5,6 +5,7 @@ import { formatNumber } from '@/lib/utils';
 import { JsonLd } from '@/components/seo/json-ld';
 import { BlogCard } from '@/components/blog/blog-card';
 import { CategoryFilter } from '@/components/blog/category-filter';
+import { AdSlot } from '@/components/ads/ad-slot';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -180,30 +181,47 @@ export default async function BlogPage({ searchParams }: { searchParams?: Promis
         </section>
       )}
 
+      {/* Inline Ad */}
+      <div className="max-w-7xl mx-auto px-4 mb-8">
+        <AdSlot slot="blog-featured-ad" format="rectangle" className="w-full flex justify-center" style={{ minHeight: '250px' }} />
+      </div>
+
       {/* Stats Bar */}
       {posts.length > 0 && (
-        <section className="max-w-7xl mx-auto px-4 mb-8">
-          <div className="bg-white dark:bg-dark-card rounded-2xl border border-gray-100 dark:border-dark-border p-6">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              <div className="text-center">
-                <div className="text-2xl md:text-3xl font-display font-extrabold text-gray-900 dark:text-white">{totalPosts}</div>
-                <div className="text-sm text-gray-500 mt-1">Total Articles</div>
+        <section className="max-w-7xl mx-auto px-4 mb-10">
+          <div className="bg-white dark:bg-dark-card rounded-3xl border border-gray-100 dark:border-dark-border p-8 shadow-sm">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+              <div className="text-center group">
+                <div className="w-14 h-14 rounded-2xl bg-primary-100 dark:bg-primary-900/40 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
+                  <BookOpen className="w-7 h-7 text-primary-600 dark:text-primary-400" />
+                </div>
+                <div className="text-3xl md:text-4xl font-display font-extrabold text-gray-900 dark:text-white">{totalPosts}</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400 mt-1 font-medium">Total Articles</div>
               </div>
-              <div className="text-center">
-                <div className="text-2xl md:text-3xl font-display font-extrabold text-gray-900 dark:text-white">{categoriesWithCount.length}</div>
-                <div className="text-sm text-gray-500 mt-1">Categories</div>
+              <div className="text-center group">
+                <div className="w-14 h-14 rounded-2xl bg-purple-100 dark:bg-purple-900/40 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
+                  <Sparkles className="w-7 h-7 text-purple-600 dark:text-purple-400" />
+                </div>
+                <div className="text-3xl md:text-4xl font-display font-extrabold text-gray-900 dark:text-white">{categoriesWithCount.length}</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400 mt-1 font-medium">Categories</div>
               </div>
-              <div className="text-center">
-                <div className="text-2xl md:text-3xl font-display font-extrabold text-gray-900 dark:text-white">
+              <div className="text-center group">
+                <div className="w-14 h-14 rounded-2xl bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
+                  <Eye className="w-7 h-7 text-emerald-600 dark:text-emerald-400" />
+                </div>
+                <div className="text-3xl md:text-4xl font-display font-extrabold text-gray-900 dark:text-white">
                   {formatNumber(posts.reduce((sum, p) => sum + (p.views || 0), 0))}
                 </div>
-                <div className="text-sm text-gray-500 mt-1">Total Views</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400 mt-1 font-medium">Total Views</div>
               </div>
-              <div className="text-center">
-                <div className="text-2xl md:text-3xl font-display font-extrabold text-gray-900 dark:text-white">
+              <div className="text-center group">
+                <div className="w-14 h-14 rounded-2xl bg-orange-100 dark:bg-orange-900/40 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
+                  <User className="w-7 h-7 text-orange-600 dark:text-orange-400" />
+                </div>
+                <div className="text-3xl md:text-4xl font-display font-extrabold text-gray-900 dark:text-white">
                   {new Set(posts.map(p => p.author?.name).filter(Boolean)).size}
                 </div>
-                <div className="text-sm text-gray-500 mt-1">Authors</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400 mt-1 font-medium">Authors</div>
               </div>
             </div>
           </div>

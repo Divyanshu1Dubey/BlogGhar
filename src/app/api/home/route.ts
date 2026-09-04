@@ -50,12 +50,12 @@ export async function GET() {
         take: 8,
       }),
       Promise.all([
-        prisma.post.count({ where: { status: 'PUBLISHED', postType: 'BLOG' } }),
-        prisma.game.count({ where: { isActive: true } }),
-        prisma.tool.count({ where: { isActive: true } }),
+        prisma.post.count({ where: { status: 'PUBLISHED', postType: 'BLOG' } }).catch(() => 0),
+        prisma.game.count({ where: { isActive: true } }).catch(() => 0),
+        prisma.tool.count({ where: { isActive: true } }).catch(() => 0),
         prisma.pageView.count({
           where: { visitedAt: { gte: new Date(new Date().setHours(0, 0, 0, 0)) } },
-        }),
+        }).catch(() => 0),
       ]).then(([blogCount, gameCount, toolCount, dailyVisitors]) => ({
         blogCount,
         gameCount,

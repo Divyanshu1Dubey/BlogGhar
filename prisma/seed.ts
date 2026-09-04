@@ -14,6 +14,7 @@ import { researchedContentScienceSpace } from './researched-content-science-spac
 import { researchedContentWorldHistory } from './researched-content-world-history';
 import { researchedContentIndia2026 } from './researched-content-2026-india';
 import { deepenedBlogs } from './deepened-blogs-2026';
+import { deepenedExamBlogs } from '../deepening/batch1-exams';
 
 const prisma = new PrismaClient();
 
@@ -211,7 +212,7 @@ async function main() {
     const { instructions, ...gameData } = game as any;
     await prisma.game.upsert({
       where: { slug: game.slug },
-      update: { playCount: game.playCount || Math.floor(Math.random() * 30000) + 5000 },
+      update: gameData,
       create: gameData,
     });
   }
@@ -449,6 +450,7 @@ async function main() {
     ...researchedContentWorldHistory,
     ...researchedContentIndia2026,
     ...deepenedBlogs,
+    ...deepenedExamBlogs,
   ];
   const researchManifest: Array<Record<string, string>> = [];
   for (const blog of researchedPosts) {

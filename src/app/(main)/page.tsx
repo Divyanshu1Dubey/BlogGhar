@@ -17,9 +17,7 @@ import {
   Flame,
   Clock,
   Eye,
-  Award,
   Star,
-  Crown,
 } from 'lucide-react';
 import TestimonialsSection from '@/components/home/testimonials-section';
 import { formatDate, formatNumber } from '@/lib/utils';
@@ -44,9 +42,25 @@ type HomeData = {
 async function getHomeData(): Promise<HomeData> {
   try {
     const res = await fetch(HOME_API, { next: { revalidate: 120 } });
-    if (!res.ok) throw new Error('Home API failed');
-    return res.json();
-  } catch {
+    if (!res.ok) throw new Error(`Home API failed: ${res.status}`);
+    const data = await res.json();
+    if (!data || typeof data !== 'object') throw new Error('Invalid home API response');
+    return {
+      featuredPosts: Array.isArray(data.featuredPosts) ? data.featuredPosts : [],
+      trendingPosts: Array.isArray(data.trendingPosts) ? data.trendingPosts : [],
+      categories: Array.isArray(data.categories) ? data.categories : [],
+      games: Array.isArray(data.games) ? data.games : [],
+      news: Array.isArray(data.news) ? data.news : [],
+      popularTools: Array.isArray(data.popularTools) ? data.popularTools : [],
+      stats: data.stats && typeof data.stats === 'object' ? {
+        blogCount: data.stats.blogCount || 0,
+        gameCount: data.stats.gameCount || 0,
+        toolCount: data.stats.toolCount || 0,
+        dailyVisitors: data.stats.dailyVisitors || 0,
+      } : { blogCount: 0, gameCount: 0, toolCount: 0, dailyVisitors: 0 },
+    };
+  } catch (err) {
+    console.error('Home data fetch error:', err);
     return {
       featuredPosts: [],
       trendingPosts: [],
@@ -114,9 +128,8 @@ function FeaturedCard({ post }: { post: any }) {
 }
 
 function GameCard({ game }: { game: any }) {
-  const level = Math.floor(Math.random() * 5) + 1;
-  const xp = Math.floor(Math.random() * 100);
   const isFeatured = game.featured || false;
+  const playersText = game.players ? `${game.players} Player${game.players.includes('-') || game.players.includes(',') ? 's' : ''}` : '1 Player';
 
   return (
     <Link href={`/games/${game.slug}`} className="card p-5 flex flex-col items-center text-center gap-3 group hover:border-primary-300 dark:hover:border-primary-700 relative">
@@ -141,28 +154,8 @@ function GameCard({ game }: { game: any }) {
         {game.difficulty ? game.difficulty.toUpperCase() : 'MEDIUM'}
       </span>
 
-      {/* Level & XP Bar */}
-      <div className="w-full">
-        <div className="flex justify-between text-[11px] text-gray-500 dark:text-gray-400 mb-1">
-          <span className="flex items-center gap-1">
-            <Crown className="w-3 h-3 text-yellow-500" />
-            Level {level}
-          </span>
-          <span>{xp}% XP</span>
-        </div>
-        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
-          <div
-            className="bg-gradient-to-r from-primary-500 to-primary-400 h-1.5 rounded-full transition-all duration-500"
-            style={{ width: `${xp}%` }}
-          />
-        </div>
-      </div>
-
-      {/* Achievement preview */}
-      <div className="flex items-center gap-1 text-[11px] text-gray-500">
-        <Award className="w-3 h-3 text-yellow-500" />
-        <span>{game.achievements || game.category?.replace(/_/g, ' ') || 'Game'} • {game.players || '1K'}+ players</span>
-      </div>
+      {/* Players */}
+      <span className="text-[11px] text-gray-500 dark:text-gray-400">{playersText}</span>
 
       <span className="text-xs text-primary-600 font-semibold group-hover:underline">Play Now →</span>
     </Link>
@@ -353,6 +346,20 @@ export default function HomePage() {
                 <Shield className="w-4 h-4" /> No Signup Needed
               </span>
             </div>
+
+            {/* Mini Stats Grid */}
+            <div className="grid grid-cols-3 gap-4 max-w-2xl mx-auto">
+              {[
+                { num: formatNumber(siteStats.posts), label: 'Blog Posts' },
+                { num: formatNumber(siteStats.games), label: 'Free Games' },
+                { num: formatNumber(siteStats.tools), label: 'Online Tools' },
+              ].map((s) => (
+                <div key={s.label} className="text-center p-3 md:p-4 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10">
+                  <div className="text-xl md:text-3xl font-extrabold text-white">{s.num}</div>
+                  <div className="text-[10px] md:text-xs text-blue-200 mt-1">{s.label}</div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -410,6 +417,34 @@ export default function HomePage() {
         <AdSlot slot="home-featured-ad" format="horizontal" className="w-full flex justify-center" style={{ minHeight: '90px' }} />
       </div>
 
+      {/* ========== RECENTLY PUBLISHED ========== */}
+      <section className="max-w-7xl mx-auto px-4 py-12">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h2 className="text-3xl font-display font-extrabold text-gray-900 dark:text-white">
+              📚 Recently Published
+            </h2>
+            <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">Fresh content added this week</p>
+          </div>
+          <Link href="/blog" className="group flex items-center gap-1 text-primary-600 hover:text-primary-700 font-semibold text-sm">
+            View All <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </div>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {featuredPosts.length > 0 ? featuredPosts.map((post) => (
+            <Link key={post.id} href={`/blog/${post.slug}`} className="card p-5 group hover:shadow-lg transition-all">
+              <div className="flex items-start gap-3">
+                <span className="text-2xl">{post.category?.icon || '📝'}</span>
+                <div>
+                  <h3 className="font-bold text-sm mb-1 line-clamp-2 group-hover:text-primary-600 transition-colors">{post.title}</h3>
+                  <p className="text-xs text-gray-500">{post.category?.name} &bull; {formatDate(post.publishedAt)}</p>
+                </div>
+              </div>
+            </Link>
+          )) : <div className="card p-8 text-center text-gray-500 col-span-full">No recent posts yet.</div>}
+        </div>
+      </section>
+
       {/* ========== GAMES SHOWCASE ========== */}
       <section className="bg-gray-50 dark:bg-dark-bg py-16">
         <div className="max-w-7xl mx-auto px-4">
@@ -443,48 +478,38 @@ export default function HomePage() {
         <AdSlot slot="home-games-ad" format="rectangle" className="w-full flex justify-center" style={{ minHeight: '250px' }} />
       </div>
 
-      {/* ========== LATEST NEWS TICKER ========== */}
-      <section className="py-6">
-        <div className="max-w-7xl mx-auto px-4 mb-4">
-          <h2 className="text-3xl font-display font-extrabold text-gray-900 dark:text-white flex items-center gap-3">
-            <Newspaper className="w-8 h-8 text-primary-600" />
-            Latest News
-          </h2>
-          <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">Stay informed with the latest headlines</p>
+      {/* ========== LATEST NEWS ========== */}
+      <section className="max-w-7xl mx-auto px-4 py-12">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h2 className="text-3xl font-display font-extrabold text-gray-900 dark:text-white flex items-center gap-3">
+              <Newspaper className="w-8 h-8 text-primary-600" />
+              Latest News
+            </h2>
+            <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">Stay informed with the latest headlines</p>
+          </div>
+          <Link href="/news" className="group flex items-center gap-1 text-primary-600 hover:text-primary-700 font-semibold text-sm">
+            View All <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </Link>
         </div>
 
         {topNews.length > 0 ? (
-          <>
-            <NewsTicker items={topNews.map((n) => ({ title: n.title, slug: n.slug }))} />
-            {/* News grid below ticker */}
-            <div className="max-w-7xl mx-auto px-4 mt-6">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-                {topNews.slice(0, 5).map((item) => (
-                  <Link key={item.id} href={`/news/${item.slug}`} className="card p-4 group hover:border-primary-300 dark:hover:border-primary-700">
-                    <span className="inline-block px-2 py-0.5 bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-[11px] font-medium rounded mb-2">
-                      {item.category?.name || 'News'}
-                    </span>
-                    <h4 className="text-sm font-semibold line-clamp-2 group-hover:text-primary-600 transition-colors">{item.title}</h4>
-                    <span className="text-[11px] text-gray-500 mt-2 flex items-center gap-1">
-                      <Clock className="w-3 h-3" />
-                      {formatDate(new Date(item.publishedAt ?? ''))}
-                    </span>
-                  </Link>
-                ))}
-              </div>
-              <div className="text-center mt-4">
-                <Link href="/news" className="text-primary-600 hover:text-primary-700 text-sm font-semibold inline-flex items-center gap-1">
-                  View All News <ArrowRight className="w-4 h-4" />
-                </Link>
-              </div>
-            </div>
-          </>
-        ) : (
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="bg-gray-100 dark:bg-dark-card rounded-xl p-8 text-center text-gray-500">
-              No news available yet.
-            </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {topNews.slice(0, 6).map((item) => (
+              <Link key={item.id} href={`/news/${item.slug}`} className="card p-5 group hover:shadow-lg transition-all">
+                <span className="inline-block px-2 py-0.5 bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-[11px] font-medium rounded mb-2">
+                  {item.category?.name || 'News'}
+                </span>
+                <h4 className="font-semibold text-sm line-clamp-2 group-hover:text-primary-600 transition-colors mb-2">{item.title}</h4>
+                <span className="text-[11px] text-gray-500 flex items-center gap-1">
+                  <Clock className="w-3 h-3" />
+                  {formatDate(new Date(item.publishedAt ?? ''))}
+                </span>
+              </Link>
+            ))}
           </div>
+        ) : (
+          <div className="card p-8 text-center text-gray-500">No news available yet.</div>
         )}
       </section>
 

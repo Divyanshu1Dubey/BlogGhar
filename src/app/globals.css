@@ -219,4 +219,275 @@ body {
   .dark .prose td {
     border-color: #374151;
   }
+
+  /* Table of Contents */
+  .toc-container {
+    position: sticky;
+    top: 5rem;
+  }
+  .toc-link {
+    display: block;
+    padding: 0.35rem 0.75rem;
+    margin-left: 0;
+    font-size: 0.875rem;
+    color: #6b7280;
+    border-left: 2px solid #e5e7eb;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    line-height: 1.5;
+  }
+  .dark .toc-link {
+    color: #9ca3af;
+    border-left-color: #374151;
+  }
+  .toc-link:hover {
+    color: #2563eb;
+    border-left-color: #2563eb;
+    background: #f9fafb;
+  }
+  .dark .toc-link:hover {
+    color: #60a5fa;
+    border-left-color: #60a5fa;
+    background: #1f2937;
+  }
+  .toc-link.active {
+    color: #2563eb;
+    border-left-color: #2563eb;
+    font-weight: 600;
+    background: #eff6ff;
+  }
+  .dark .toc-link.active {
+    color: #60a5fa;
+    border-left-color: #60a5fa;
+    background: #1e3a5f;
+  }
+  .toc-link.sub {
+    padding-left: 1.5rem;
+    font-size: 0.8125rem;
+  }
+
+  /* Gradient text utility */
+  .gradient-text {
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Image reveal animation */
+  @keyframes imageReveal {
+    from { opacity: 0; transform: scale(1.02); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  .img-reveal {
+    animation: imageReveal 0.6s ease-out forwards;
+  }
+
+  /* Card shine effect */
+  .card-shine {
+    position: relative;
+    overflow: hidden;
+  }
+  .card-shine::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
+    transition: left 0.6s ease;
+    z-index: 1;
+    pointer-events: none;
+  }
+  .card-shine:hover::before {
+    left: 100%;
+  }
+
+  /* Subtle floating animation */
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  /* Selection style */
+  ::selection {
+    background: #dbeafe;
+    color: #1e40af;
+  }
+  .dark ::selection {
+    background: #1e3a5f;
+    color: #dbeafe;
+  }
+
+  /* Smooth scroll */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Prose enhancements */
+  .prose-content p {
+    margin-bottom: 1.35em;
+    line-height: 1.85;
+    font-size: 1.0625rem;
+    color: #374151;
+  }
+  .dark .prose-content p {
+    color: #d1d5db;
+  }
+  .prose-content h2 {
+    margin-top: 2.5em;
+    margin-bottom: 0.9em;
+    scroll-margin-top: 6rem;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #111827;
+    position: relative;
+  }
+  .dark .prose-content h2 {
+    color: #f9fafb;
+  }
+  .prose-content h3 {
+    margin-top: 2em;
+    margin-bottom: 0.7em;
+    scroll-margin-top: 6rem;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #1f2937;
+  }
+  .dark .prose-content h3 {
+    color: #f3f4f6;
+  }
+  .prose-content ul {
+    margin-bottom: 1.35em;
+    padding-left: 1.5em;
+  }
+  .prose-content li {
+    margin-bottom: 0.5em;
+    line-height: 1.75;
+  }
+  .prose-content li::marker {
+    color: #2563eb;
+  }
+  .dark .prose-content li::marker {
+    color: #60a5fa;
+  }
+  .prose-content blockquote {
+    border-left: 4px solid #3b82f6;
+    padding: 1em 1.5em;
+    margin: 1.8em 0;
+    font-style: italic;
+    color: #4b5563;
+    background: linear-gradient(135deg, #f9fafb, #f3f4f6);
+    border-radius: 0 0.75rem 0.75rem 0;
+  }
+  .dark .prose-content blockquote {
+    color: #9ca3af;
+    background: linear-gradient(135deg, #1f2937, #111827);
+  }
+  .prose-content img {
+    border-radius: 0.75rem;
+    box-shadow: 0 8px 16px -4px rgba(0,0,0,0.1);
+    margin: 2em auto;
+    max-width: 100%;
+    height: auto;
+  }
+  .prose-content code {
+    font-size: 0.9em;
+    background: #f3f4f6;
+    padding: 0.2em 0.5em;
+    border-radius: 0.375rem;
+    color: #2563eb;
+    font-family: ui-monospace, monospace;
+    border: 1px solid #e5e7eb;
+  }
+  .dark .prose-content code {
+    background: #374151;
+    color: #60a5fa;
+    border-color: #4b5563;
+  }
+  .prose-content pre {
+    border-radius: 0.75rem;
+    padding: 1.25em;
+    margin: 1.8em 0;
+    overflow-x: auto;
+    background: #1f2937;
+    border: 1px solid #374151;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+  }
+  .dark .prose-content pre {
+    border-color: #4b5563;
+  }
+  .prose-content pre code {
+    background: transparent;
+    color: #e5e7eb;
+    padding: 0;
+    border: none;
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+  .prose-content a {
+    font-weight: 500;
+    color: #2563eb;
+    text-decoration: none;
+    border-bottom: 1.5px solid #bfdbfe;
+    transition: all 0.2s;
+  }
+  .prose-content a:hover {
+    border-bottom-color: #2563eb;
+    color: #1d4ed8;
+  }
+  .dark .prose-content a {
+    color: #60a5fa;
+    border-bottom-color: #1e40af;
+  }
+  .dark .prose-content a:hover {
+    color: #93c5fd;
+  }
+  .prose-content strong {
+    font-weight: 700;
+    color: inherit;
+  }
+  .prose-content hr {
+    border: none;
+    border-top: 2px solid #e5e7eb;
+    margin: 2.5em 0;
+  }
+  .dark .prose-content hr {
+    border-top-color: #374151;
+  }
+  .prose-content table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 1.8em 0;
+    font-size: 0.95rem;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+  }
+  .dark .prose-content table {
+    border-color: #374151;
+  }
+  .prose-content th {
+    background: #f9fafb;
+    font-weight: 600;
+    text-align: left;
+    padding: 0.7em 1em;
+    border-bottom: 2px solid #e5e7eb;
+  }
+  .dark .prose-content th {
+    background: #1f2937;
+    border-bottom-color: #4b5563;
+  }
+  .prose-content td {
+    padding: 0.65em 1em;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  .dark .prose-content td {
+    border-bottom-color: #374151;
+  }
 }

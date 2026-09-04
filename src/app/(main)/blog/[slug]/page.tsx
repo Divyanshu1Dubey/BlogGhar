@@ -1,13 +1,17 @@
 import prisma from '@/lib/prisma';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { Clock, Eye, Calendar, Tag, Bookmark, Share2, ArrowLeft } from 'lucide-react';
+import {
+  Clock, Eye, Calendar, Tag, Bookmark, Share2, ArrowLeft, Home,
+  ChevronRight, TrendingUp, BookOpen, User, Sparkles
+} from 'lucide-react';
 import { Metadata } from 'next';
 import { readingTime, formatNumber } from '@/lib/utils';
 import { JsonLd } from '@/components/seo/json-ld';
 import { BlogCard } from '@/components/blog/blog-card';
 import { ReadingProgressBar } from '@/components/ui/reading-progress-bar';
 import { TableOfContents } from '@/components/blog/table-of-contents';
+import { InArticleAd } from '@/components/ads/ad-slot';
 
 type Params = Promise<{ slug: string }>;
 
@@ -68,9 +72,23 @@ export default async function BlogPostPage({ params }: { params: Params }) {
   }
 
   const readTime = readingTime(post.content);
+  const wordCount = post.content ? post.content.replace(/<[^>]*>/g, '').split(/\s+/).filter(Boolean).length : 0;
   const publishedDate = post.publishedAt
     ? new Date(post.publishedAt).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })
     : '';
+
+  // Inject heading IDs for TOC anchor links
+  const contentWithIds = post.content?.replace(
+    /<h([23])([^>]*)>([\s\S]*?)<\/h\1>/g,
+    (match, level, attrs, inner) => {
+      const existingId = attrs.match(/id="([^"]+)"/);
+      if (existingId) return match;
+      const text = inner.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim();
+      const id = text.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-').slice(0, 60);
+      if (!id || id.length < 3) return match;
+      return `<h${level}${attrs} id="${id}">${inner}</h${level}>`;
+    }
+  ) || '';
 
   const articleSchema = {
     '@context': 'https://schema.org',
@@ -88,133 +106,172 @@ export default async function BlogPostPage({ params }: { params: Params }) {
       <JsonLd type="Article" data={articleSchema} />
       <ReadingProgressBar />
       <div className="min-h-screen bg-gray-50/50 dark:bg-dark-bg">
-        {/* Back navigation */}
+        {/* Enhanced Breadcrumb Navigation */}
         <div className="max-w-6xl mx-auto px-4 pt-6">
-          <Link
-            href="/blog"
-            className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-primary-600 transition-colors group"
-          >
-            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
-            Back to Blog
-          </Link>
+          <nav className="flex items-center gap-2 text-sm">
+            <Link href="/" className="text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors flex items-center gap-1">
+              <Home className="w-3.5 h-3.5" />
+              Home
+            </Link>
+            <ChevronRight className="w-3.5 h-3.5 text-gray-300" />
+            <Link href="/blog" className="text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+              Blog
+            </Link>
+            <ChevronRight className="w-3.5 h-3.5 text-gray-300" />
+            <span className="text-gray-600 dark:text-gray-300 font-medium truncate max-w-[180px] md:max-w-[300px]">
+              {post.title}
+            </span>
+          </nav>
         </div>
 
         <div className="max-w-6xl mx-auto px-4 py-8">
-          {/* Breadcrumb */}
-          <nav className="flex items-center gap-2 text-sm text-gray-400 mb-8">
-            <Link href="/" className="hover:text-primary-600 transition-colors">Home</Link>
-            <span className="text-gray-300">/</span>
-            <Link href="/blog" className="hover:text-primary-600 transition-colors">Blog</Link>
-            <span className="text-gray-300">/</span>
-            <span className="text-gray-600 dark:text-gray-300 truncate max-w-[200px]">{post.title}</span>
-          </nav>
-
           {/* Article Layout: TOC sidebar + main content */}
           <div className="flex gap-8">
             {/* Main Article */}
             <article className="flex-1 min-w-0">
-              <div className="bg-white dark:bg-dark-card rounded-2xl overflow-hidden border border-gray-100 dark:border-dark-border shadow-sm">
-                {/* Cover Image with gradient overlay */}
-                {post.featuredImage && (
-                  <div className="aspect-[21/9] w-full bg-gray-100 relative">
-                    <img src={post.featuredImage} alt={post.title} className="w-full h-full object-cover" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+              <div className="bg-white dark:bg-dark-card rounded-3xl overflow-hidden border border-gray-100 dark:border-dark-border shadow-sm hover:shadow-md transition-shadow duration-300">
+                {/* Cover Image Section */}
+                {post.featuredImage ? (
+                  <div className="relative aspect-[21/9] w-full bg-gray-100 overflow-hidden">
+                    <img
+                      src={post.featuredImage}
+                      alt={post.title}
+                      className="w-full h-full object-cover img-reveal"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
+                    <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        {post.category && (
+                          <Link href={`/blog?category=${post.category.slug}`}>
+                            <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-white/95 dark:bg-gray-900/95 backdrop-blur text-primary-700 dark:text-primary-300 rounded-full text-sm font-bold shadow-lg hover:bg-white transition-colors">
+                              {post.category.icon} {post.category.name}
+                            </span>
+                          </Link>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="relative h-40 bg-gradient-to-br from-primary-600 via-indigo-600 to-purple-700 overflow-hidden">
+                    <div className="absolute inset-0 opacity-10" style={{
+                      backgroundImage: 'radial-gradient(circle at 25% 50%, white 1px, transparent 1px)',
+                      backgroundSize: '30px 30px'
+                    }} />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <BookOpen className="w-16 h-16 text-white/30" />
+                    </div>
+                    <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        {post.category && (
+                          <Link href={`/blog?category=${post.category.slug}`}>
+                            <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-white/95 dark:bg-gray-900/95 backdrop-blur text-primary-700 dark:text-primary-300 rounded-full text-sm font-bold shadow-lg hover:bg-white transition-colors">
+                              {post.category.icon} {post.category.name}
+                            </span>
+                          </Link>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 )}
 
                 <div className="px-6 md:px-10 lg:px-14 pt-8 pb-12">
-                  {/* Category & Tags */}
-                  <div className="flex items-center gap-3 mb-5 flex-wrap">
-                    {post.category && (
-                      <Link href={`/blog?category=${post.category.slug}`}>
-                        <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 rounded-full text-sm font-semibold hover:bg-primary-100 transition-colors cursor-pointer">
-                          {post.category.icon} {post.category.name}
-                        </span>
-                      </Link>
-                    )}
-                    {post.tags && (
-                      <Link
-                        href={`/tag/${post.tags.slug}`}
-                        className="inline-flex items-center gap-1 px-3 py-1.5 bg-gray-100 dark:bg-gray-700/50 text-gray-600 dark:text-gray-300 rounded-full text-sm font-medium hover:bg-gray-200 transition-colors"
-                      >
-                        <Tag className="w-3 h-3" />
-                        {post.tags.name}
-                      </Link>
-                    )}
-                  </div>
+                  {/* Category & Tags - only show in body if no featured image */}
+                  {!post.featuredImage && (
+                    <div className="flex items-center gap-3 mb-5 flex-wrap">
+                      {post.category && (
+                        <Link href={`/blog?category=${post.category.slug}`}>
+                          <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 rounded-full text-sm font-semibold hover:bg-primary-100 transition-colors">
+                            {post.category.icon} {post.category.name}
+                          </span>
+                        </Link>
+                      )}
+                      {post.tags && (
+                        <Link
+                          href={`/tag/${post.tags.slug}`}
+                          className="inline-flex items-center gap-1 px-3 py-1.5 bg-gray-100 dark:bg-gray-700/50 text-gray-600 dark:text-gray-300 rounded-full text-sm font-medium hover:bg-gray-200 transition-colors"
+                        >
+                          <Tag className="w-3 h-3" />
+                          {post.tags.name}
+                        </Link>
+                      )}
+                    </div>
+                  )}
 
                   {/* Title */}
                   <h1 className="text-3xl md:text-4xl lg:text-[2.75rem] font-display font-extrabold text-gray-900 dark:text-white mb-6 leading-[1.2]">
                     {post.title}
                   </h1>
 
-                  {/* Excerpt highlight */}
+                  {/* Excerpt Pull Quote */}
                   {post.excerpt && (
-                    <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed border-l-4 border-primary-500 pl-5 bg-primary-50/50 dark:bg-primary-900/10 py-4 rounded-r-lg">
-                      {post.excerpt}
-                    </p>
+                    <div className="relative mb-8 p-6 md:p-8 bg-gradient-to-br from-primary-50 via-indigo-50/50 to-purple-50/30 dark:from-primary-900/15 dark:via-indigo-900/10 dark:to-purple-900/5 rounded-2xl border-l-4 border-primary-500">
+                      <div className="absolute top-4 left-4 text-5xl text-primary-300 dark:text-primary-700/50 font-serif leading-none">
+                        &ldquo;
+                      </div>
+                      <p className="text-base md:text-lg text-gray-700 dark:text-gray-200 leading-relaxed pl-6 relative z-10">
+                        {post.excerpt}
+                      </p>
+                    </div>
                   )}
 
-                  {/* Meta info bar */}
-                  <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-gray-500 mb-10 pb-8 border-b border-gray-100 dark:border-dark-border">
-                    {/* Author */}
-                    <div className="flex items-center gap-3">
-                      <div className="w-11 h-11 rounded-full bg-gradient-to-br from-primary-500 to-indigo-600 flex items-center justify-center text-sm font-bold text-white shadow-md ring-2 ring-primary-100 dark:ring-primary-900">
+                  {/* Enhanced Meta Info Bar */}
+                  <div className="flex flex-wrap items-center gap-3 text-sm text-gray-500 mb-8 pb-8 border-b border-gray-100 dark:border-dark-border">
+                    {/* Author Card */}
+                    <div className="flex items-center gap-3 px-4 py-2.5 bg-gray-50 dark:bg-gray-800/50 rounded-xl">
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary-500 to-indigo-600 flex items-center justify-center text-sm font-bold text-white shadow-md ring-2 ring-primary-100 dark:ring-primary-900">
                         {(post.author?.name || '?').charAt(0).toUpperCase()}
                       </div>
                       <div>
-                        <span className="font-semibold text-gray-900 dark:text-white block">{post.author?.name || 'Blog-Ghar'}</span>
-                        <span className="text-xs">Author</span>
+                        <span className="font-semibold text-gray-900 dark:text-white block text-sm leading-tight">
+                          {post.author?.name || 'Blog-Ghar'}
+                        </span>
+                        <span className="text-xs text-gray-400">Author</span>
                       </div>
                     </div>
 
-                    <div className="hidden sm:block w-px h-8 bg-gray-200 dark:bg-gray-700" />
-
-                    {/* Date */}
-                    <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
-                        <Calendar className="w-4 h-4 text-gray-500" />
+                    {/* Date Badge */}
+                    <div className="flex items-center gap-2 px-3 py-2.5 bg-gray-50 dark:bg-gray-800/50 rounded-xl">
+                      <div className="w-7 h-7 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+                        <Calendar className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
                       </div>
                       <div>
-                        <span className="block font-medium text-gray-900 dark:text-white">{publishedDate}</span>
+                        <span className="block font-medium text-gray-900 dark:text-white text-sm leading-tight">{publishedDate}</span>
                         <span className="text-xs text-gray-400">Published</span>
                       </div>
                     </div>
 
-                    <div className="hidden sm:block w-px h-8 bg-gray-200 dark:bg-gray-700" />
-
-                    {/* Read time */}
-                    <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
-                        <Clock className="w-4 h-4 text-gray-500" />
+                    {/* Read Time Badge */}
+                    <div className="flex items-center gap-2 px-3 py-2.5 bg-gray-50 dark:bg-gray-800/50 rounded-xl">
+                      <div className="w-7 h-7 rounded-lg bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
+                        <Clock className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
                       </div>
                       <div>
-                        <span className="block font-medium text-gray-900 dark:text-white">{readTime} min</span>
-                        <span className="text-xs text-gray-400">Read time</span>
+                        <span className="block font-medium text-gray-900 dark:text-white text-sm leading-tight">{readTime} min</span>
+                        <span className="text-xs text-gray-400">{wordCount} words</span>
                       </div>
                     </div>
 
-                    <div className="hidden sm:block w-px h-8 bg-gray-200 dark:bg-gray-700" />
-
-                    {/* Views */}
-                    <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
-                        <Eye className="w-4 h-4 text-gray-500" />
+                    {/* Views Badge */}
+                    <div className="flex items-center gap-2 px-3 py-2.5 bg-gray-50 dark:bg-gray-800/50 rounded-xl">
+                      <div className="w-7 h-7 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
+                        <Eye className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                       </div>
                       <div>
-                        <span className="block font-medium text-gray-900 dark:text-white">{formatNumber(post.views || 0)}</span>
+                        <span className="block font-medium text-gray-900 dark:text-white text-sm leading-tight">
+                          {formatNumber(post.views || 0)}
+                        </span>
                         <span className="text-xs text-gray-400">Views</span>
                       </div>
                     </div>
                   </div>
 
-                  {/* Action buttons */}
+                  {/* Action Buttons */}
                   <div className="flex items-center gap-3 mb-10">
-                    <button className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                    <button className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gray-100 dark:bg-gray-800 text-sm font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors border border-gray-200 dark:border-gray-700">
                       <Bookmark className="w-4 h-4" />
                       Save
                     </button>
-                    <button className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                    <button className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary-50 dark:bg-primary-900/30 text-sm font-semibold text-primary-700 dark:text-primary-300 hover:bg-primary-100 dark:hover:bg-primary-900/50 transition-colors border border-primary-200/50 dark:border-primary-800/30">
                       <Share2 className="w-4 h-4" />
                       Share
                     </button>
@@ -222,9 +279,24 @@ export default async function BlogPostPage({ params }: { params: Params }) {
 
                   {/* Article Content */}
                   <div
-                    className="prose prose-lg dark:prose-invert max-w-none prose-headings:font-display prose-headings:font-bold prose-headings:text-gray-900 dark:prose-headings:text-white prose-headings:scroll-mt-24 prose-a:text-primary-600 prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl prose-img:shadow-lg prose-pre:bg-gray-900 prose-pre:text-gray-100 prose-code:text-primary-600 prose-code:bg-primary-50 dark:prose-code:bg-primary-900/30 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm leading-relaxed"
-                    dangerouslySetInnerHTML={{ __html: post.content }}
+                    className="prose-content max-w-none"
+                    dangerouslySetInnerHTML={{ __html: contentWithIds }}
                   />
+
+                  {/* Bottom Tags */}
+                  {post.tags && (
+                    <div className="mt-12 pt-8 border-t border-gray-100 dark:border-dark-border">
+                      <div className="flex items-center gap-3 flex-wrap">
+                        <span className="text-sm font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Tags</span>
+                        <Link
+                          href={`/tag/${post.tags.slug}`}
+                          className="px-4 py-2 bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 rounded-full text-sm font-semibold hover:bg-primary-100 dark:hover:bg-primary-900/50 transition-all hover:scale-105 border border-primary-200/50 dark:border-primary-800/30"
+                        >
+                          {post.tags.name}
+                        </Link>
+                      </div>
+                    </div>
+                  )}
 
                   {/* Bottom tags */}
                   {post.tags && (
@@ -241,20 +313,34 @@ export default async function BlogPostPage({ params }: { params: Params }) {
                     </div>
                   )}
 
-                  {/* Author card */}
-                  <div className="mt-10 p-6 md:p-8 bg-gradient-to-br from-primary-50 to-indigo-50 dark:from-primary-900/20 dark:to-indigo-900/20 rounded-2xl border border-primary-100 dark:border-primary-800/30">
-                    <div className="flex items-start gap-4">
-                      <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary-500 to-indigo-600 flex items-center justify-center text-xl font-bold text-white shadow-lg shrink-0">
+                  {/* Author Bio Card */}
+                  <div className="mt-10 p-6 md:p-8 bg-gradient-to-br from-primary-50 via-white to-indigo-50/50 dark:from-primary-900/20 dark:via-dark-card dark:to-indigo-900/15 rounded-2xl border border-primary-100/50 dark:border-primary-800/20 relative overflow-hidden">
+                    <div className="absolute -top-12 -right-12 w-40 h-40 bg-primary-200/20 dark:bg-primary-400/5 rounded-full blur-2xl" />
+                    <div className="relative flex items-start gap-5">
+                      <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary-500 to-indigo-600 flex items-center justify-center text-2xl font-bold text-white shadow-xl ring-4 ring-primary-100 dark:ring-primary-900/50 shrink-0">
                         {(post.author?.name || '?').charAt(0).toUpperCase()}
                       </div>
-                      <div>
-                        <h3 className="font-display font-bold text-lg text-gray-900 dark:text-white">
-                          Written by {post.author?.name || 'Blog-Ghar'}
-                        </h3>
-                        <p className="text-sm text-gray-500 mt-1 leading-relaxed">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                          <User className="w-4 h-4 text-primary-600 dark:text-primary-400" />
+                          <h3 className="font-display font-bold text-xl text-gray-900 dark:text-white">
+                            Written by {post.author?.name || 'Blog-Ghar'}
+                          </h3>
+                        </div>
+                        <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
                           Passionate about sharing knowledge and insights on technology, lifestyle, and more.
                           Follow for more curated content delivered to your inbox.
                         </p>
+                        <div className="flex items-center gap-2 mt-4">
+                          <div className="flex items-center gap-1 px-3 py-1.5 bg-white dark:bg-gray-800 rounded-lg text-xs font-medium text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700">
+                            <BookOpen className="w-3.5 h-3.5" />
+                            {Math.max(1, Math.floor(wordCount / 1000))}k+ words published
+                          </div>
+                          <div className="flex items-center gap-1 px-3 py-1.5 bg-white dark:bg-gray-800 rounded-lg text-xs font-medium text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700">
+                            <TrendingUp className="w-3.5 h-3.5" />
+                            Top contributor
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
