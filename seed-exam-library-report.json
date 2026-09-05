@@ -1,0 +1,1866 @@
+{
+  "date": "2026-09-05",
+  "totalAttempted": 265,
+  "created": 265,
+  "updated": 0,
+  "failed": 0,
+  "categoriesCreated": 43,
+  "authorUsed": "cmtkpqmap0000qmy38tyi9q9c",
+  "articles": [
+    {
+      "slug": "sat-complete-guide-2024-2025-structure-syllabus-registration-scoring",
+      "category": "General Exams",
+      "wordCount": 2880,
+      "readTime": 15,
+      "status": "created"
+    },
+    {
+      "slug": "sat-study-plan-3-month-preparation-strategy-2024-2025",
+      "category": "General Exams",
+      "wordCount": 2570,
+      "readTime": 13,
+      "status": "created"
+    },
+    {
+      "slug": "digital-sat-vs-paper-sat-comparison-transition-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 2082,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "sat-score-interpretation-college-admissions-superscoring-retake-strategy",
+      "category": "General Exams",
+      "wordCount": 2752,
+      "readTime": 14,
+      "status": "created"
+    },
+    {
+      "slug": "sat-math-mastery-advanced-strategies-750-plus-digital-sat",
+      "category": "Undergraduate Admissions / Standardized Testing",
+      "wordCount": 2593,
+      "readTime": 13,
+      "status": "created"
+    },
+    {
+      "slug": "act-complete-guide-2024-2025-structure-syllabus-registration-scoring",
+      "category": "General Exams",
+      "wordCount": 2660,
+      "readTime": 14,
+      "status": "created"
+    },
+    {
+      "slug": "act-study-plan-3-month-preparation-strategy-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1837,
+      "readTime": 10,
+      "status": "created"
+    },
+    {
+      "slug": "act-science-mastery-data-interpretation-experimental-design-pacing",
+      "category": "General Exams",
+      "wordCount": 1813,
+      "readTime": 10,
+      "status": "created"
+    },
+    {
+      "slug": "act-vs-sat-comparison-conversion-decision-framework-2024-2025",
+      "category": "General Exams",
+      "wordCount": 2000,
+      "readTime": 10,
+      "status": "created"
+    },
+    {
+      "slug": "act-score-interpretation-superscoring-retake-strategy-admissions",
+      "category": "Graduate Admissions / Standardized Testing",
+      "wordCount": 2883,
+      "readTime": 15,
+      "status": "created"
+    },
+    {
+      "slug": "gre-complete-guide-2024-2025-structure-syllabus-registration-scoring",
+      "category": "General Exams",
+      "wordCount": 2264,
+      "readTime": 12,
+      "status": "created"
+    },
+    {
+      "slug": "gre-study-plan-2-month-preparation-verbal-quant-writing",
+      "category": "General Exams",
+      "wordCount": 2240,
+      "readTime": 12,
+      "status": "created"
+    },
+    {
+      "slug": "gre-quant-mastery-quantitative-comparison-data-interpretation-calculator",
+      "category": "General Exams",
+      "wordCount": 834,
+      "readTime": 5,
+      "status": "created"
+    },
+    {
+      "slug": "gre-vs-gmat-comparison-mba-decision-framework-2024-2025",
+      "category": "General Exams",
+      "wordCount": 898,
+      "readTime": 5,
+      "status": "created"
+    },
+    {
+      "slug": "gre-score-interpretation-program-targets-retake-strategy-funding",
+      "category": "English Language Proficiency",
+      "wordCount": 1698,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "toefl-ibt-complete-guide-2024-2025-structure-registration-scoring",
+      "category": "General Exams",
+      "wordCount": 2040,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "toefl-ibt-study-plan-4-week-high-intensity-preparation",
+      "category": "General Exams",
+      "wordCount": 1335,
+      "readTime": 7,
+      "status": "created"
+    },
+    {
+      "slug": "toefl-speaking-writing-26-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1660,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "toefl-vs-ielts-vs-pte-vs-duolingo-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1504,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "toefl-score-interpretation-university-requirements-retake",
+      "category": "English Proficiency",
+      "wordCount": 2056,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "ielts-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 3129,
+      "readTime": 16,
+      "status": "created"
+    },
+    {
+      "slug": "ielts-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1163,
+      "readTime": 6,
+      "status": "created"
+    },
+    {
+      "slug": "ielts-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1590,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "ielts-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 962,
+      "readTime": 5,
+      "status": "created"
+    },
+    {
+      "slug": "ielts-score-interpretation-2024-2025",
+      "category": "Business School Admissions",
+      "wordCount": 1336,
+      "readTime": 7,
+      "status": "created"
+    },
+    {
+      "slug": "gmat-focus-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 989,
+      "readTime": 5,
+      "status": "created"
+    },
+    {
+      "slug": "gmat-focus-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1171,
+      "readTime": 6,
+      "status": "created"
+    },
+    {
+      "slug": "gmat-focus-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1636,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "gmat-focus-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 965,
+      "readTime": 5,
+      "status": "created"
+    },
+    {
+      "slug": "gmat-focus-score-interpretation-2024-2025",
+      "category": "Law School Admissions",
+      "wordCount": 1355,
+      "readTime": 7,
+      "status": "created"
+    },
+    {
+      "slug": "lsat-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1325,
+      "readTime": 7,
+      "status": "created"
+    },
+    {
+      "slug": "lsat-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1162,
+      "readTime": 6,
+      "status": "created"
+    },
+    {
+      "slug": "lsat-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1580,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "lsat-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 937,
+      "readTime": 5,
+      "status": "created"
+    },
+    {
+      "slug": "lsat-score-interpretation-2024-2025",
+      "category": "Medical School Admissions",
+      "wordCount": 1311,
+      "readTime": 7,
+      "status": "created"
+    },
+    {
+      "slug": "mcat-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1613,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "mcat-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1161,
+      "readTime": 6,
+      "status": "created"
+    },
+    {
+      "slug": "mcat-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1580,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "mcat-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 941,
+      "readTime": 5,
+      "status": "created"
+    },
+    {
+      "slug": "mcat-score-interpretation-2024-2025",
+      "category": "Nursing Licensure",
+      "wordCount": 1321,
+      "readTime": 7,
+      "status": "created"
+    },
+    {
+      "slug": "nclex-rn-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1939,
+      "readTime": 10,
+      "status": "created"
+    },
+    {
+      "slug": "nclex-rn-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1671,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "nclex-rn-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1580,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "nclex-rn-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1434,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "nclex-rn-score-interpretation-2024-2025",
+      "category": "Professional Certification / Accounting",
+      "wordCount": 2008,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "cpa-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1957,
+      "readTime": 10,
+      "status": "created"
+    },
+    {
+      "slug": "cpa-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1682,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "cpa-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1589,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "cpa-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1448,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "cpa-score-interpretation-2024-2025",
+      "category": "Professional Certification / Finance",
+      "wordCount": 2020,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "cfa-level-i-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1997,
+      "readTime": 10,
+      "status": "created"
+    },
+    {
+      "slug": "cfa-level-i-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1735,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "cfa-level-i-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1676,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "cfa-level-i-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1492,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "cfa-level-i-score-interpretation-2024-2025",
+      "category": "Professional Certification / Management",
+      "wordCount": 2114,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "pmp-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1930,
+      "readTime": 10,
+      "status": "created"
+    },
+    {
+      "slug": "pmp-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1656,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "pmp-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1565,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "pmp-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1410,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "pmp-score-interpretation-2024-2025",
+      "category": "Engineering Entrance",
+      "wordCount": 2008,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "jee-advanced-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1126,
+      "readTime": 6,
+      "status": "created"
+    },
+    {
+      "slug": "jee-advanced-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1729,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "jee-advanced-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1646,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "jee-advanced-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1501,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "jee-advanced-score-interpretation-2024-2025",
+      "category": "Medical Entrance",
+      "wordCount": 2082,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "neet-ug-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1112,
+      "readTime": 6,
+      "status": "created"
+    },
+    {
+      "slug": "neet-ug-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1699,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "neet-ug-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1624,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "neet-ug-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1461,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "neet-ug-score-interpretation-2024-2025",
+      "category": "Civil Services / Government Recruitment",
+      "wordCount": 2067,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "upsc-cse-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1281,
+      "readTime": 7,
+      "status": "created"
+    },
+    {
+      "slug": "upsc-cse-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1702,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "upsc-cse-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1631,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "upsc-cse-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1463,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "upsc-cse-score-interpretation-2024-2025",
+      "category": "MBA Entrance",
+      "wordCount": 2073,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "cat-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1063,
+      "readTime": 6,
+      "status": "created"
+    },
+    {
+      "slug": "cat-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1679,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "cat-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1588,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "cat-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1446,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "cat-score-interpretation-2024-2025",
+      "category": "Engineering / PSU Recruitment",
+      "wordCount": 2023,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "gate-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1066,
+      "readTime": 6,
+      "status": "created"
+    },
+    {
+      "slug": "gate-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1668,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "gate-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1579,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "gate-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1431,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "gate-score-interpretation-2024-2025",
+      "category": "Law Entrance",
+      "wordCount": 2016,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "clat-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1941,
+      "readTime": 10,
+      "status": "created"
+    },
+    {
+      "slug": "clat-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1668,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "clat-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1579,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "clat-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1428,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "clat-score-interpretation-2024-2025",
+      "category": "Government Recruitment",
+      "wordCount": 2011,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "ssc-cgl-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1955,
+      "readTime": 10,
+      "status": "created"
+    },
+    {
+      "slug": "ssc-cgl-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1692,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "ssc-cgl-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1621,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "ssc-cgl-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1449,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "ssc-cgl-score-interpretation-2024-2025",
+      "category": "Banking Recruitment",
+      "wordCount": 2052,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "ibps-po-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1981,
+      "readTime": 10,
+      "status": "created"
+    },
+    {
+      "slug": "ibps-po-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1697,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "ibps-po-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1626,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "ibps-po-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1460,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "ibps-po-score-interpretation-2024-2025",
+      "category": "University Admissions",
+      "wordCount": 2067,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "cuet-ug-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1974,
+      "readTime": 10,
+      "status": "created"
+    },
+    {
+      "slug": "cuet-ug-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1708,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "cuet-ug-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1631,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "cuet-ug-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1471,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "cuet-ug-score-interpretation-2024-2025",
+      "category": "University Entrance / National Exam",
+      "wordCount": 2064,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "gaokao-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1952,
+      "readTime": 10,
+      "status": "created"
+    },
+    {
+      "slug": "gaokao-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1675,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "gaokao-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1578,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "gaokao-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1438,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "gaokao-score-interpretation-2024-2025",
+      "category": "University Entrance",
+      "wordCount": 2020,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "suneung---csat-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 2017,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "suneung---csat-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1752,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "suneung---csat-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1685,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "suneung---csat-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1517,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "suneung---csat-score-interpretation-2024-2025",
+      "category": "Language Proficiency",
+      "wordCount": 2126,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "jlpt-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1948,
+      "readTime": 10,
+      "status": "created"
+    },
+    {
+      "slug": "jlpt-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1665,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "jlpt-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1574,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "jlpt-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1425,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "jlpt-score-interpretation-2024-2025",
+      "category": "University Entrance",
+      "wordCount": 2017,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "jamb-utme-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1973,
+      "readTime": 10,
+      "status": "created"
+    },
+    {
+      "slug": "jamb-utme-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1711,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "jamb-utme-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1634,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "jamb-utme-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1473,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "jamb-utme-score-interpretation-2024-2025",
+      "category": "University Entrance / National Assessment",
+      "wordCount": 2064,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "enem-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1962,
+      "readTime": 10,
+      "status": "created"
+    },
+    {
+      "slug": "enem-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1684,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "enem-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1589,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "enem-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1452,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "enem-score-interpretation-2024-2025",
+      "category": "University Entrance / School-Leaving",
+      "wordCount": 2023,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "abitur-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1959,
+      "readTime": 10,
+      "status": "created"
+    },
+    {
+      "slug": "abitur-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1685,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "abitur-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1590,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "abitur-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1449,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "abitur-score-interpretation-2024-2025",
+      "category": "University Entrance / School-Leaving",
+      "wordCount": 2021,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "baccalaureat-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1952,
+      "readTime": 10,
+      "status": "created"
+    },
+    {
+      "slug": "baccalaureat-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1674,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "baccalaureat-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1575,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "baccalaureat-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1437,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "baccalaureat-score-interpretation-2024-2025",
+      "category": "Medical School Admissions",
+      "wordCount": 2018,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "ucat-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1949,
+      "readTime": 10,
+      "status": "created"
+    },
+    {
+      "slug": "ucat-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1672,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "ucat-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1579,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "ucat-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1434,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "ucat-score-interpretation-2024-2025",
+      "category": "English Proficiency",
+      "wordCount": 2017,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "pte-academic-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1975,
+      "readTime": 10,
+      "status": "created"
+    },
+    {
+      "slug": "pte-academic-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1710,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "pte-academic-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1635,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "pte-academic-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1473,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "pte-academic-score-interpretation-2024-2025",
+      "category": "English Proficiency",
+      "wordCount": 2064,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "duolingo-english-test-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1988,
+      "readTime": 10,
+      "status": "created"
+    },
+    {
+      "slug": "duolingo-english-test-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1738,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "duolingo-english-test-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1681,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "duolingo-english-test-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1493,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "duolingo-english-test-score-interpretation-2024-2025",
+      "category": "Technology Certification / Cloud",
+      "wordCount": 2108,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "aws-saa-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1970,
+      "readTime": 10,
+      "status": "created"
+    },
+    {
+      "slug": "aws-saa-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1699,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "aws-saa-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1622,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "aws-saa-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1458,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "aws-saa-score-interpretation-2024-2025",
+      "category": "Professional Certification / Accounting",
+      "wordCount": 2064,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "ca-icai-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1978,
+      "readTime": 10,
+      "status": "created"
+    },
+    {
+      "slug": "ca-icai-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1708,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "ca-icai-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1637,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "ca-icai-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1472,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "ca-icai-score-interpretation-2024-2025",
+      "category": "Defence / Government Recruitment",
+      "wordCount": 2064,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "nda-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1964,
+      "readTime": 10,
+      "status": "created"
+    },
+    {
+      "slug": "nda-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1680,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "nda-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1587,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "nda-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1449,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "nda-score-interpretation-2024-2025",
+      "category": "High School / College Credit",
+      "wordCount": 2023,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "ap-exams-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1973,
+      "readTime": 10,
+      "status": "created"
+    },
+    {
+      "slug": "ap-exams-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1700,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "ap-exams-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1627,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "ap-exams-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1460,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "ap-exams-score-interpretation-2024-2025",
+      "category": "Professional Licensure / Law",
+      "wordCount": 2064,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "ube---bar-exam-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 2059,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "ube---bar-exam-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1800,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "ube---bar-exam-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1745,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "ube---bar-exam-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1569,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "ube---bar-exam-score-interpretation-2024-2025",
+      "category": "Professional Certification / Accounting",
+      "wordCount": 2185,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "acca-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1949,
+      "readTime": 10,
+      "status": "created"
+    },
+    {
+      "slug": "acca-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1669,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "acca-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1576,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "acca-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1431,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "acca-score-interpretation-2024-2025",
+      "category": "Professional Licensure / Engineering",
+      "wordCount": 2017,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "fe-exam-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1959,
+      "readTime": 10,
+      "status": "created"
+    },
+    {
+      "slug": "fe-exam-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1700,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "fe-exam-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1623,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "fe-exam-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1456,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "fe-exam-score-interpretation-2024-2025",
+      "category": "Professional Licensure / Teaching",
+      "wordCount": 2058,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "praxis-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1945,
+      "readTime": 10,
+      "status": "created"
+    },
+    {
+      "slug": "praxis-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1667,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "praxis-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1576,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "praxis-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1428,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "praxis-score-interpretation-2024-2025",
+      "category": "Military Entrance",
+      "wordCount": 2014,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "asvab-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1942,
+      "readTime": 10,
+      "status": "created"
+    },
+    {
+      "slug": "asvab-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1668,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "asvab-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1579,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "asvab-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1429,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "asvab-score-interpretation-2024-2025",
+      "category": "High School / University Preparation",
+      "wordCount": 2011,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "ib-diploma-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1992,
+      "readTime": 10,
+      "status": "created"
+    },
+    {
+      "slug": "ib-diploma-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1717,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "ib-diploma-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1646,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "ib-diploma-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1483,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "ib-diploma-score-interpretation-2024-2025",
+      "category": "High School / University Entrance",
+      "wordCount": 2073,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "a-levels-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1930,
+      "readTime": 10,
+      "status": "created"
+    },
+    {
+      "slug": "a-levels-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1645,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "a-levels-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1554,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "a-levels-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1398,
+      "readTime": 7,
+      "status": "created"
+    },
+    {
+      "slug": "a-levels-score-interpretation-2024-2025",
+      "category": "University Entrance",
+      "wordCount": 2006,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "evau---selectividad-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 2020,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "evau---selectividad-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1755,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "evau---selectividad-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1688,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "evau---selectividad-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1523,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "evau---selectividad-score-interpretation-2024-2025",
+      "category": "Nursing Entrance",
+      "wordCount": 2126,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "teas-7-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1967,
+      "readTime": 10,
+      "status": "created"
+    },
+    {
+      "slug": "teas-7-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1703,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "teas-7-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1632,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "teas-7-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1464,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "teas-7-score-interpretation-2024-2025",
+      "category": "School-Leaving / University Entrance",
+      "wordCount": 2058,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "kcse-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1970,
+      "readTime": 10,
+      "status": "created"
+    },
+    {
+      "slug": "kcse-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1673,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "kcse-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1582,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "kcse-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1438,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "kcse-score-interpretation-2024-2025",
+      "category": "School-Leaving / University Entrance",
+      "wordCount": 2027,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "nsc-matric-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1986,
+      "readTime": 10,
+      "status": "created"
+    },
+    {
+      "slug": "nsc-matric-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1712,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "nsc-matric-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1635,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "nsc-matric-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1474,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "nsc-matric-score-interpretation-2024-2025",
+      "category": "Medical Licensure",
+      "wordCount": 2071,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "mccqe-i-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1963,
+      "readTime": 10,
+      "status": "created"
+    },
+    {
+      "slug": "mccqe-i-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1696,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "mccqe-i-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1621,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "mccqe-i-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1455,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "mccqe-i-score-interpretation-2024-2025",
+      "category": "Medical Licensure / IMG",
+      "wordCount": 2058,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "amc-mcq-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1965,
+      "readTime": 10,
+      "status": "created"
+    },
+    {
+      "slug": "amc-mcq-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1696,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "amc-mcq-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1621,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "amc-mcq-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1454,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "amc-mcq-score-interpretation-2024-2025",
+      "category": "Law Entrance",
+      "wordCount": 2063,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "lnat-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1962,
+      "readTime": 10,
+      "status": "created"
+    },
+    {
+      "slug": "lnat-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1680,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "lnat-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1587,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "lnat-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1447,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "lnat-score-interpretation-2024-2025",
+      "category": "Medical/Graduate Medical Admissions",
+      "wordCount": 2023,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "gamsat-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1953,
+      "readTime": 10,
+      "status": "created"
+    },
+    {
+      "slug": "gamsat-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1673,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "gamsat-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1586,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "gamsat-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1441,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "gamsat-score-interpretation-2024-2025",
+      "category": "Professional Licensure / Pharmacy",
+      "wordCount": 2016,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "naplex-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1941,
+      "readTime": 10,
+      "status": "created"
+    },
+    {
+      "slug": "naplex-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1655,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "naplex-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1564,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "naplex-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1412,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "naplex-score-interpretation-2024-2025",
+      "category": "Graduate Admissions / Subject Tests",
+      "wordCount": 2014,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "gre-subject-tests-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1987,
+      "readTime": 10,
+      "status": "created"
+    },
+    {
+      "slug": "gre-subject-tests-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1724,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "gre-subject-tests-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1669,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "gre-subject-tests-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1478,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "gre-subject-tests-score-interpretation-2024-2025",
+      "category": "English Proficiency / Immigration",
+      "wordCount": 2110,
+      "readTime": 11,
+      "status": "created"
+    },
+    {
+      "slug": "celpip-complete-guide-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1949,
+      "readTime": 10,
+      "status": "created"
+    },
+    {
+      "slug": "celpip-study-plan-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1672,
+      "readTime": 9,
+      "status": "created"
+    },
+    {
+      "slug": "celpip-mastery-strategies-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1581,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "celpip-vs-alternatives-2024-2025",
+      "category": "General Exams",
+      "wordCount": 1438,
+      "readTime": 8,
+      "status": "created"
+    },
+    {
+      "slug": "celpip-score-interpretation-2024-2025",
+      "category": "General Exams",
+      "wordCount": 2016,
+      "readTime": 11,
+      "status": "created"
+    }
+  ]
+}
