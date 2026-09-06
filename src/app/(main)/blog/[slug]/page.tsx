@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import { Metadata } from 'next';
 import { readingTime, formatNumber } from '@/lib/utils';
-import { extractHeadings } from '@/lib/content-parser';
+import { extractHeadings, markdownToHtml } from '@/lib/content-parser';
 import { JsonLd } from '@/components/seo/json-ld';
 import { BlogCard } from '@/components/blog/blog-card';
 import { ReadingProgressBar } from '@/components/ui/reading-progress-bar';
@@ -79,8 +79,14 @@ export default async function BlogPostPage({ params }: { params: Params }) {
     ? new Date(post.publishedAt).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })
     : '';
 
-  // Convert Markdown → HTML once so article and TOC share the same heading IDs
-
+  // Content is stored as HTML by the parser; only convert if it still looks like raw Markdown
+  const trimmedContent = (post.content || '').trim();
+  const looksLikeMarkdown = /^(?:#{1,6}\s|[-*+]\s+|\d+\.\s)/m.test(trimmedContent) ||
+    /(?:\n)(?:#{1,6}\s|[-*+]\s+|\d+\.\s)/.test(trimmedContent) ||
+    /\*\*[^*]+\*\*/.test(trimmedContent) ||
+    /`[^`]+`/.test(trimmedContent) ||
+    /\[([^\]]+)\]\(([^)]+)\)/.test(trimmedContent);
+  const articleHtml = looksLikeMarkdown ? markdownToHtml(post.content) : (post.content || '');
 
   const articleSchema = {
     '@context': 'https://schema.org',
@@ -117,10 +123,10 @@ export default async function BlogPostPage({ params }: { params: Params }) {
         </div>
 
         {/* Two-column layout: article + TOC sidebar */}
-        <div className="max-w-6xl mx-auto px-4 py-8">
-          <div className="flex gap-8 items-start">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+          <div className="flex gap-8 xl:gap-12 items-start">
             {/* Main Article */}
-            <article className="flex-1 min-w-0">
+            <article className="flex-1 min-w-0 max-w-3xl">
               <div className="bg-white dark:bg-dark-card rounded-3xl overflow-hidden border border-gray-100 dark:border-dark-border shadow-sm">
 
                 {/* Cover Image */}
@@ -160,6 +166,20 @@ export default async function BlogPostPage({ params }: { params: Params }) {
                 )}
 
                 <div className="px-6 md:px-10 lg:px-14 pt-8 pb-12">
+
+                  {/* Key Takeaway Box - auto-generated from first paragraph or excerpt */}
+                  {post.excerpt && (
+                    <div className="mb-8 p-5 md:p-6 bg-gradient-to-br from-amber-50 to-yellow-50 dark:from-amber-900/15 dark:to-yellow-900/10 rounded-2xl border border-amber-200/60 dark:border-amber-700/30 shadow-sm">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-lg">🔑</span>
+                        <span className="text-xs font-bold text-amber-800 dark:text-amber-400 uppercase tracking-widest">Key Takeaway</span>
+                      </div>
+                      <p className="text-sm md:text-base text-amber-900 dark:text-amber-100 leading-relaxed">
+                        {post.excerpt}
+                      </p>
+                    </div>
+                  )}
+
                   {/* Category & Tags — only when no featured image */}
                   {!post.featuredImage && (
                     <div className="flex items-center gap-3 mb-5 flex-wrap">
@@ -262,9 +282,10 @@ export default async function BlogPostPage({ params }: { params: Params }) {
 
                   {/* ─── Article Content ─── */}
                   <ArticleRenderer
-                    content={post.content}
+                    content={articleHtml}
                     showToc={true}
-                    tocItems={extractHeadings(post.content)}
+                    tocItems={extractHeadings(articleHtml)}
+                    isHtml={!looksLikeMarkdown}
                   />
 
                   {/* Bottom Tags */}

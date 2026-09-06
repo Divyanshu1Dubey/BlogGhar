@@ -39,7 +39,7 @@ export interface ParsedContent {
   title: string;
   slug: string;
   excerpt: string;
-  content: string; // HTML
+  content: string;
   suggestedCategory: string;
   tags: string[];
   readTime: number;
@@ -48,6 +48,81 @@ export interface ParsedContent {
 
 export async function readFiles(files: File[]): Promise<string[]> {
   return Promise.all(files.map(file => file.text()));
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+//  SPECIAL BLOCKS — Tip, Warning, Callout, FAQ, Source, Key Takeaway
+// ═══════════════════════════════════════════════════════════════════════
+
+const BLOCK_MARKERS: Record<string, { class: string; icon: string; title: string }> = {
+  ':::tip':       { class: 'article-tip',            icon: '💡', title: 'Pro Tip' },
+  ':::warning':   { class: 'article-warning',        icon: '⚠️', title: 'Warning' },
+  ':::callout':   { class: 'article-callout',        icon: '📢', title: 'Important' },
+  ':::important': { class: 'article-callout',        icon: '❗', title: 'Important' },
+  ':::key-takeaway': { class: 'article-key-takeaway', icon: '🔑', title: 'Key Takeaway' },
+  ':::faq':       { class: 'article-faq',            icon: '❓', title: 'FAQ' },
+  ':::source':    { class: 'article-source',         icon: '📚', title: 'Sources' },
+};
+
+function convertSpecialBlocks(html: string): string {
+  // Match block markers on their own lines: :::type content... :::
+  const blockRegex = /(?:^|\n)(:::tip|:::warning|:::callout|:::important|:::key-takeaway|:::faq|:::source)\s*\n([\s\S]*?)\n:::/g;
+
+  return html.replace(blockRegex, (_, marker, content) => {
+    const info = BLOCK_MARKERS[marker] || BLOCK_MARKERS[':::callout'];
+    // Process inline markdown inside the block content
+    const processedContent = content
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.+?)\*/g, '<em>$1</em>')
+      .replace(/`([^`]+)`/g, '<code>$1</code>')
+      .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+
+    return `<div class="${info.class}"><div class="article-callout-title">${info.icon} ${info.title}</div><div class="article-callout-content">${processedContent}</div></div>`;
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+//  MARKDOWN → HTML CONVERTER
+// ═══════════════════════════════════════════════════════════════════════
+
+// ── HTML escape ─────────────────────────────────────────────────────
+function escapeHtml(text: string): string {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+// ── Heading ID generation ──────────────────────────────────────────
+function makeHeadingId(text: string, seen: Map<string, number>): string {
+  let id = text
+    .toLowerCase()
+    .replace(/<[^>]*>/g, '')
+    .replace(/[^\p{L}\p{N}\s-]/gu, '')
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .substring(0, 60);
+
+  if (!id) return 'section';
+
+  const original = id;
+  let counter = 1;
+  while (seen.has(id)) {
+    id = `${original}-${counter++}`;
+  }
+  seen.set(id, 1);
+  return id;
+}
+
+// ── Inline Markdown escaping (for headings) ─────────────────────────
+function escapeInlineMarkdown(text: string): string {
+  return text
+    .replace(/\*\*(.+?)\*\*/g, '$1')
+    .replace(/\*(.+?)\*/g, '$1')
+    .replace(/`(.+?)`/g, '$1');
 }
 
 // ── URL safety ──────────────────────────────────────────────────────
@@ -63,19 +138,7 @@ function sanitizeUrl(url: string): string | null {
   return null;
 }
 
-// ── HTML escape ────────────────────────────────────────────────────
-function escapeHtml(text: string): string {
-  const map: Record<string, string> = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#039;',
-  };
-  return text.replace(/[&<>"']/g, (m) => map[m]);
-}
-
-// ── Inline formatting ──────────────────────────────────────────────
+// ── Inline formatting (used by list parser) ─────────────────────────
 function inlineFormat(text: string): string {
   let result = text;
 
@@ -101,7 +164,7 @@ function inlineFormat(text: string): string {
   result = result.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
 
   // Italic: *text*
-  result = result.replace(/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/g, '<em>$1</em>');
+  result = result.replace(/(?<!\*)\*([^*]+?)\*(?!\*)/g, '<em>$1</em>');
 
   // Inline code: `code`
   result = result.replace(/`([^`]+)`/g, '<code>$1</code>');
@@ -109,197 +172,317 @@ function inlineFormat(text: string): string {
   return result;
 }
 
-// ── Parse a single line of a pipe-delimited table ──────────────────
-function parseTableRow(line: string): string[] {
-  const trimmed = line.trim();
-  const inner = trimmed.startsWith('|') && trimmed.endsWith('|')
-    ? trimmed.slice(1, -1)
-    : trimmed;
-  return inner.split('|').map((c) => c.trim());
-}
+// ── Table rendering ──────────────────────────────────────────────
+function renderTable(tableText: string): string {
+  const rows = tableText.split('\n').filter(l => l.trim().match(/^\|.+\|$/));
+  if (rows.length < 2) return tableText;
 
-// ── Unordered list: returns [html, nextIndex] ──────────────────────
-function parseUnorderedList(lines: string[], startIdx: number): { html: string; nextIdx: number } {
-  const items: string[] = [];
-  let i = startIdx;
-  while (i < lines.length && lines[i].match(/^[-*+]\s+/)) {
-    items.push(`  <li>${inlineFormat(lines[i].replace(/^[-*+]\s+/, ''))}</li>`);
-    i++;
-  }
-  return { html: `<ul>\n${items.join('\n')}\n</ul>`, nextIdx: i };
-}
-
-// ── Ordered list: returns [html, nextIndex] ────────────────────────
-function parseOrderedList(lines: string[], startIdx: number): { html: string; nextIdx: number } {
-  const items: string[] = [];
-  let i = startIdx;
-  while (i < lines.length && lines[i].match(/^\d+\.\s+/)) {
-    items.push(`  <li>${inlineFormat(lines[i].replace(/^\d+\.\s+/, ''))}</li>`);
-    i++;
-  }
-  return { html: `<ol>\n${items.join('\n')}\n</ol>`, nextIdx: i };
-}
-
-// ── Table: returns [html, nextIndex] ──────────────────────────────
-function parseTable(lines: string[], startIdx: number): { html: string; nextIdx: number } {
-  const headerLine = lines[startIdx];
-  const headers = parseTableRow(headerLine);
-  const separatorLine = lines[startIdx + 1];
-  const separators = parseTableRow(separatorLine);
-
-  const rows: string[][] = [];
-  let idx = startIdx + 2;
-  while (idx < lines.length && lines[idx].includes('|')) {
-    rows.push(parseTableRow(lines[idx]));
-    idx++;
-  }
-
-  const alignAttr = (sep: string) => {
-    if (sep.startsWith(':') && sep.endsWith(':')) return ' align="center"';
-    if (sep.endsWith(':')) return ' align="right"';
-    return '';
-  };
-
-  let html = '<div class="table-wrapper"><table>\n<thead>\n<tr>\n';
-  for (let c = 0; c < headers.length; c++) {
-    html += `  <th${alignAttr(separators[c] || '')}>${inlineFormat(headers[c])}</th>\n`;
-  }
-  html += '</tr>\n</thead>\n<tbody>\n';
+  let headerRow = '';
+  const bodyRows: string[] = [];
+  let isFirstDataRow = true;
 
   for (const row of rows) {
-    html += '<tr>\n';
-    for (let c = 0; c < Math.max(headers.length, row.length); c++) {
-      html += `  <td>${inlineFormat(row[c] || '')}</td>\n`;
+    const cleaned = row.replace(/^\|/, '').replace(/\|$/, '');
+    const cells = cleaned.split('|').map(c => c.trim());
+    if (cells.every(c => /^:?-+:?$/.test(c))) continue;
+    if (isFirstDataRow) {
+      headerRow = cleaned;
+      isFirstDataRow = false;
+    } else {
+      bodyRows.push(cleaned);
     }
-    html += '</tr>\n';
   }
 
-  html += '</tbody>\n</table></div>';
-  return { html, nextIdx: idx };
+  if (!headerRow && bodyRows.length === 0) return tableText;
+
+  const escapeCell = (cell: string) => inlineFormat(escapeHtml(cell.trim()));
+
+  let tableHtml = '<div class="article-table-wrapper"><table>';
+
+  if (headerRow) {
+    const headers = headerRow.split('|').map(c => escapeCell(c));
+    tableHtml += '<thead><tr>' + headers.map(h => `<th>${h}</th>`).join('') + '</tr></thead>';
+  }
+
+  if (bodyRows.length > 0) {
+    const tbodyRows = bodyRows.map(row => {
+      const cells = row.split('|').map(c => escapeCell(c));
+      return '<tr>' + cells.map(c => `<td>${c}</td>`).join('') + '</tr>';
+    });
+    tableHtml += '<tbody>' + tbodyRows.join('') + '</tbody>';
+  }
+
+  tableHtml += '</table></div>';
+  return tableHtml;
+}
+
+function convertTables(html: string): string {
+  const lines = html.split('\n');
+  const tables: string[] = [];
+  let inTable = false;
+  let tableLines: string[] = [];
+  const result: string[] = [];
+
+  for (let i = 0; i < lines.length; i++) {
+    const trimmed = lines[i].trim();
+    const isTableLine = trimmed.startsWith('|') && trimmed.endsWith('|');
+
+    if (isTableLine) {
+      if (!inTable) {
+        inTable = true;
+        tableLines = [];
+      }
+      tableLines.push(trimmed);
+
+      const nextLine = (i + 1 < lines.length) ? lines[i + 1].trim() : '';
+      if (!nextLine.startsWith('|') || !nextLine.endsWith('|')) {
+        tables.push(tableLines.join('\n'));
+        tableLines = [];
+        inTable = false;
+      }
+    } else {
+      result.push(lines[i]);
+    }
+  }
+
+  if (tableLines.length > 0) {
+    tables.push(tableLines.join('\n'));
+    result.push(...tableLines);
+  }
+
+  let joined = result.join('\n');
+
+  tables.forEach((table) => {
+    const tableHtml = renderTable(table);
+    joined = joined.replace(table, tableHtml);
+  });
+
+  return joined;
+}
+
+// ── List conversion ────────────────────────────────────────────────
+function convertLists(html: string): string {
+  const lines = html.split('\n');
+  const result: string[] = [];
+  const listStack: { type: 'ul' | 'ol'; items: string[] }[] = [];
+  let inList = false;
+
+  function closeList() {
+    while (listStack.length > 0) {
+      const list = listStack.pop()!;
+      const tag = list.type;
+      result.push(`<${tag}>${list.items.join('')}</${tag}>`);
+    }
+    inList = false;
+  }
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const trimmed = line.trim();
+
+    const ulMatch = trimmed.match(/^[-*+]\s+(.+)/);
+    const olMatch = trimmed.match(/^(\d+)\.\s+(.+)/);
+
+    if (ulMatch || olMatch) {
+      const listType: 'ul' | 'ol' = ulMatch ? 'ul' : 'ol';
+      const content = ulMatch ? ulMatch[1] : olMatch![2];
+
+      if (!inList) {
+        inList = true;
+        listStack.length = 0;
+      }
+
+      if (listStack.length > 0 && listStack[listStack.length - 1].type !== listType) {
+        closeList();
+        inList = true;
+      }
+
+      const processedContent = inlineFormat(escapeHtml(content));
+      if (listStack.length === 0) {
+        listStack.push({ type: listType, items: [] });
+      }
+      listStack[listStack.length - 1].items.push(`<li>${processedContent}</li>`);
+    } else {
+      if (inList) {
+        closeList();
+      }
+      result.push(line);
+    }
+  }
+
+  if (inList) {
+    closeList();
+  }
+
+  return result.join('\n');
+}
+
+// ── Inline formatting (for paragraphs and inline contexts) ─────────
+function applyInlineFormatting(html: string): string {
+  html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_m, alt, url) => {
+    const safeAlt = escapeHtml(alt);
+    return `<img src="${url}" alt="${safeAlt}" loading="lazy" />`;
+  });
+
+  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_m, label, url) => {
+    const safeLabel = escapeHtml(label);
+    const safeUrl = url.replace(/"/g, '&quot;');
+    return `<a href="${safeUrl}">${safeLabel}</a>`;
+  });
+
+  // Bold+Italic
+  html = html.replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>');
+  html = html.replace(/___(.+?)___/g, '<strong><em>$1</em></strong>');
+
+  // Bold
+  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  html = html.replace(/__(.+?)__/g, '<strong>$1</strong>');
+
+  // Italic
+  html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+  html = html.replace(/_(.+?)_/g, '<em>$1</em>');
+
+  // Strikethrough
+  html = html.replace(/~~(.+?)~~/g, '<del>$1</del>');
+
+  // Inline code
+  html = html.replace(/`([^`\n]+)`/g, '<code>$1</code>');
+
+  return html;
+}
+
+// ── HTML Sanitization ──────────────────────────────────────────────
+function sanitizeHtml(html: string): string {
+  html = html.replace(/<script[\s\S]*?<\/script>/gi, '');
+  html = html.replace(/\s(on\w+)=["'][^"']*["']/gi, '');
+  html = html.replace(/\s(on\w+)=\S+/gi, '');
+  html = html.replace(/(href|src)=["'](?:javascript|data|vbscript):[^"']*["']/gi, (_m, attr) => `${attr}=""`);
+  return html;
 }
 
 // ── Main Markdown → HTML converter ────────────────────────────────
 export function markdownToHtml(md: string): string {
-  const lines = md.split('\n');
-  const blocks: string[] = [];
-  let i = 0;
+  if (!md || !md.trim()) return '';
 
-  while (i < lines.length) {
+  let html = md.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+
+  // Phase 1: Extract code blocks (protect from further processing)
+  const codeBlocks: string[] = [];
+  html = html.replace(/```([\s\S]*?)```/g, (match) => {
+    codeBlocks.push(match);
+    return `\n%%CODEBLOCK_${codeBlocks.length - 1}%%\n`;
+  });
+
+  // Inline code
+  const inlineCodes: string[] = [];
+  html = html.replace(/`([^`\n]+)`/g, (match) => {
+    inlineCodes.push(match);
+    return `%%INLINECODE_${inlineCodes.length - 1}%%`;
+  });
+
+  // Phase 1.5: Special blocks (::tip, :::warning, etc.)
+  html = convertSpecialBlocks(html);
+
+  // Phase 2: Headings (with anchor IDs for TOC)
+  const headingIds = new Map<string, number>();
+
+  html = html.replace(/^(#{1,6})\s+(.+)$/gm, (_, hashes, title) => {
+    const level = Math.min(hashes.length, 3);
+    const plainText = title.replace(/\*\*(.+?)\*\*/g, '$1')
+                           .replace(/\*(.+?)\*/g, '$1')
+                           .replace(/`(.+?)`/g, '$1')
+                           .replace(/<[^>]*>/g, '')
+                           .trim();
+
+    const id = makeHeadingId(plainText, headingIds);
+    const escaped = escapeInlineMarkdown(title.trim());
+    return `<h${level} id="${id}">${escaped}</h${level}>`;
+  });
+
+  // Phase 3: Horizontal rules
+  html = html.replace(/^([-*_])(?:\s*\1){2,}\s*$/gm, '<hr>');
+
+  // Phase 4: Blockquotes
+  const lines = html.split('\n');
+  const processedLines: string[] = [];
+  let inQuote = false;
+  let quoteContent: string[] = [];
+
+  for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
+    const quoteMatch = line.match(/^>\s?(.*)/);
 
-    // Empty line — skip
-    if (line.trim() === '') {
-      i++;
-      continue;
-    }
-
-    // Fenced code block
-    if (line.match(/^```/)) {
-      const lang = line.replace(/^```/, '').trim();
-      const codeLines: string[] = [];
-      i++;
-      while (i < lines.length && !lines[i].match(/^```/)) {
-        codeLines.push(lines[i]);
-        i++;
+    if (quoteMatch) {
+      if (!inQuote) {
+        inQuote = true;
+        quoteContent = [];
       }
-      if (i < lines.length) i++;
-      const escapedCode = escapeHtml(codeLines.join('\n'));
-      blocks.push(`<pre><code${lang ? ` class="language-${escapeHtml(lang)}"` : ''}>${escapedCode}</code></pre>`);
-      continue;
-    }
-
-    // Horizontal rule
-    if (line.match(/^(-{3,}|\*{3,}|_{3,})\s*$/)) {
-      blocks.push('<hr />');
-      i++;
-      continue;
-    }
-
-    // Headings (h1-h6)
-    const headingMatch = line.match(/^(#{1,6})\s+(.+)$/);
-    if (headingMatch) {
-      const level = headingMatch[1].length;
-      const text = headingMatch[2];
-      const id = text
-        .toLowerCase()
-        .replace(/[^\wऀ-ॿ\s-]/g, '')
-        .trim()
-        .replace(/\s+/g, '-');
-      const lvl = Math.min(level, 6);
-      blocks.push(`<h${lvl} id="${id}">${inlineFormat(text)}</h${lvl}>`);
-      i++;
-      continue;
-    }
-
-    // Blockquote
-    if (line.match(/^>\s?/)) {
-      const quoteLines: string[] = [];
-      while (i < lines.length && lines[i].match(/^>\s?/)) {
-        quoteLines.push(lines[i].replace(/^>\s?/, ''));
-        i++;
+      quoteContent.push(quoteMatch[1]);
+    } else {
+      if (inQuote) {
+        processedLines.push(`<blockquote>${quoteContent.join('<br>')}</blockquote>`);
+        inQuote = false;
+        quoteContent = [];
       }
-      blocks.push(`<blockquote><p>${inlineFormat(quoteLines.join(' '))}</p></blockquote>`);
-      continue;
-    }
-
-    // Unordered list
-    if (line.match(/^[-*+]\s+/)) {
-      const { html: ulHtml, nextIdx } = parseUnorderedList(lines, i);
-      blocks.push(ulHtml);
-      i = nextIdx;
-      continue;
-    }
-
-    // Ordered list
-    if (line.match(/^\d+\.\s+/)) {
-      const { html: olHtml, nextIdx } = parseOrderedList(lines, i);
-      blocks.push(olHtml);
-      i = nextIdx;
-      continue;
-    }
-
-    // Table (GFM)
-    if (line.includes('|') && i + 1 < lines.length && lines[i + 1].match(/^\|[\s\-:|]+\|$/)) {
-      const { html: tableHtml, nextIdx } = parseTable(lines, i);
-      blocks.push(tableHtml);
-      i = nextIdx;
-      continue;
-    }
-
-    // Paragraph — collect consecutive non-empty, non-block lines
-    const paraLines: string[] = [line];
-    i++;
-    while (
-      i < lines.length &&
-      lines[i].trim() !== '' &&
-      !lines[i].match(/^(#{1,6}\s|[-*+]\s|\d+\.\s|>\s?|```|(-{3,}|\*{3,}|_{3,})\s*$)/) &&
-      !(lines[i].includes('|') && i + 1 < lines.length && lines[i + 1].match(/^\|[\s\-:|]+\|$/))
-    ) {
-      paraLines.push(lines[i]);
-      i++;
-    }
-    const text = paraLines.join(' ').trim();
-    if (text) {
-      blocks.push(`<p>${inlineFormat(text)}</p>`);
+      processedLines.push(line);
     }
   }
+  if (inQuote) {
+    processedLines.push(`<blockquote>${quoteContent.join('<br>')}</blockquote>`);
+  }
+  html = processedLines.join('\n');
 
-  return blocks.join('\n');
+  // Phase 5: Tables
+  html = convertTables(html);
+
+  // Phase 6: Lists
+  html = convertLists(html);
+
+  // Phase 7: Remaining inline formatting (bold, italic, links)
+  html = applyInlineFormatting(html);
+
+  // Phase 8: Paragraphs
+  const blocks = html.split(/\n\n+/);
+  html = blocks
+    .map((block) => {
+      const trimmed = block.trim();
+      if (!trimmed) return '';
+      if (/^<(h[1-6]|blockquote|hr|ul|ol|li|table|pre|%%CODEBLOCK)/.test(trimmed)) {
+        return trimmed;
+      }
+      return `<p>${trimmed.replace(/\n/g, '<br>')}</p>`;
+    })
+    .join('\n\n');
+
+  // Phase 9: Restore code blocks
+  codeBlocks.forEach((block, i) => {
+    const langMatch = block.match(/```(\w*)/);
+    const lang = langMatch ? langMatch[1] : '';
+    const code = block.replace(/```\w*\n?/, '').replace(/```$/, '').trim();
+    const escapedCode = escapeHtml(code);
+    html = html.replace(`%%CODEBLOCK_${i}%%`, `<pre><code${lang ? ` class="language-${lang}"` : ''}>${escapedCode}</code></pre>`);
+  });
+
+  // Restore inline code
+  inlineCodes.forEach((code, i) => {
+    const unquoted = code.replace(/^`|`$/g, '');
+    html = html.replace(`%%INLINECODE_${i}%%`, `<code>${escapeHtml(unquoted)}</code>`);
+  });
+
+  return sanitizeHtml(html);
 }
+
+// ═══════════════════════════════════════════════════════════════════════
+//  PUBLIC API — parseContent, extractHeadings
+// ═══════════════════════════════════════════════════════════════════════
 
 // ── Public entry point ─────────────────────────────────────────────
 export function parseContent(rawText: string): ParsedContent {
   const text = rawText.trim();
   if (!text) {
     return {
-      title: '',
-      slug: '',
-      excerpt: '',
-      content: '',
-      suggestedCategory: 'TECHNOLOGY',
-      tags: [],
-      readTime: 1,
-      wordCount: 0,
+      title: '', slug: '', excerpt: '', content: '',
+      suggestedCategory: 'TECHNOLOGY', tags: [], readTime: 1, wordCount: 0,
     };
   }
 
@@ -336,8 +519,12 @@ export function parseContent(rawText: string): ParsedContent {
   const rawBody = contentLines.join('\n');
   const htmlContent = markdownToHtml(rawBody);
 
-  // Excerpt from first sentences
-  const plainText = rawBody.replace(/[#*_`>]/g, '').replace(/\n+/g, ' ').trim();
+  // Excerpt from first sentences (strip markdown markers)
+  const plainText = rawBody
+    .replace(/#{1,6}\s/g, '')
+    .replace(/[*_`>]/g, '')
+    .replace(/\n+/g, ' ')
+    .trim();
   const sentences = plainText.match(/[^.!?]+[.!?]+/g) || [plainText];
   const excerpt = sentences.slice(0, 3).join(' ').substring(0, 300).trim();
 

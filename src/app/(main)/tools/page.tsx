@@ -1,55 +1,55 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { JsonLd } from '@/components/seo/json-ld';
 
 const TOOL_ITEMS = [
-  { name: 'BMI Calculator', slug: 'bmi-calculator', description: 'Calculate your Body Mass Index', url: 'https://bloghar.com/tools/bmi-calculator' },
-  { name: 'Age Calculator', slug: 'age-calculator', description: 'Calculate exact age', url: 'https://bloghar.com/tools/age-calculator' },
-  { name: 'Percentage Calculator', slug: 'percentage-calculator', description: 'Calculate percentages', url: 'https://bloghar.com/tools/percentage-calculator' },
-  { name: 'EMI Calculator', slug: 'emi-calculator', description: 'Calculate loan EMI', url: 'https://bloghar.com/tools/emi-calculator' },
-  { name: 'GST Calculator', slug: 'gst-calculator', description: 'Calculate GST in India', url: 'https://bloghar.com/tools/gst-calculator' },
-  { name: 'Compound Interest', slug: 'compound-interest', description: 'Calculate compound interest', url: 'https://bloghar.com/tools/compound-interest' },
-  { name: 'Date Difference', slug: 'date-difference', description: 'Days between dates', url: 'https://bloghar.com/tools/date-difference' },
-  { name: 'GPA Calculator', slug: 'gpa-calculator', description: 'Calculate GPA', url: 'https://bloghar.com/tools/gpa-calculator' },
-  { name: 'Tip Calculator', slug: 'tip-calculator', description: 'Calculate tip & split bill', url: 'https://bloghar.com/tools/tip-calculator' },
-  { name: 'Discount Calculator', slug: 'discount-calculator', description: 'Calculate discount', url: 'https://bloghar.com/tools/discount-calculator' },
-  { name: 'Time Zone Converter', slug: 'timezone-converter', description: 'Convert time zones', url: 'https://bloghar.com/tools/timezone-converter' },
-  { name: 'Currency Converter', slug: 'currency-converter', description: 'Convert currencies', url: 'https://bloghar.com/tools/currency-converter' },
-  { name: 'Length Converter', slug: 'length-converter', description: 'Convert length units', url: 'https://bloghar.com/tools/length-converter' },
-  { name: 'Weight Converter', slug: 'weight-converter', description: 'Convert weight units', url: 'https://bloghar.com/tools/weight-converter' },
-  { name: 'Temperature Converter', slug: 'temperature-converter', description: 'Convert temperature', url: 'https://bloghar.com/tools/temperature-converter' },
-  { name: 'Speed Converter', slug: 'speed-converter', description: 'Convert speed units', url: 'https://bloghar.com/tools/speed-converter' },
-  { name: 'Area Converter', slug: 'area-converter', description: 'Convert area units', url: 'https://bloghar.com/tools/area-converter' },
-  { name: 'Number to Words', slug: 'number-to-words', description: 'Numbers to words', url: 'https://bloghar.com/tools/number-to-words' },
-  { name: 'Roman Numeral', slug: 'roman-numeral', description: 'Roman numeral converter', url: 'https://bloghar.com/tools/roman-numeral' },
-  { name: 'Word Counter', slug: 'word-counter', description: 'Count words & chars', url: 'https://bloghar.com/tools/word-counter' },
-  { name: 'Text Case Converter', slug: 'text-case-converter', description: 'Convert text case', url: 'https://bloghar.com/tools/text-case-converter' },
-  { name: 'JSON Formatter', slug: 'json-formatter', description: 'Format & validate JSON', url: 'https://bloghar.com/tools/json-formatter' },
-  { name: 'Password Generator', slug: 'password-generator', description: 'Generate passwords', url: 'https://bloghar.com/tools/password-generator' },
-  { name: 'UUID Generator', slug: 'uuid-generator', description: 'Generate UUIDs', url: 'https://bloghar.com/tools/uuid-generator' },
-  { name: 'Markdown Editor', slug: 'markdown-editor', description: 'Write & preview markdown', url: 'https://bloghar.com/tools/markdown-editor' },
-  { name: 'Online Notepad', slug: 'online-notepad', description: 'Quick online notepad', url: 'https://bloghar.com/tools/online-notepad' },
-  { name: 'QR Code Generator', slug: 'qr-code-generator', description: 'Generate QR codes', url: 'https://bloghar.com/tools/qr-code-generator' },
-  { name: 'Color Palette', slug: 'color-palette', description: 'Generate color palettes', url: 'https://bloghar.com/tools/color-palette' },
-  { name: 'Base64 Encoder', slug: 'base64-encoder', description: 'Encode/decode Base64', url: 'https://bloghar.com/tools/base64-encoder' },
-  { name: 'Hash Generator', slug: 'hash-generator', description: 'Generate MD5, SHA256', url: 'https://bloghar.com/tools/hash-generator' },
+  { name: 'EMI Calculator', slug: 'emi-calculator', description: 'Calculate home, car, or personal loan EMI with amortization schedule', icon: '🏦' },
+  { name: 'SIP Calculator', slug: 'sip-calculator', description: 'Calculate SIP returns with year-by-year growth projection', icon: '📈' },
+  { name: 'Income Tax Calculator', slug: 'income-tax-india', description: 'Compare Old vs New tax regimes with HRA, 80C deductions', icon: '🇮🇳' },
+  { name: 'Loan Affordability', slug: 'loan-affordability', description: 'Find out how much home or car loan you can actually afford', icon: '🏠' },
+  { name: 'Percentage Calculator', slug: 'percentage-calculator', description: 'Calculate percentages, change, and difference', icon: '%' },
+  { name: 'BMI Calculator', slug: 'bmi-calculator', description: 'Calculate Body Mass Index and ideal weight range', icon: '⚖️' },
+  { name: 'Age Calculator', slug: 'age-calculator', description: 'Calculate exact age in years, months, and days', icon: '🎂' },
+  { name: 'Date Difference', slug: 'date-difference', description: 'Calculate days, weeks, months between two dates', icon: '📅' },
+  { name: 'GPA Calculator', slug: 'gpa-calculator', description: 'Calculate GPA from course grades and credit hours', icon: '🎓' },
+  { name: 'Compound Interest', slug: 'compound-interest', description: 'Calculate compound interest with year-by-year growth', icon: '💰' },
+  { name: 'Discount Calculator', slug: 'discount-calculator', description: 'Calculate discounted price and savings amount', icon: '🏷️' },
+  { name: 'Tip Calculator', slug: 'tip-calculator', description: 'Calculate tip and split the bill among friends', icon: '💵' },
+  { name: 'Multi-Unit Converter', slug: 'unit-converter', description: 'Convert length, weight, temperature, speed, and more', icon: '📏' },
+  { name: 'Word Counter', slug: 'word-counter', description: 'Count words, characters, sentences, and reading time', icon: '📝' },
+  { name: 'JSON Formatter', slug: 'json-formatter', description: 'Format, validate, and minify JSON data', icon: '{ }' },
+  { name: 'Password Generator', slug: 'password-generator', description: 'Generate strong passwords with strength indicator', icon: '🔒' },
+  { name: 'Base64 Encoder', slug: 'base64-encoder', description: 'Encode text to Base64 or decode it back', icon: '🔤' },
+  { name: 'QR Code Generator', slug: 'qr-code-generator', description: 'Generate QR codes for URLs, text, or any content', icon: '📱' },
+  { name: 'Image Compressor', slug: 'image-compressor', description: 'Compress images in browser — private, no upload', icon: '🖼️' },
+  { name: 'PDF Merge & Split', slug: 'pdf-merge-split', description: 'Merge multiple PDFs or split a PDF into pages', icon: '📄' },
+  { name: 'Text Diff Checker', slug: 'text-diff', description: 'Compare two texts side-by-side with differences highlighted', icon: '🔍' },
+  { name: 'Color Palette & Contrast', slug: 'color-palette', description: 'Generate color palettes and check WCAG contrast ratios', icon: '🎨' },
+  { name: 'Markdown to HTML', slug: 'markdown-html', description: 'Convert Markdown to HTML with live preview', icon: '📋' },
+  { name: 'Time Zone Converter', slug: 'timezone-converter', description: 'Convert time between world time zones', icon: '🌍' },
 ];
 
 const categories: Record<string, string[]> = {
-  'Calculators': ['bmi-calculator', 'age-calculator', 'percentage-calculator', 'emi-calculator', 'gst-calculator', 'compound-interest', 'date-difference', 'gpa-calculator', 'tip-calculator', 'discount-calculator', 'timezone-converter'],
-  'Converters': ['currency-converter', 'length-converter', 'weight-converter', 'temperature-converter', 'speed-converter', 'area-converter', 'number-to-words', 'roman-numeral'],
-  'Text Tools': ['word-counter', 'text-case-converter', 'json-formatter', 'password-generator', 'uuid-generator', 'markdown-editor', 'online-notepad'],
-  'Dev Tools': ['qr-code-generator', 'color-palette', 'base64-encoder', 'hash-generator'],
+  'Finance': ['emi-calculator', 'sip-calculator', 'income-tax-india', 'loan-affordability', 'compound-interest'],
+  'Calculators': ['percentage-calculator', 'bmi-calculator', 'discount-calculator', 'tip-calculator'],
+  'Date & Time': ['age-calculator', 'date-difference', 'timezone-converter'],
+  'Education': ['gpa-calculator'],
+  'Converters': ['unit-converter', 'base64-encoder'],
+  'Text Tools': ['word-counter'],
+  'Developer': ['json-formatter', 'text-diff', 'markdown-html'],
+  'Security': ['password-generator'],
+  'Media': ['image-compressor', 'qr-code-generator'],
+  'Documents': ['pdf-merge-split'],
+  'Design': ['color-palette'],
 };
-
-
 
 const toolListSchema = TOOL_ITEMS.map((tool, i) => ({
   '@type': 'ListItem',
   position: i + 1,
   name: tool.name,
-  url: tool.url,
+  url: `https://bloghar.com/tools/${tool.slug}`,
 }));
 
 export default function ToolsPage() {
@@ -65,7 +65,7 @@ export default function ToolsPage() {
     <div className="max-w-7xl mx-auto px-4 py-8">
       <div className="text-center mb-10">
         <h1 className="text-4xl font-display font-extrabold mb-3">🔧 Free Online Tools</h1>
-        <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">30+ free online tools — no registration required!</p>
+        <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">24 free online tools — no registration required, everything runs in your browser.</p>
       </div>
 
       <div className="max-w-xl mx-auto mb-6">
@@ -88,12 +88,12 @@ export default function ToolsPage() {
             <h2 className="text-2xl font-display font-bold mb-6">{cat} <span className="text-gray-400 text-lg">({ft.length})</span></h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               {ft.map((tool) => (
-                <a key={tool.slug} href={tool.url} className="card p-5 group hover:border-primary-300 dark:hover:border-primary-700 transition-colors">
+                <Link key={tool.slug} href={`/tools/${tool.slug}`} className="card p-5 group hover:border-primary-300 dark:hover:border-primary-700 transition-colors">
                   <div>
-                    <h3 className="font-medium group-hover:text-primary-600 transition-colors">{tool.name}</h3>
+                    <h3 className="font-medium group-hover:text-primary-600 transition-colors">{tool.icon} {tool.name}</h3>
                     <p className="text-sm text-gray-500 dark:text-gray-400">{tool.description}</p>
                   </div>
-                </a>
+                </Link>
               ))}
             </div>
           </section>
@@ -102,7 +102,7 @@ export default function ToolsPage() {
 
       <JsonLd type="ItemList" data={{
         name: 'Blog-Ghar Free Online Tools',
-        description: '30+ free online tools including calculators, converters, generators, and text utilities.',
+        description: '24 free online tools including calculators, converters, generators, and text utilities.',
         url: 'https://bloghar.com/tools',
         numberOfItems: TOOL_ITEMS.length,
         itemListElement: toolListSchema,

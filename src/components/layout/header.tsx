@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { useSession, signOut } from 'next-auth/react';
-import { Menu, X, Search, Moon, Sun, LogOut, User, Settings } from 'lucide-react';
+import { Menu, X, Search, Moon, LogOut, User, Settings } from 'lucide-react';
 import { useTheme } from 'next-themes';
 
 const categories = [
@@ -22,51 +22,33 @@ export function Header() {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const { theme, setTheme } = useTheme();
   const { data: session, status } = useSession();
-
   const isAdmin = (session?.user as any)?.role === 'ADMIN';
 
   return (
-    <header className="sticky top-0 z-50 bg-white dark:bg-dark-bg border-b border-gray-200 dark:border-dark-border">
-      {/* Top bar */}
-      <div className="bg-primary-600 text-white text-xs py-1.5">
-        <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
-          <span>Welcome to Blog-Ghar - Your One-Stop Destination!</span>
-          <div className="hidden sm:flex gap-4">
-            <Link href="/news" className="hover:underline">📰 Latest News</Link>
-            <Link href="/games" className="hover:underline">🎮 Play Games</Link>
-            <Link href="/tools" className="hover:underline">🔧 Free Tools</Link>
-          </div>
-        </div>
-      </div>
-
-      {/* Main header */}
+    <header className="sticky top-0 z-50 bg-white/80 dark:bg-dark-bg/80 backdrop-blur-md border-b border-gray-200 dark:border-dark-border">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
-            <span className="text-2xl font-display font-extrabold text-primary-600 group-hover:text-primary-700 transition-colors">
+          <Link href="/" className="flex items-center gap-2">
+            <span className="text-2xl font-display font-extrabold text-primary-600">
               Blog<span className="text-gray-900 dark:text-white">Ghar</span>
-            </span>
-            <span className="hidden sm:inline text-xs text-gray-500 dark:text-gray-400 border-l border-gray-300 dark:border-gray-600 pl-2">
-              Home of Blogs
             </span>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-1">
+          <nav className="hidden lg:flex items-center gap-0.5">
             <NavLink href="/blog">Blog</NavLink>
-            <NavLink href="/games">🎮 Games</NavLink>
-            <NavLink href="/tools">🔧 Tools</NavLink>
-            <NavLink href="/news">📰 News</NavLink>
-            <NavLink href="/horoscope">🔮 Horoscope</NavLink>
-            <NavLink href="/forum">💬 Forum</NavLink>
-            <NavLink href="/qa">❓ Q&A</NavLink>
-            <NavLink href="/jobs">💼 Jobs</NavLink>
+            <NavLink href="/games">Games</NavLink>
+            <NavLink href="/tools">Tools</NavLink>
+            <NavLink href="/news">News</NavLink>
+            <NavLink href="/horoscope">Horoscope</NavLink>
+            <NavLink href="/forum">Forum</NavLink>
+            <NavLink href="/qa">Q&A</NavLink>
+            <NavLink href="/jobs">Jobs</NavLink>
           </nav>
 
           {/* Right side actions */}
-          <div className="flex items-center gap-2">
-            {/* Search toggle */}
+          <div className="flex items-center gap-1">
             <button
               onClick={() => setSearchOpen(!searchOpen)}
               className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-dark-card transition-colors"
@@ -75,14 +57,13 @@ export function Header() {
               <Search className="w-5 h-5" />
             </button>
 
-            {/* Theme toggle */}
             <button
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
               className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-dark-card transition-colors"
               aria-label="Toggle theme"
             >
-              <Sun className="w-5 h-5 hidden dark:block" />
-              <Moon className="w-5 h-5 block dark:hidden" />
+              <Moon className="w-5 h-5 hidden dark:block" />
+              <SunIcon className="w-5 h-5 block dark:hidden" />
             </button>
 
             {status === 'loading' ? (
@@ -93,29 +74,29 @@ export function Header() {
                   onClick={() => setUserMenuOpen(!userMenuOpen)}
                   className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary-50 dark:bg-primary-900/30 text-sm font-medium hover:bg-primary-100 transition-colors"
                 >
-                  <div className="w-6 h-6 rounded-full bg-primary-600 text-white flex items-center justify-center text-xs">
+                  <div className="w-6 h-6 rounded-full bg-primary-600 text-white flex items-center justify-center text-xs font-bold">
                     {(session.user.name || session.user.email || 'U').charAt(0).toUpperCase()}
                   </div>
                   <span className="max-w-[100px] truncate">{session.user.name || 'User'}</span>
                 </button>
 
                 {userMenuOpen && (
-                  <div className="absolute right-0 top-full mt-1 w-48 bg-white dark:bg-dark-card rounded-xl shadow-lg border border-gray-200 dark:border-dark-border py-1 z-50">
+                  <div className="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-dark-card rounded-xl shadow-lg border border-gray-200 dark:border-dark-border py-1 z-50">
                     <div className="px-4 py-2 border-b border-gray-100 dark:border-gray-700">
                       <p className="text-sm font-medium truncate">{session.user.name}</p>
                       <p className="text-xs text-gray-500 truncate">{session.user.email}</p>
                     </div>
-                    <Link href="/profile" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-dark-bg">
+                    <Link href="/profile" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-dark-bg transition-colors">
                       <User className="w-4 h-4" /> Profile
                     </Link>
                     {isAdmin && (
-                      <Link href="/admin" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-dark-bg">
-                        <Settings className="w-4 h-4" /> Admin Dashboard
+                      <Link href="/admin" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-dark-bg transition-colors">
+                        <Settings className="w-4 h-4" /> Admin
                       </Link>
                     )}
                     <button
                       onClick={() => { signOut({ callbackUrl: '/' }); setUserMenuOpen(false); }}
-                      className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
+                      className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
                     >
                       <LogOut className="w-4 h-4" /> Logout
                     </button>
@@ -124,10 +105,10 @@ export function Header() {
               </div>
             ) : (
               <>
-                <Link href="/login" className="hidden sm:block text-sm font-medium hover:text-primary-600 transition-colors">
+                <Link href="/login" className="hidden sm:block text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 transition-colors px-3 py-2">
                   Login
                 </Link>
-                <Link href="/register" className="hidden sm:block btn-primary text-sm">
+                <Link href="/register" className="hidden sm:block bg-primary-600 text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-primary-700 transition-colors">
                   Sign Up
                 </Link>
               </>
@@ -136,7 +117,7 @@ export function Header() {
             {/* Mobile menu toggle */}
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="lg:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-dark-card"
+              className="lg:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-dark-card transition-colors"
               aria-label="Menu"
             >
               {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -153,9 +134,13 @@ export function Header() {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyDown={(e) => { if (e.key === 'Enter' && searchQuery.trim()) { window.location.href = `/search?q=${encodeURIComponent(searchQuery.trim())}`; } }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && searchQuery.trim()) {
+                    window.location.href = `/search?q=${encodeURIComponent(searchQuery.trim())}`;
+                  }
+                }}
                 placeholder="Search blogs, games, tools, news..."
-                className="w-full pl-10 pr-4 py-3 bg-gray-100 dark:bg-dark-card border border-gray-200 dark:border-dark-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-full pl-10 pr-4 py-3 bg-gray-100 dark:bg-dark-card border border-gray-200 dark:border-dark-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
                 autoFocus
               />
             </div>
@@ -163,7 +148,7 @@ export function Header() {
         )}
 
         {/* Category pills */}
-        <div className="flex gap-2 pb-3 overflow-x-auto scrollbar-hide">
+        <div className="flex gap-2 pb-3 overflow-x-auto scrollbar-hide -mx-1 px-1">
           {categories.map((cat) => (
             <Link
               key={cat.slug}
@@ -180,7 +165,7 @@ export function Header() {
       {/* Mobile menu */}
       {mobileOpen && (
         <div className="lg:hidden border-t border-gray-200 dark:border-dark-border bg-white dark:bg-dark-bg">
-          <nav className="max-w-7xl mx-auto px-4 py-4 flex flex-col gap-2">
+          <nav className="max-w-7xl mx-auto px-4 py-4 flex flex-col gap-1">
             <MobileNavLink href="/blog" onClick={() => setMobileOpen(false)}>📝 Blog</MobileNavLink>
             <MobileNavLink href="/games" onClick={() => setMobileOpen(false)}>🎮 Games</MobileNavLink>
             <MobileNavLink href="/tools" onClick={() => setMobileOpen(false)}>🔧 Tools</MobileNavLink>
@@ -189,16 +174,16 @@ export function Header() {
             <MobileNavLink href="/forum" onClick={() => setMobileOpen(false)}>💬 Forum</MobileNavLink>
             <MobileNavLink href="/qa" onClick={() => setMobileOpen(false)}>❓ Q&A</MobileNavLink>
             <MobileNavLink href="/jobs" onClick={() => setMobileOpen(false)}>💼 Jobs</MobileNavLink>
-            <hr className="border-gray-200 dark:border-dark-border" />
+            <hr className="border-gray-200 dark:border-dark-border my-2" />
             {session?.user ? (
               <>
                 <MobileNavLink href="/profile" onClick={() => setMobileOpen(false)}>👤 Profile</MobileNavLink>
                 {isAdmin && (
-                  <MobileNavLink href="/admin" onClick={() => setMobileOpen(false)}>⚙️ Admin Dashboard</MobileNavLink>
+                  <MobileNavLink href="/admin" onClick={() => setMobileOpen(false)}>⚙️ Admin</MobileNavLink>
                 )}
                 <button
                   onClick={() => { signOut({ callbackUrl: '/' }); setMobileOpen(false); }}
-                  className="text-left px-4 py-3 text-base font-medium text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg"
+                  className="text-left px-4 py-3 text-base font-medium text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
                 >
                   🚪 Logout
                 </button>
@@ -206,7 +191,7 @@ export function Header() {
             ) : (
               <>
                 <MobileNavLink href="/login" onClick={() => setMobileOpen(false)}>🔑 Login</MobileNavLink>
-                <MobileNavLink href="/register" onClick={() => setMobileOpen(false)}>✨ Sign Up Free</MobileNavLink>
+                <MobileNavLink href="/register" onClick={() => setMobileOpen(false)}>✨ Sign Up</MobileNavLink>
               </>
             )}
           </nav>
@@ -236,5 +221,13 @@ function MobileNavLink({ href, onClick, children }: { href: string; onClick: () 
     >
       {children}
     </Link>
+  );
+}
+
+function SunIcon() {
+  return (
+    <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+    </svg>
   );
 }
