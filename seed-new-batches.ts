@@ -2,6 +2,15 @@ import { PrismaClient } from '@prisma/client';
 import { parseContent } from './src/lib/content-parser';
 import { deepenedAmericasPosts } from './deepening/batch4-americas-tech';
 import { deepenedEuropeAfricaPosts } from './deepening/batch5-europe-africa';
+import { deepenedRegionalV2Posts } from './deepening/batch6-regional-v2';
+import { deepenedAsiaRemaining1Posts } from './deepening/batch7-asia-remaining1';
+import { deepenedExpansionRemainingPosts } from './deepening/batch8-expansion-remaining';
+import { deepenedOuterPosts } from './deepening/batch9-deep-outer';
+import { deepenedExamJobPosts } from './deepening/batch10-exams-jobs';
+import { deepenedTechFinancePosts } from './deepening/batch10-tech-finance';
+import { deepenedAsiaPosts } from './deepening/batch10-asia-worldwide';
+import { deepenedAmericasEuropePosts } from './deepening/batch10-americas-europe';
+import { deepenedPosts11 } from './deepening/batch11-deep';
 
 const prisma = new PrismaClient();
 
@@ -10,8 +19,21 @@ function categorySlug(name: string): string {
 }
 
 async function main(){
-  const posts = [...deepenedAmericasPosts, ...deepenedEuropeAfricaPosts];
-  console.log(`Upserting ${posts.length} deepened posts (Americas=${deepenedAmericasPosts.length}, Europe=${deepenedEuropeAfricaPosts.length})`);
+  const posts = [
+    ...deepenedAmericasPosts,
+    ...deepenedEuropeAfricaPosts,
+    ...deepenedRegionalV2Posts,
+    ...deepenedAsiaRemaining1Posts,
+    ...deepenedExpansionRemainingPosts,
+    ...deepenedOuterPosts,
+    ...deepenedExamJobPosts,
+    ...deepenedTechFinancePosts,
+    ...deepenedAsiaPosts,
+    ...deepenedAmericasEuropePosts,
+    ...deepenedPosts11,
+  ];
+  console.log(`Upserting ${posts.length} deepened posts`);
+  console.log(`  batch4=${deepenedAmericasPosts.length}, batch5=${deepenedEuropeAfricaPosts.length}, batch6=${deepenedRegionalV2Posts.length}, batch7=${deepenedAsiaRemaining1Posts.length}, batch8=${deepenedExpansionRemainingPosts.length}, batch9=${deepenedOuterPosts.length}, batch10-exams=${deepenedExamJobPosts.length}, batch10-tech=${deepenedTechFinancePosts.length}, batch10-asia=${deepenedAsiaPosts.length}, batch10-europe=${deepenedAmericasEuropePosts.length}, batch11=${deepenedPosts11.length}`);
   const editorial = await prisma.user.upsert({
     where: { email: 'editorial@bloghar.com' },
     update: { name: 'Blog-Ghar Editorial' },

@@ -1,16 +1,17 @@
-// Content Parser - Converts raw text into structured blog post data
+// Content Parser - Converts raw Markdown text into structured blog post data
+// Handles: headings, bold, italic, links, lists, blockquotes, code, tables, images, horizontal rules
 
 const CATEGORY_KEYWORDS: Record<string, string[]> = {
-  TECHNOLOGY: ['code', 'software', 'app', 'tech', 'digital', 'AI', 'computer', 'web', 'data', 'cloud', 'programming', 'developer', 'API', 'software', 'machine learning', 'blockchain', 'cyber'],
-  LIFESTYLE: ['health', 'fitness', 'diet', 'travel', 'food', 'fashion', 'wellness', 'mindfulness', 'yoga', 'meditation', 'self-care', 'routine', 'habits'],
-  EDUCATION: ['learn', 'study', 'course', 'exam', 'school', 'college', 'university', 'student', 'tutorial', 'guide', 'tips', 'career', 'skill'],
-  FINANCE: ['money', 'invest', 'stock', 'market', 'save', 'tax', 'budget', 'crypto', 'bitcoin', 'portfolio', 'income', 'wealth', 'trading'],
-  ENTERTAINMENT: ['movie', 'music', 'game', 'celebrity', 'fun', 'film', 'series', 'streaming', 'review', 'actor', 'director', 'album'],
-  HEALTH: ['medical', 'doctor', 'disease', 'treatment', 'symptom', 'mental health', 'therapy', 'medicine', 'hospital', 'fitness', 'nutrition'],
-  TRAVEL: ['destination', 'flight', 'hotel', 'vacation', 'trip', 'tourist', 'backpacking', 'resort', 'airport', 'passport'],
-  FOOD: ['recipe', 'cook', 'kitchen', 'restaurant', 'cuisine', 'ingredient', 'baking', 'meal', 'chef', 'delicious'],
-  SPORTS: ['match', 'player', 'team', 'score', 'championship', 'league', 'tournament', 'coach', 'athlete', 'fitness'],
-  SCIENCE: ['research', 'discovery', 'experiment', 'space', 'nasa', 'quantum', 'physics', 'biology', 'chemistry', 'study'],
+  TECHNOLOGY: ['code', 'software', 'app', 'tech', 'digital', 'AI', 'computer', 'web', 'data', 'cloud', 'programming', 'developer', 'API', 'software', 'machine learning', 'blockchain', 'cyber', 'javascript', 'python', 'react', 'node'],
+  LIFESTYLE: ['health', 'fitness', 'diet', 'travel', 'food', 'fashion', 'wellness', 'mindfulness', 'yoga', 'meditation', 'self-care', 'routine', 'habits', 'morning', 'balance'],
+  EDUCATION: ['learn', 'study', 'course', 'exam', 'school', 'college', 'university', 'student', 'tutorial', 'guide', 'tips', 'career', 'skill', 'education', 'learning', 'training', 'certification'],
+  FINANCE: ['money', 'invest', 'stock', 'market', 'save', 'tax', 'budget', 'crypto', 'bitcoin', 'portfolio', 'income', 'wealth', 'trading', 'banking', 'loan', 'insurance', 'financial'],
+  ENTERTAINMENT: ['movie', 'music', 'game', 'celebrity', 'fun', 'film', 'series', 'streaming', 'review', 'actor', 'director', 'album', 'entertainment', 'show', 'netflix'],
+  HEALTH: ['medical', 'doctor', 'disease', 'treatment', 'symptom', 'mental health', 'therapy', 'medicine', 'hospital', 'fitness', 'nutrition', 'health', 'wellness', 'diet', 'exercise'],
+  TRAVEL: ['destination', 'flight', 'hotel', 'vacation', 'trip', 'tourist', 'backpacking', 'resort', 'airport', 'passport', 'travel', 'tourism', 'journey', 'adventure'],
+  FOOD: ['recipe', 'cook', 'kitchen', 'restaurant', 'cuisine', 'ingredient', 'baking', 'meal', 'chef', 'delicious', 'food', 'cooking', 'taste', 'flavor'],
+  SPORTS: ['match', 'player', 'team', 'score', 'championship', 'league', 'tournament', 'coach', 'athlete', 'fitness', 'sport', 'cricket', 'football', 'game'],
+  SCIENCE: ['research', 'discovery', 'experiment', 'space', 'nasa', 'quantum', 'physics', 'biology', 'chemistry', 'study', 'science', 'scientific', 'theory', 'hypothesis'],
 };
 
 const STOP_WORDS = new Set([
@@ -49,6 +50,244 @@ export async function readFiles(files: File[]): Promise<string[]> {
   return Promise.all(files.map(file => file.text()));
 }
 
+// ── URL safety ──────────────────────────────────────────────────────
+const ALLOWED_PROTOCOLS = /^(?:https?:|mailto:|tel:|\/|\.\/|#)/i;
+
+function sanitizeUrl(url: string): string | null {
+  const trimmed = url.trim();
+  if (!trimmed) return null;
+  if (/^(?:javascript|data|vbscript):/i.test(trimmed)) return null;
+  if (ALLOWED_PROTOCOLS.test(trimmed) || trimmed.startsWith('./') || trimmed.startsWith('../')) {
+    return trimmed.replace(/"/g, '&quot;');
+  }
+  return null;
+}
+
+// ── HTML escape ────────────────────────────────────────────────────
+function escapeHtml(text: string): string {
+  const map: Record<string, string> = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;',
+  };
+  return text.replace(/[&<>"']/g, (m) => map[m]);
+}
+
+// ── Inline formatting ──────────────────────────────────────────────
+function inlineFormat(text: string): string {
+  let result = text;
+
+  // Images: ![alt](url)
+  result = result.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_match: string, alt: string, url: string) => {
+    const safeUrl = sanitizeUrl(url);
+    if (!safeUrl) return escapeHtml(alt || '');
+    const safeAlt = escapeHtml(alt);
+    return `<img src="${safeUrl}" alt="${safeAlt}" loading="lazy" />`;
+  });
+
+  // Links: [text](url)
+  result = result.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_match: string, label: string, url: string) => {
+    const safeUrl = sanitizeUrl(url);
+    if (!safeUrl) return escapeHtml(label);
+    return `<a href="${safeUrl}">${label}</a>`;
+  });
+
+  // Bold+Italic: ***text***
+  result = result.replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>');
+
+  // Bold: **text**
+  result = result.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+
+  // Italic: *text*
+  result = result.replace(/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/g, '<em>$1</em>');
+
+  // Inline code: `code`
+  result = result.replace(/`([^`]+)`/g, '<code>$1</code>');
+
+  return result;
+}
+
+// ── Parse a single line of a pipe-delimited table ──────────────────
+function parseTableRow(line: string): string[] {
+  const trimmed = line.trim();
+  const inner = trimmed.startsWith('|') && trimmed.endsWith('|')
+    ? trimmed.slice(1, -1)
+    : trimmed;
+  return inner.split('|').map((c) => c.trim());
+}
+
+// ── Unordered list: returns [html, nextIndex] ──────────────────────
+function parseUnorderedList(lines: string[], startIdx: number): { html: string; nextIdx: number } {
+  const items: string[] = [];
+  let i = startIdx;
+  while (i < lines.length && lines[i].match(/^[-*+]\s+/)) {
+    items.push(`  <li>${inlineFormat(lines[i].replace(/^[-*+]\s+/, ''))}</li>`);
+    i++;
+  }
+  return { html: `<ul>\n${items.join('\n')}\n</ul>`, nextIdx: i };
+}
+
+// ── Ordered list: returns [html, nextIndex] ────────────────────────
+function parseOrderedList(lines: string[], startIdx: number): { html: string; nextIdx: number } {
+  const items: string[] = [];
+  let i = startIdx;
+  while (i < lines.length && lines[i].match(/^\d+\.\s+/)) {
+    items.push(`  <li>${inlineFormat(lines[i].replace(/^\d+\.\s+/, ''))}</li>`);
+    i++;
+  }
+  return { html: `<ol>\n${items.join('\n')}\n</ol>`, nextIdx: i };
+}
+
+// ── Table: returns [html, nextIndex] ──────────────────────────────
+function parseTable(lines: string[], startIdx: number): { html: string; nextIdx: number } {
+  const headerLine = lines[startIdx];
+  const headers = parseTableRow(headerLine);
+  const separatorLine = lines[startIdx + 1];
+  const separators = parseTableRow(separatorLine);
+
+  const rows: string[][] = [];
+  let idx = startIdx + 2;
+  while (idx < lines.length && lines[idx].includes('|')) {
+    rows.push(parseTableRow(lines[idx]));
+    idx++;
+  }
+
+  const alignAttr = (sep: string) => {
+    if (sep.startsWith(':') && sep.endsWith(':')) return ' align="center"';
+    if (sep.endsWith(':')) return ' align="right"';
+    return '';
+  };
+
+  let html = '<div class="table-wrapper"><table>\n<thead>\n<tr>\n';
+  for (let c = 0; c < headers.length; c++) {
+    html += `  <th${alignAttr(separators[c] || '')}>${inlineFormat(headers[c])}</th>\n`;
+  }
+  html += '</tr>\n</thead>\n<tbody>\n';
+
+  for (const row of rows) {
+    html += '<tr>\n';
+    for (let c = 0; c < Math.max(headers.length, row.length); c++) {
+      html += `  <td>${inlineFormat(row[c] || '')}</td>\n`;
+    }
+    html += '</tr>\n';
+  }
+
+  html += '</tbody>\n</table></div>';
+  return { html, nextIdx: idx };
+}
+
+// ── Main Markdown → HTML converter ────────────────────────────────
+export function markdownToHtml(md: string): string {
+  const lines = md.split('\n');
+  const blocks: string[] = [];
+  let i = 0;
+
+  while (i < lines.length) {
+    const line = lines[i];
+
+    // Empty line — skip
+    if (line.trim() === '') {
+      i++;
+      continue;
+    }
+
+    // Fenced code block
+    if (line.match(/^```/)) {
+      const lang = line.replace(/^```/, '').trim();
+      const codeLines: string[] = [];
+      i++;
+      while (i < lines.length && !lines[i].match(/^```/)) {
+        codeLines.push(lines[i]);
+        i++;
+      }
+      if (i < lines.length) i++;
+      const escapedCode = escapeHtml(codeLines.join('\n'));
+      blocks.push(`<pre><code${lang ? ` class="language-${escapeHtml(lang)}"` : ''}>${escapedCode}</code></pre>`);
+      continue;
+    }
+
+    // Horizontal rule
+    if (line.match(/^(-{3,}|\*{3,}|_{3,})\s*$/)) {
+      blocks.push('<hr />');
+      i++;
+      continue;
+    }
+
+    // Headings (h1-h6)
+    const headingMatch = line.match(/^(#{1,6})\s+(.+)$/);
+    if (headingMatch) {
+      const level = headingMatch[1].length;
+      const text = headingMatch[2];
+      const id = text
+        .toLowerCase()
+        .replace(/[^\wऀ-ॿ\s-]/g, '')
+        .trim()
+        .replace(/\s+/g, '-');
+      const lvl = Math.min(level, 6);
+      blocks.push(`<h${lvl} id="${id}">${inlineFormat(text)}</h${lvl}>`);
+      i++;
+      continue;
+    }
+
+    // Blockquote
+    if (line.match(/^>\s?/)) {
+      const quoteLines: string[] = [];
+      while (i < lines.length && lines[i].match(/^>\s?/)) {
+        quoteLines.push(lines[i].replace(/^>\s?/, ''));
+        i++;
+      }
+      blocks.push(`<blockquote><p>${inlineFormat(quoteLines.join(' '))}</p></blockquote>`);
+      continue;
+    }
+
+    // Unordered list
+    if (line.match(/^[-*+]\s+/)) {
+      const { html: ulHtml, nextIdx } = parseUnorderedList(lines, i);
+      blocks.push(ulHtml);
+      i = nextIdx;
+      continue;
+    }
+
+    // Ordered list
+    if (line.match(/^\d+\.\s+/)) {
+      const { html: olHtml, nextIdx } = parseOrderedList(lines, i);
+      blocks.push(olHtml);
+      i = nextIdx;
+      continue;
+    }
+
+    // Table (GFM)
+    if (line.includes('|') && i + 1 < lines.length && lines[i + 1].match(/^\|[\s\-:|]+\|$/)) {
+      const { html: tableHtml, nextIdx } = parseTable(lines, i);
+      blocks.push(tableHtml);
+      i = nextIdx;
+      continue;
+    }
+
+    // Paragraph — collect consecutive non-empty, non-block lines
+    const paraLines: string[] = [line];
+    i++;
+    while (
+      i < lines.length &&
+      lines[i].trim() !== '' &&
+      !lines[i].match(/^(#{1,6}\s|[-*+]\s|\d+\.\s|>\s?|```|(-{3,}|\*{3,}|_{3,})\s*$)/) &&
+      !(lines[i].includes('|') && i + 1 < lines.length && lines[i + 1].match(/^\|[\s\-:|]+\|$/))
+    ) {
+      paraLines.push(lines[i]);
+      i++;
+    }
+    const text = paraLines.join(' ').trim();
+    if (text) {
+      blocks.push(`<p>${inlineFormat(text)}</p>`);
+    }
+  }
+
+  return blocks.join('\n');
+}
+
+// ── Public entry point ─────────────────────────────────────────────
 export function parseContent(rawText: string): ParsedContent {
   const text = rawText.trim();
   if (!text) {
@@ -64,30 +303,27 @@ export function parseContent(rawText: string): ParsedContent {
     };
   }
 
-  // Parse title (first line or first sentence)
   const lines = text.split('\n').filter(l => l.trim());
   let title = '';
   let contentStart = 0;
 
-  // Check for markdown heading
-  const firstLine = lines[0].trim();
+  // Title from first markdown heading
+  const firstLine = lines[0] ? lines[0].trim() : '';
   if (firstLine.startsWith('# ')) {
     title = firstLine.replace(/^#+\s*/, '').trim();
     contentStart = 1;
-  } else if (firstLine.length < 120 && !firstLine.includes('. ')) {
-    title = firstLine;
+  } else if (firstLine.length < 120 && !firstLine.match(/[.!?]\s/)) {
+    title = firstLine.replace(/^[#*_\s]+/, '').trim();
     contentStart = 1;
   } else {
-    // Use first sentence as title
     const firstSentenceMatch = text.match(/^(.+?[.!?])\s/);
     if (firstSentenceMatch && firstSentenceMatch[1].length < 120) {
-      title = firstSentenceMatch[1].trim();
+      title = firstSentenceMatch[1].trim().replace(/^[#*_\s]+/, '');
     } else {
-      title = firstLine.substring(0, 80).trim();
+      title = firstLine.substring(0, 80).replace(/^[#*_\s]+/, '').trim();
     }
   }
 
-  // Generate slug
   const slug = title
     .toLowerCase()
     .replace(/[^\w\s-]/g, '')
@@ -95,22 +331,18 @@ export function parseContent(rawText: string): ParsedContent {
     .replace(/-+/g, '-')
     .substring(0, 60);
 
-  // Parse content
+  // HTML content from remaining lines
   const contentLines = lines.slice(contentStart);
-  const htmlContent = parseMarkdownToHtml(contentLines.join('\n'));
+  const rawBody = contentLines.join('\n');
+  const htmlContent = markdownToHtml(rawBody);
 
-  // Generate excerpt from first 2-3 sentences
-  const plainText = text.replace(/[#*_`]/g, '').replace(/\n+/g, ' ');
+  // Excerpt from first sentences
+  const plainText = rawBody.replace(/[#*_`>]/g, '').replace(/\n+/g, ' ').trim();
   const sentences = plainText.match(/[^.!?]+[.!?]+/g) || [plainText];
   const excerpt = sentences.slice(0, 3).join(' ').substring(0, 300).trim();
 
-  // Detect category
   const suggestedCategory = detectCategory(text);
-
-  // Extract tags
   const tags = extractTags(text);
-
-  // Calculate read time
   const wordCount = plainText.split(/\s+/).filter(Boolean).length;
   const readTime = Math.max(1, Math.ceil(wordCount / 200));
 
@@ -126,95 +358,20 @@ export function parseContent(rawText: string): ParsedContent {
   };
 }
 
-function parseMarkdownToHtml(text: string): string {
-  let html = text;
-
-  // Escape HTML
-  html = html.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-
-  // Headings
-  html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
-  html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>');
-  html = html.replace(/^# (.+)$/gm, '<h1>$1</h1>');
-
-  // Bold and italic
-  html = html.replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>');
-  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-  html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
-  html = html.replace(/__(.+?)__/g, '<strong>$1</strong>');
-  html = html.replace(/_(.+?)_/g, '<em>$1</em>');
-
-  const sanitizeUrl = (url: string): string | null => {
-    const trimmed = url.trim();
-    if (!trimmed || /^(?:javascript|data|vbscript):/i.test(trimmed)) return null;
-    if (/^(?:https?:|mailto:)/i.test(trimmed) || trimmed.startsWith('/') || trimmed.startsWith('./') || trimmed.startsWith('../') || trimmed.startsWith('#')) {
-      return trimmed.replace(/"/g, '&quot;');
-    }
-    return null;
-  };
-
-  // Images
-  html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_match, alt, url) => {
-    const safeUrl = sanitizeUrl(url);
-    return safeUrl ? `<img src="${safeUrl}" alt="${alt}" style="max-width:100%;border-radius:8px;margin:12px 0;" />` : '';
-  });
-
-  // Links
-  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_match, label, url) => {
-    const safeUrl = sanitizeUrl(url);
-    return safeUrl ? `<a href="${safeUrl}" target="_blank" rel="noopener">${label}</a>` : label;
-  });
-
-  // Lists
-  const lines = html.split('\n');
-  let inList = false;
-  const result: string[] = [];
-
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-    const listMatch = line.match(/^[-*]\s+(.+)/);
-
-    if (listMatch) {
-      if (!inList) { result.push('<ul>'); inList = true; }
-      result.push(`<li>${listMatch[1]}</li>`);
-    } else {
-      if (inList) { result.push('</ul>'); inList = false; }
-
-      if (line.trim() === '') {
-        result.push('');
-      } else if (line.match(/^<h[1-6]/)) {
-        result.push(line);
-      } else if (line.match(/^<[uo]l/)) {
-        result.push(line);
-      } else if (line.match(/^<\/[uo]l>/)) {
-        result.push(line);
-      } else {
-        // Wrap in paragraph
-        const trimmed = line.trim();
-        if (trimmed && !trimmed.match(/^<[hup]/)) {
-          result.push(`<p>${trimmed}</p>`);
-        } else {
-          result.push(trimmed);
-        }
-      }
+// ── Heading extraction (for TOC) ───────────────────────────────────
+export function extractHeadings(html: string): { id: string; text: string; level: number }[] {
+  const items: { id: string; text: string; level: number }[] = [];
+  const headingRegex = /<h([1-6])(?:\s[^>]*)?id="([^"]*)"[^>]*>([\s\S]*?)<\/h\1>/g;
+  let m: RegExpExecArray | null;
+  while ((m = headingRegex.exec(html)) !== null) {
+    const level = parseInt(m[1]);
+    const id = m[2];
+    const text = m[3].replace(/<[^>]*>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+    if (level >= 2 && text.trim().length >= 3) {
+      items.push({ id, text: text.trim(), level: Math.min(level, 3) });
     }
   }
-  if (inList) result.push('</ul>');
-
-  // Blockquotes
-  let final = result.join('\n');
-  final = final.replace(/^&gt;\s*(.+)$/gm, '<blockquote>$1</blockquote>');
-
-  // Merge consecutive blockquotes
-  final = final.replace(/<\/blockquote>\n<blockquote>/g, '\n');
-
-  // Merge consecutive paragraphs
-  final = final.replace(/<\/p>\n<p>/g, '</p>\n\n<p>');
-
-  // Clean up empty paragraphs
-  final = final.replace(/<p>\s*<\/p>/g, '');
-
-  return final;
+  return items;
 }
 
 function detectCategory(text: string): string {

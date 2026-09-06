@@ -8,35 +8,29 @@ interface TocItem {
   level: number;
 }
 
-export function TableOfContents({ html }: { html: string }) {
-  const [headings, setHeadings] = useState<TocItem[]>([]);
-  const [activeId, setActiveId] = useState<string>('');
+interface TableOfContentsProps {
+  headings: TocItem[];
+}
 
-  useEffect(() => {
-    const items: TocItem[] = [];
-    const regex = /<h([23])([^>]*)>([\s\S]*?)<\/h\1>/g;
-    let match;
-    while ((match = regex.exec(html)) !== null) {
-      const level = parseInt(match[1]);
-      const text = match[3].replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim();
-      const id = text.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-').slice(0, 60);
-      if (text.length > 3) items.push({ id, text, level });
-    }
-    setHeadings(items);
-  }, [html]);
+export function TableOfContents({ headings }: TableOfContentsProps) {
+  const [activeId, setActiveId] = useState<string>('');
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     if (headings.length === 0) return;
+
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) setActiveId(entry.target.id);
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveId(entry.target.id);
+          }
         });
       },
       { rootMargin: '-80px 0px -70% 0px', threshold: 0 }
     );
 
-    headings.forEach(h => {
+    headings.forEach((h) => {
       const el = document.getElementById(h.id);
       if (el) observer.observe(el);
     });
@@ -44,31 +38,64 @@ export function TableOfContents({ html }: { html: string }) {
     return () => observer.disconnect();
   }, [headings]);
 
-  if (headings.length < 3) return null;
-
-  return (
-    <aside className="hidden xl:block w-64 shrink-0">
-      <div className="sticky top-24">
-        <h4 className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
-          Table of Contents
-        </h4>
-        <nav className="space-y-1">
-          {headings.map((heading) => (
-            <a
-              key={heading.id}
-              href={`#${heading.id}`}
-              className={`block text-sm py-1.5 px-3 rounded-lg transition-all border-l-2 ${
-                activeId === heading.id
-                  ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300 font-medium'
-                  : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800'
-              }`}
-              style={{ paddingLeft: heading.level === 3 ? '2rem' : '1rem' }}
-            >
-              {heading.text}
-            </a>
-          ))}
+  // Mobile collapsible TOC
+  const MobileToc = () => (
+    <div className="lg:hidden mb-8">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="toc-mobile-header w-full px-4 py-3 bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-bold text-gray-700 dark:text-gray-300"
+        aria-expanded={isOpen}
+      >
+        <span>Table of Contents</span>
+        <span className="toc-mobile-toggle" aria-hidden="true">{isOpen ? '−' : '+'}</span>
+      </button>
+      {isOpen && (
+        <nav className="toc mt-2" aria-label="Table of contents">
+          <ul className="toc-list">
+            {headings.map((heading) => (
+              <li key={heading.id} className={`toc-item ${heading.level === 3 ? 'toc-h3' : ''}`}>
+                <a
+                  href={`#${heading.id}`}
+                  className={`toc-link ${activeId === heading.id ? 'toc-active' : ''}`}
+                  onClick={() => setIsOpen(false)}
+                >
+                  {heading.text}
+                </a>
+              </li>
+            ))}
+          </ul>
         </nav>
+      )}
+    </div>
+  );
+
+  // Desktop sidebar TOC
+  const DesktopToc = () => (
+    <aside className="hidden lg:block w-56 shrink-0" aria-label="Table of contents">
+      <div className="toc toc-sidebar">
+        <div className="toc-title">Table of Contents</div>
+        <ul className="toc-list">
+          {headings.map((heading) => (
+            <li key={heading.id} className={`toc-item ${heading.level === 3 ? 'toc-h3' : ''}`}>
+              <a
+                href={`#${heading.id}`}
+                className={`toc-link ${activeId === heading.id ? 'toc-active' : ''}`}
+              >
+                {heading.text}
+              </a>
+            </li>
+          ))}
+        </ul>
       </div>
     </aside>
+  );
+
+  if (headings.length < 2) return null;
+
+  return (
+    <>
+      <MobileToc />
+      <DesktopToc />
+    </>
   );
 }
