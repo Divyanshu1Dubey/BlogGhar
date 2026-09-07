@@ -32,7 +32,7 @@ export default async function AdminPostsPage() {
                 <td className="p-3">{p.author?.name}</td>
                 <td className="p-3"><span className={`px-2 py-0.5 rounded-full text-xs ${p.status === 'PUBLISHED' ? 'bg-green-100 text-green-700' : 'bg-gray-100'}`}>{p.status}</span></td>
                 <td className="p-3">{p.views}</td>
-                <td className="p-3"><a href={`/blog/${p.slug}`} className="mr-3 text-primary-600 text-xs">View</a><a href={`/admin/posts/${p.id}/edit`} className="text-primary-600 text-xs">Edit</a></td>
+                <td className="p-3"><a href={`/blog/${p.slug}`} className="mr-3 text-primary-600 text-xs">View</a><a href={`/admin/posts/new?id=${p.id}`} className="text-primary-600 text-xs">Edit</a></td>
               </tr>
             ))}</tbody>
           </table>

@@ -14,7 +14,7 @@ export async function GET(
       include: {
         author: {
           select: {
-            id: true, name: true, username: true, image: true, role: true,
+            id: true, name: true, image: true, role: true,
           },
         },
         category: {
@@ -76,7 +76,7 @@ export async function PUT(
       include: {
         author: {
           select: {
-            id: true, name: true, username: true, image: true, role: true,
+            id: true, name: true, image: true, role: true,
           },
         },
         category: {

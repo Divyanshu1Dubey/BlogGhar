@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
+import Link from 'next/link';
 import { CommunityPostKindEnum } from '@/lib/validation';
 import {
   Lightbulb, Link2, HelpCircle, Compass, Plus,
@@ -64,7 +65,7 @@ export default function CommunityPage() {
 
   const loadPosts = useCallback(async () => {
     try {
-      const url = filter === 'ALL' ? '/api/community/posts' : `/api/community/posts?category=${filter}`;
+      const url = filter === 'ALL' ? '/api/community/posts' : `/api/community/posts?categoryId=${filter}`;
       const res = await fetch(url);
       if (res.ok) {
         const data = await res.json();
@@ -275,7 +276,7 @@ function PostCard({ post, sessionUserId, onDelete }: { post: Post; sessionUserId
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
             <span className="font-semibold text-sm">{post.author.name || 'Anonymous'}</span>
-            <span className="text-xs text-gray-400">@{post.author.username || 'unknown'}</span>
+            <span className="text-xs text-gray-400">@{post.author.name || post.author.email?.split('@')[0] || 'unknown'}</span>
             <span className="text-xs text-gray-400">· {new Date(post.createdAt).toLocaleDateString()}</span>
             {post.isPinned && <span className="text-xs px-1.5 py-0.5 bg-red-100 text-red-700 rounded-full flex items-center gap-0.5"><Pin className="w-3 h-3" />Pinned</span>}
             {post.category && <span className="text-xs px-2 py-0.5 bg-gray-100 dark:bg-gray-700 rounded-full">{post.category.name}</span>}

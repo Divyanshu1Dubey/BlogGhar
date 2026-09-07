@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import prisma from '@/lib/prisma';
+import { requireAdmin } from '@/lib/admin-auth';
 
 export const metadata: Metadata = {
   title: 'Reports — Blog-Ghar Admin',
@@ -10,6 +11,15 @@ export const metadata: Metadata = {
 export const dynamic = 'force-dynamic';
 
 export default async function AdminReportsPage({ searchParams }: { searchParams?: Promise<{ status?: string }> }) {
+  const adminCheck = await requireAdmin();
+  if (adminCheck.error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-red-600 text-lg font-medium">{adminCheck.error}</div>
+      </div>
+    );
+  }
+
   const params = await searchParams;
   const status = params?.status?.toUpperCase() || 'OPEN';
 
@@ -23,8 +33,8 @@ export default async function AdminReportsPage({ searchParams }: { searchParams?
         orderBy: { createdAt: 'desc' },
         take: 100,
         include: {
-          reporter: { select: { id: true, name: true, username: true, email: true } },
-          moderator: { select: { id: true, name: true, username: true } },
+          reporter: { select: { id: true, name: true, email: true } },
+          moderator: { select: { id: true, name: true } },
         },
       }),
       prisma.report.count({ where: { status: 'OPEN' } }),

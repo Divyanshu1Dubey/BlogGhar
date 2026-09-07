@@ -31,7 +31,7 @@ export async function GET(req: NextRequest) {
       include: {
         author: {
           select: {
-            id: true, name: true, username: true, image: true, role: true,
+            id: true, name: true, image: true, role: true,
           },
         },
         category: {
@@ -95,10 +95,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Moderators/admins can post freely; standard users may need moderation
-    const requiresReview = user?.role !== 'ADMIN' && user?.role !== 'MODERATOR';
     // For now we publish immediately; a future moderator queue can move to a PENDING status.
-
     const cleanContent = sanitizeHtml(parsed.data.content).slice(0, 2000);
 
     const post = await prisma.communityPost.create({
@@ -111,7 +108,7 @@ export async function POST(req: NextRequest) {
         linkDesc: parsed.data.linkDesc || null,
         imageUrl: parsed.data.imageUrl || null,
         categoryId: parsed.data.categoryId || null,
-        status: requiresReview ? 'PENDING' : 'PUBLISHED',
+        status: 'PUBLISHED',
       },
     });
 

@@ -70,7 +70,7 @@ export async function GET(request: Request) {
           content: { contains: query, mode: 'insensitive' },
         },
         take: 5,
-        include: { author: { select: { name: true, username: true } } },
+        include: { author: { select: { name: true } } },
       });
       posts.forEach((p: any) => {
         results.push({ type: 'community', title: p.content.slice(0, 100), slug: p.id, description: `by ${p.author?.name || 'Anonymous'}`, url: `/community` });
@@ -86,10 +86,10 @@ export async function GET(request: Request) {
           ],
         },
         take: 3,
-        select: { id: true, name: true, username: true },
+        select: { id: true, name: true, email: true },
       });
       users.forEach((u: any) => {
-        const username = u.username || u.email?.split('@')[0] || u.id;
+        const username = u.email?.split('@')[0] || u.id;
         results.push({ type: 'user', title: u.name || 'User', slug: username, description: `Creator`, url: `/profile/${username}` });
       });
     }

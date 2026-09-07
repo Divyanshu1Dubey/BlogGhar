@@ -30,16 +30,13 @@ model Account {
 model User {
   id            String    @id @default(cuid())
   name          String?
-  username      String?   @unique
   email         String?   @unique
   emailVerified DateTime?
   image         String?
   password      String?
-  bio           String?   @db.Text
   role          String    @default("USER") // USER | AUTHOR | MODERATOR | ADMIN
-  isModerator   Boolean   @default(false)
   isBanned      Boolean   @default(false)
-  bannedReason  String?
+
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
@@ -59,9 +56,8 @@ model User {
   profile       Profile?
   newsletterSubs NewsletterSubscriber[]
   communityPosts CommunityPost[]
-  revisions     Revision[]
-  reportsFiled  Report[]   @relation("Reporter")
-  reportsActioned Report[] @relation("Moderator")
+  reportsFiled  Report[]   @relation("ReportReporter")
+  reportsActioned Report[] @relation("ReportModerator")
 
   @@map("users")
 }
@@ -176,23 +172,8 @@ model Post {
   comments Comment[]
   likes    Like[]
   bookmarks Bookmark[]
-  revisions Revision[]
 
   @@map("posts")
-}
-
-model Revision {
-  id        String   @id @default(cuid())
-  postId    String
-  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
-  title     String
-  content   String   @db.Text
-  excerpt   String?
-  authorId  String
-  author    User     @relation(fields: [authorId], references: [id])
-  createdAt DateTime @default(now())
-
-  @@map("revisions")
 }
 
 model Comment {
@@ -269,7 +250,7 @@ model CommunityPost {
 model Report {
   id          String   @id @default(cuid())
   reporterId  String
-  reporter    User     @relation("Reporter", fields: [reporterId], references: [id])
+  reporter    User     @relation("ReportReporter", fields: [reporterId], references: [id])
   targetType  String   // 'post' | 'comment' | 'community_post'
   targetId    String
   communityPostId String?
@@ -278,7 +259,7 @@ model Report {
   details     String?  @db.Text
   status      String   @default("OPEN") // OPEN | RESOLVED | DISMISSED
   moderatorId String?
-  moderator   User?    @relation("Moderator", fields: [moderatorId], references: [id])
+  moderator   User?    @relation("ReportModerator", fields: [moderatorId], references: [id])
   moderatorNote String?
   createdAt   DateTime @default(now())
   resolvedAt  DateTime?

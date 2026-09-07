@@ -6,7 +6,7 @@ import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { PostStatusEnum } from '@/lib/validation';
 import {
-  PlusCircle, FileText, Drafts, Trash2, Eye, ExternalLink,
+  PlusCircle, FileText, FileJson, Trash2, Eye, ExternalLink,
   BarChart3, BookOpen, Clock, MoreHorizontal, RefreshCw,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -186,7 +186,7 @@ export default function MyPostsPage() {
                       'inline-flex items-center gap-1 px-2 py-0.5 rounded-full',
                       post.status === 'PUBLISHED' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
                     )}>
-                      {post.status === 'PUBLISHED' ? <Eye className="w-3 h-3" /> : <Drafts className="w-3 h-3" />}
+                      {post.status === 'PUBLISHED' ? <Eye className="w-3 h-3" /> : <FileJson className="w-3 h-3" />}
                       {post.status}
                     </span>
                     {post.category && <span>{post.category.name}</span>}

@@ -50,7 +50,7 @@ export async function GET(req: NextRequest) {
         category: { select: { id: true, name: true, slug: true, color: true } },
         tags: true,
         author: {
-          select: { id: true, name: true, username: true, image: true, role: true },
+          select: { id: true, name: true, image: true, role: true },
         },
       },
     });

@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import {
   FileText, Eye, TrendingUp, PlusCircle, BarChart3,
-  Clock, ChevronRight, PenLine, BookOpen,
+  Clock, ChevronRight, PenLine, BookOpen, FileJson, MessageSquare,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -93,7 +93,7 @@ export default function AuthorDashboardPage() {
             <PenLine className="w-4 h-4" /> Write Post
           </Link>
           <Link href="/community" className="inline-flex items-center gap-2 px-5 py-3 bg-white dark:bg-dark-card border border-gray-200 dark:border-dark-border rounded-xl hover:border-primary-300 font-medium text-sm transition-all">
-            <Drafts className="w-4 h-4" /> Community
+            <MessageSquare className="w-4 h-4" /> Community
           </Link>
           {isAdmin && <Link href="/admin" className="inline-flex items-center gap-2 px-5 py-3 bg-white dark:bg-dark-card border border-gray-200 dark:border-dark-border rounded-xl hover:border-primary-300 font-medium text-sm transition-all">Admin Panel</Link>}
         </div>
@@ -103,7 +103,7 @@ export default function AuthorDashboardPage() {
           {[
             { label: 'Posts', value: stats.posts, icon: FileText, color: 'bg-blue-50 dark:bg-blue-900/20 text-blue-600' },
             { label: 'Published', value: stats.published, icon: Eye, color: 'bg-green-50 dark:bg-green-900/20 text-green-600' },
-            { label: 'Drafts', value: stats.drafts, icon: Drafts, color: 'bg-yellow-50 dark:bg-yellow-900/20 text-yellow-600' },
+            { label: 'Drafts', value: stats.drafts, icon: FileJson, color: 'bg-yellow-50 dark:bg-yellow-900/20 text-yellow-600' },
             { label: 'Total Views', value: formatViews(stats.views), icon: TrendingUp, color: 'bg-purple-50 dark:bg-purple-900/20 text-purple-600' },
             { label: 'Community', value: stats.community, icon: BarChart3, color: 'bg-pink-50 dark:bg-pink-900/20 text-pink-600' },
           ].map((stat) => (
@@ -160,7 +160,7 @@ export default function AuthorDashboardPage() {
             </div>
             {recentCommunity.length === 0 ? (
               <div className="p-12 text-center">
-                <Drafts className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+                <MessageSquare className="w-12 h-12 text-gray-300 mx-auto mb-3" />
                 <p className="text-gray-500 mb-3">No community posts yet</p>
                 <Link href="/community" className="text-sm text-primary-600 font-medium">Share something →</Link>
               </div>

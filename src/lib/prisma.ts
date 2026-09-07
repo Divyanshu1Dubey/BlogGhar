@@ -202,6 +202,14 @@ export const db = {
     create:     (args?: any, opts?: { fallback?: any })    => safeQuery(c => c.report.create(args), opts?.fallback ?? null),
   },
 
+  // ── communityPost (CommunityPost model) ────────────────────────────────────
+  communityPost: {
+    findMany:   (args?: any, opts?: { fallback?: any[] })  => safeQuery(c => c.communityPost.findMany(args), opts?.fallback ?? SAFE_EMPTY),
+    findUnique: (args?: any, opts?: { fallback?: any })    => safeQuery(c => c.communityPost.findUnique(args), opts?.fallback ?? null),
+    count:      (args?: any, opts?: { fallback?: number }) => safeQuery(c => c.communityPost.count(args), opts?.fallback ?? SAFE_ZERO),
+    create:     (args?: any, opts?: { fallback?: any })    => safeQuery(c => c.communityPost.create(args), opts?.fallback ?? null),
+  },
+
   // ── newsletterSubscriber (NewsletterSubscriber model) ──────────────────────
   newsletterSubscriber: {
     findMany:   (args?: any, opts?: { fallback?: any[] })  => safeQuery(c => c.newsletterSubscriber.findMany(args), opts?.fallback ?? SAFE_EMPTY),
