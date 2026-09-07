@@ -188,6 +188,7 @@ export const db = {
   // ── tag (Tag model) ────────────────────────────────────────────────────────
   tag: {
     findUnique: (args?: any, opts?: { fallback?: any }) => safeQuery(c => c.tag.findUnique(args), opts?.fallback ?? null),
+    findMany:   (args?: any, opts?: { fallback?: any[] }) => safeQuery(c => c.tag.findMany(args), opts?.fallback ?? SAFE_EMPTY),
   },
 
   // ── bookmark (Bookmark model) ──────────────────────────────────────────────
