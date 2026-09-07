@@ -30,12 +30,16 @@ model Account {
 model User {
   id            String    @id @default(cuid())
   name          String?
+  username      String?   @unique
   email         String?   @unique
   emailVerified DateTime?
   image         String?
   password      String?
-  role          String    @default("USER")
+  bio           String?   @db.Text
+  role          String    @default("USER") // USER | AUTHOR | MODERATOR | ADMIN
+  isModerator   Boolean   @default(false)
   isBanned      Boolean   @default(false)
+  bannedReason  String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
@@ -54,6 +58,10 @@ model User {
   subscriptions Subscription[]
   profile       Profile?
   newsletterSubs NewsletterSubscriber[]
+  communityPosts CommunityPost[]
+  revisions     Revision[]
+  reportsFiled  Report[]   @relation("Reporter")
+  reportsActioned Report[] @relation("Moderator")
 
   @@map("users")
 }
@@ -97,6 +105,7 @@ model Category {
 
   posts   Post[]
   jobs    JobListing[]
+  communityPosts CommunityPost[]
 
   @@map("categories")
 }
@@ -112,23 +121,50 @@ model Tag {
   @@map("tags")
 }
 
+enum PostStatus {
+  DRAFT
+  PENDING_REVIEW
+  PUBLISHED
+  ARCHIVED
+}
+
+enum PostFormat {
+  STANDARD // Markdown / HTML — rendered by standard article renderer
+  CUSTOM_CODE // Developer-built page rendered in isolated sandbox iframe
+}
+
 model Post {
-  id            String    @id @default(cuid())
+  id            String      @id @default(cuid())
   title         String
-  slug          String    @unique
-  content       String    @db.Text
+  slug          String      @unique
+  content       String      @db.Text
   excerpt       String?
   featuredImage String?
-  postType      String    @default("BLOG")
-  status        String    @default("DRAFT")
-  views         Int       @default(0)
+  postType      String      @default("BLOG")
+  status        String      @default("DRAFT")
+  // New authoring fields
+  format        String      @default("STANDARD") // STANDARD | CUSTOM_CODE
+  customHtml    String?     @db.Text
+  customCss     String?     @db.Text
+  customJs      String?     @db.Text
+  customMeta    String?     @db.Text
+  faqs          String?     @db.Text // JSON: [{q, a}]
+  relatedIds    String?     @db.Text // JSON: [postId,...]
+  isFeatured    Boolean     @default(false)
+  scheduledFor  DateTime?
+  publishedAt   DateTime?
+  // SEO fields
   seoTitle      String?
   seoDesc       String?
   focusKeyword  String?
+  canonicalUrl  String?
+  ogImage       String?
   readTime      Int?
-  publishedAt   DateTime?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  views         Int         @default(0)
+  // Audit
+  lastEditedById String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 
   authorId String
   author   User     @relation(fields: [authorId], references: [id])
@@ -140,14 +176,30 @@ model Post {
   comments Comment[]
   likes    Like[]
   bookmarks Bookmark[]
+  revisions Revision[]
 
   @@map("posts")
+}
+
+model Revision {
+  id        String   @id @default(cuid())
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  title     String
+  content   String   @db.Text
+  excerpt   String?
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@map("revisions")
 }
 
 model Comment {
   id        String   @id @default(cuid())
   content   String   @db.Text
   isApproved Boolean @default(true)
+  isHidden  Boolean  @default(false)
   createdAt DateTime @default(now())
 
   userId String
@@ -185,6 +237,53 @@ model Bookmark {
 
   @@unique([userId, postId])
   @@map("bookmarks")
+}
+
+// CommunityPost = short-form post (Twitter-like thought, link share, question)
+// Separate from Post (long-form blog) to keep the data model clean.
+model CommunityPost {
+  id        String   @id @default(cuid())
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  content   String   @db.Text
+  linkUrl   String?
+  linkTitle String?
+  linkDesc  String?
+  imageUrl  String?
+  // communityCategory: THOUGHT | LINK | QUESTION | DISCOVERY
+  kind      String   @default("THOUGHT")
+  categoryId String?
+  category  Category? @relation(fields: [categoryId], references: [id])
+  status    String   @default("PUBLISHED") // PUBLISHED | HIDDEN | REMOVED
+  isPinned  Boolean  @default(false)
+  views     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  reports Report[]
+
+  @@map("community_posts")
+}
+
+// Moderation reports filed by users against posts, comments, or community posts.
+model Report {
+  id          String   @id @default(cuid())
+  reporterId  String
+  reporter    User     @relation("Reporter", fields: [reporterId], references: [id])
+  targetType  String   // 'post' | 'comment' | 'community_post'
+  targetId    String
+  communityPostId String?
+  communityPost   CommunityPost? @relation(fields: [communityPostId], references: [id], onDelete: SetNull)
+  reason      String   // SPAM | ABUSE | MISINFORMATION | OTHER
+  details     String?  @db.Text
+  status      String   @default("OPEN") // OPEN | RESOLVED | DISMISSED
+  moderatorId String?
+  moderator   User?    @relation("Moderator", fields: [moderatorId], references: [id])
+  moderatorNote String?
+  createdAt   DateTime @default(now())
+  resolvedAt  DateTime?
+
+  @@map("reports")
 }
 
 model NewsArticle {
@@ -357,7 +456,7 @@ model QnAAnswer {
 }
 
 model JobListing {
-  id          String   @id @default(cuid())
+  id          String    @id @default(cuid())
   title       String
   company     String
   description String   @db.Text

@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation';
 import { formatDate } from '@/lib/utils';
 import Link from 'next/link';
 import {
-  Bookmark, Gamepad2, MessageSquare, Trophy, User, Clock,
+  FileText, Bookmark, Gamepad2, MessageSquare, Trophy, User, Clock,
   Eye, Shield, Bell, Palette, Trash2
 } from 'lucide-react';
 
@@ -187,6 +187,7 @@ export default async function ProfilePage({ searchParams }: Props) {
   if (!user) redirect('/login');
 
   const tabs = [
+    { id: 'posts', label: 'My Posts', icon: <FileText className="w-4 h-4" /> },
     { id: 'saved', label: 'Saved', icon: <Bookmark className="w-4 h-4" /> },
     { id: 'games', label: 'Game Scores', icon: <Gamepad2 className="w-4 h-4" /> },
     { id: 'comments', label: 'Comments', icon: <MessageSquare className="w-4 h-4" /> },
@@ -250,6 +251,29 @@ export default async function ProfilePage({ searchParams }: Props) {
 
       {/* Content */}
       <div className="card p-8">
+        {activeTab === 'posts' && (
+          <div>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-display font-bold text-lg">My Posts</h3>
+              <Link href="/admin/posts/new" className="btn-primary text-sm">New Post</Link>
+            </div>
+            {user?._count.posts > 0 ? (
+              <p className="text-gray-500 mb-4">You have {user._count.posts} post{user._count.posts !== 1 ? 's' : ''}.</p>
+            ) : (
+              <div className="text-center py-8">
+                <FileText className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+                <p className="text-gray-500 mb-3">You haven't published any posts yet.</p>
+                <Link href="/admin/posts/new" className="btn-primary inline-block">Create Your First Post</Link>
+              </div>
+            )}
+            <div className="mt-4">
+              <Link href="/profile/posts" className="text-sm text-primary-600 hover:text-primary-700 font-medium">
+                Manage all my posts →
+              </Link>
+            </div>
+          </div>
+        )}
+
         {activeTab === 'saved' && (
           <div>
             <h3 className="font-display font-bold text-lg mb-4">Saved Content</h3>

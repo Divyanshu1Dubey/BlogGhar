@@ -11,8 +11,9 @@ import { extractHeadings, markdownToHtml } from '@/lib/content-parser';
 import { JsonLd } from '@/components/seo/json-ld';
 import { BlogCard } from '@/components/blog/blog-card';
 import { ReadingProgressBar } from '@/components/ui/reading-progress-bar';
-import ArticleRenderer from '@/components/blog/article-renderer';
-import '@/components/blog/ArticleRenderer.css';
+import { ArticleRenderer } from '@/components/blog/article-renderer';
+import CustomBlogFrame from '@/components/blog/custom-blog-frame';
+import '@/styles/blog-article.css';
 
 type Params = Promise<{ slug: string }>;
 
@@ -79,14 +80,14 @@ export default async function BlogPostPage({ params }: { params: Params }) {
     ? new Date(post.publishedAt).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })
     : '';
 
-  // Content is stored as HTML by the parser; only convert if it still looks like raw Markdown
-  const trimmedContent = (post.content || '').trim();
-  const looksLikeMarkdown = /^(?:#{1,6}\s|[-*+]\s+|\d+\.\s)/m.test(trimmedContent) ||
-    /(?:\n)(?:#{1,6}\s|[-*+]\s+|\d+\.\s)/.test(trimmedContent) ||
-    /\*\*[^*]+\*\*/.test(trimmedContent) ||
-    /`[^`]+`/.test(trimmedContent) ||
-    /\[([^\]]+)\]\(([^)]+)\)/.test(trimmedContent);
-  const articleHtml = looksLikeMarkdown ? markdownToHtml(post.content) : (post.content || '');
+  // Content is stored as Markdown by the parser; convert to HTML before rendering
+  let articleHtml: string;
+  if (post.format === 'CUSTOM_CODE' && post.customHtml) {
+    articleHtml = post.customHtml;
+  } else {
+    articleHtml = markdownToHtml(post.content);
+  }
+  const headings = extractHeadings(articleHtml);
 
   const articleSchema = {
     '@context': 'https://schema.org',
@@ -283,9 +284,6 @@ export default async function BlogPostPage({ params }: { params: Params }) {
                   {/* ─── Article Content ─── */}
                   <ArticleRenderer
                     content={articleHtml}
-                    showToc={true}
-                    tocItems={extractHeadings(articleHtml)}
-                    isHtml={!looksLikeMarkdown}
                   />
 
                   {/* Bottom Tags */}

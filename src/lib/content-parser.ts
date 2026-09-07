@@ -361,6 +361,30 @@ function sanitizeHtml(html: string): string {
 }
 
 // ── Main Markdown → HTML converter ────────────────────────────────
+
+// ═══════════════════════════════════════════════════════════════════════
+//  CONTENT FORMAT DETECTION
+// ═══════════════════════════════════════════════════════════════════════
+
+export function isHtmlContent(text: string): boolean {
+  if (!text || !text.trim()) return false;
+  const trimmed = text.trim();
+  const firstLine = trimmed.split('\n').find(l => l.trim().length > 0)?.trim() || '';
+  if (/^<([a-zA-Z][a-zA-Z0-9]*)/.test(firstLine)) return true;
+  if (/^#{1,6}\s/.test(firstLine)) return false;
+  if (/^[-*+]\s/.test(firstLine)) return false;
+  if (/^\d+\.\s/.test(firstLine)) return false;
+  if (/^>\s/.test(firstLine)) return false;
+  if (/^```/.test(firstLine)) return false;
+  if (/^([-*_])\1{2,}\s*$/.test(firstLine)) return false;
+  if (/^:::/.test(firstLine)) return false;
+  const htmlTagCount = (trimmed.match(/<[a-zA-Z][^>]{0,40}>/g) || []).length;
+  const mdIndicatorCount = (trimmed.match(/(^|\n)[-*+]\s|(^|\n)\d+\.\s|(^|\n)#{1,6}\s|(^|\n)>\s|(^|\n)---/g) || []).length;
+  if (htmlTagCount > mdIndicatorCount + 2) return true;
+  if (htmlTagCount > 0) return true;
+  return false;
+}
+
 export function markdownToHtml(md: string): string {
   if (!md || !md.trim()) return '';
 
@@ -548,14 +572,31 @@ export function parseContent(rawText: string): ParsedContent {
 // ── Heading extraction (for TOC) ───────────────────────────────────
 export function extractHeadings(html: string): { id: string; text: string; level: number }[] {
   const items: { id: string; text: string; level: number }[] = [];
-  const headingRegex = /<h([1-6])(?:\s[^>]*)?id="([^"]*)"[^>]*>([\s\S]*?)<\/h\1>/g;
+  const headingRegex = /<h([1-6])(?:[^>]*)?>([\s\S]*?)<\/h\1>/g;
   let m: RegExpExecArray | null;
+  const usedIds = new Map<string, number>();
+  function makeId(text: string): string {
+    let id = text.toLowerCase()
+      .replace(/<[^>]*>/g, '')
+      .replace(/[^a-z0-9\s-]/g, '')
+      .trim()
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .substring(0, 60);
+    if (!id) id = 'section';
+    const original = id;
+    let counter = 1;
+    while (usedIds.has(id)) { id = original + '-' + (counter++); }
+    usedIds.set(id, 1);
+    return id;
+  }
   while ((m = headingRegex.exec(html)) !== null) {
     const level = parseInt(m[1]);
-    const id = m[2];
-    const text = m[3].replace(/<[^>]*>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
-    if (level >= 2 && text.trim().length >= 3) {
-      items.push({ id, text: text.trim(), level: Math.min(level, 3) });
+    const rawText = m[2].replace(/<[^>]*>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').trim();
+    if (level >= 2 && rawText.length >= 3) {
+      const idMatch = m[0].match(/id="([^"]*)"/);
+      const id = idMatch ? idMatch[1] : makeId(rawText);
+      items.push({ id, text: rawText, level: Math.min(level, 3) });
     }
   }
   return items;

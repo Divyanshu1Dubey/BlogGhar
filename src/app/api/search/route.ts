@@ -2,9 +2,6 @@ import { NextResponse } from 'next/server';
 import { db, getAvailable } from '@/lib/prisma';
 
 export async function GET(request: Request) {
-  if (!getAvailable()) {
-    return NextResponse.json({ results: [] });
-  }
   try {
     const { searchParams } = new URL(request.url);
     const query = searchParams.get('q') || '';
@@ -27,9 +24,9 @@ export async function GET(request: Request) {
           ],
         },
         take: 5,
-        include: { category: { select: { name: true, slug: true } } },
+        include: { author: { select: { name: true } }, category: { select: { name: true, slug: true } } },
       });
-      posts.forEach((p) => {
+      posts.forEach((p: any) => {
         results.push({ type: 'post', title: p.title, slug: p.slug, description: p.excerpt || '', url: `/blog/${p.slug}` });
       });
     }
@@ -44,7 +41,7 @@ export async function GET(request: Request) {
         },
         take: 3,
       });
-      games.forEach((g) => {
+      games.forEach((g: any) => {
         results.push({ type: 'game', title: g.name, slug: g.slug, description: g.description, url: `/games/${g.slug}` });
       });
     }
@@ -61,13 +58,45 @@ export async function GET(request: Request) {
         },
         take: 5,
       });
-      news.forEach((n) => {
+      news.forEach((n: any) => {
         results.push({ type: 'news', title: n.title, slug: n.slug, description: n.excerpt || '', url: `/news/${n.slug}` });
       });
     }
 
+    if (type === 'all' || type === 'community') {
+      const posts = await db.communityPost.findMany({
+        where: {
+          status: 'PUBLISHED',
+          content: { contains: query, mode: 'insensitive' },
+        },
+        take: 5,
+        include: { author: { select: { name: true, username: true } } },
+      });
+      posts.forEach((p: any) => {
+        results.push({ type: 'community', title: p.content.slice(0, 100), slug: p.id, description: `by ${p.author?.name || 'Anonymous'}`, url: `/community` });
+      });
+    }
+
+    if (type === 'all' || type === 'user') {
+      const users = await db.user.findMany({
+        where: {
+          OR: [
+            { name: { contains: query, mode: 'insensitive' } },
+            { email: { contains: query, mode: 'insensitive' } },
+          ],
+        },
+        take: 3,
+        select: { id: true, name: true, username: true },
+      });
+      users.forEach((u: any) => {
+        const username = u.username || u.email?.split('@')[0] || u.id;
+        results.push({ type: 'user', title: u.name || 'User', slug: username, description: `Creator`, url: `/profile/${username}` });
+      });
+    }
+
     return NextResponse.json({ results });
-  } catch {
+  } catch (err) {
+    console.error('[GET /api/search]', err);
     return NextResponse.json({ results: [] });
   }
 }

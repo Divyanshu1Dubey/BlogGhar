@@ -195,6 +195,13 @@ export const db = {
     findMany: (args?: any, opts?: { fallback?: any[] }) => safeQuery(c => c.bookmark.findMany(args), opts?.fallback ?? SAFE_EMPTY),
   },
 
+  // ── report (Report model) ──────────────────────────────────────────────────
+  report: {
+    findMany:   (args?: any, opts?: { fallback?: any[] })  => safeQuery(c => c.report.findMany(args), opts?.fallback ?? SAFE_EMPTY),
+    count:      (args?: any, opts?: { fallback?: number }) => safeQuery(c => c.report.count(args), opts?.fallback ?? SAFE_ZERO),
+    create:     (args?: any, opts?: { fallback?: any })    => safeQuery(c => c.report.create(args), opts?.fallback ?? null),
+  },
+
   // ── newsletterSubscriber (NewsletterSubscriber model) ──────────────────────
   newsletterSubscriber: {
     findMany:   (args?: any, opts?: { fallback?: any[] })  => safeQuery(c => c.newsletterSubscriber.findMany(args), opts?.fallback ?? SAFE_EMPTY),
