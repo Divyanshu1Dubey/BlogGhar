@@ -32,6 +32,24 @@ export function BlogCard({ post, variant = 'default' }: BlogCardProps) {
       ? formatDate(new Date(post.createdAt))
       : '';
 
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    const img = e.currentTarget;
+    img.style.display = 'none';
+    const fallback = img.nextElementSibling as HTMLElement | null;
+    if (fallback) {
+      fallback.style.display = 'flex';
+    }
+  };
+
+  const imgWithError = (extraClass = '') => (
+    <img
+      src={imageUrl || ''}
+      alt={post.title}
+      onError={handleImageError}
+      className={`${extraClass} group-hover:scale-105 transition-transform duration-500`}
+    />
+  );
+
   if (variant === 'featured') {
     return (
       <Link href={`/blog/${post.slug}`} className="group block h-full">
@@ -39,11 +57,12 @@ export function BlogCard({ post, variant = 'default' }: BlogCardProps) {
           {/* Image */}
           <div className="relative h-52 bg-gradient-to-br from-primary-100 via-primary-50 to-indigo-100 dark:from-primary-900/40 dark:via-primary-800/30 dark:to-indigo-900/40 overflow-hidden">
             {imageUrl ? (
-              <img
-                src={imageUrl}
-                alt={post.title}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-              />
+              <div className="relative w-full h-full">
+                {imgWithError('w-full h-full object-cover')}
+                <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-primary-100 via-primary-50 to-indigo-100 dark:from-primary-900/40 dark:via-primary-800/30 dark:to-indigo-900/40" style={{ display: 'none' }}>
+                  <span className="text-5xl opacity-80">{categoryIcon || '📝'}</span>
+                </div>
+              </div>
             ) : (
               <div className="w-full h-full flex items-center justify-center">
                 <span className="text-5xl opacity-80 group-hover:scale-110 transition-transform duration-300">
@@ -108,7 +127,12 @@ export function BlogCard({ post, variant = 'default' }: BlogCardProps) {
         <div className="card p-4 flex gap-4 group-hover:border-primary-300 dark:group-hover:border-primary-700 group-hover:shadow-lg transition-all duration-200">
           <div className="shrink-0 w-16 h-16 rounded-xl bg-gradient-to-br from-primary-100 to-primary-50 dark:from-primary-900/40 dark:to-primary-800/30 flex items-center justify-center text-2xl overflow-hidden">
             {imageUrl ? (
-              <img src={imageUrl} alt={post.title} className="w-full h-full object-cover" />
+              <div className="relative w-full h-full">
+                {imgWithError('w-full h-full object-cover')}
+                <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-primary-100 to-primary-50 dark:from-primary-900/40 dark:to-primary-800/30" style={{ display: 'none' }}>
+                  <span>{categoryIcon || '📝'}</span>
+                </div>
+              </div>
             ) : (
               <span>{categoryIcon || '📝'}</span>
             )}
@@ -138,11 +162,12 @@ export function BlogCard({ post, variant = 'default' }: BlogCardProps) {
         {/* Image */}
         <div className="relative h-48 bg-gradient-to-br from-primary-100 via-primary-50 to-indigo-100 dark:from-primary-900/40 dark:via-primary-800/30 dark:to-indigo-900/40 overflow-hidden">
           {imageUrl ? (
-            <img
-              src={imageUrl}
-              alt={post.title}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-            />
+            <div className="relative w-full h-full">
+              {imgWithError('w-full h-full object-cover')}
+              <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-primary-100 via-primary-50 to-indigo-100 dark:from-primary-900/40 dark:via-primary-800/30 dark:to-indigo-900/40" style={{ display: 'none' }}>
+                <span className="text-5xl opacity-80">{categoryIcon || '📝'}</span>
+              </div>
+            </div>
           ) : (
             <div className="w-full h-full flex items-center justify-center">
               <span className="text-5xl opacity-80 group-hover:scale-110 transition-transform duration-300">
