@@ -373,7 +373,7 @@ function Btn({ children, onClick, variant = 'primary', className = '', ...props 
 //  EMI CALCULATOR
 // ──────────────────────────────────────────────
 function EMICalc() {
-  const [p, setP] = useState;
+  const [p, setP] = useState(0);
   const [r, setR] = useState(8.5);
   const [t, setT] = useState(20);
   const emi = useMemo(() => {
@@ -457,7 +457,7 @@ function EMICalc() {
 //  SIP CALCULATOR
 // ──────────────────────────────────────────────
 function SIPCalc() {
-  const [monthly, setMonthly] = useState;
+  const [monthly, setMonthly] = useState(0);
   const [rate, setRate] = useState(12);
   const [years, setYears] = useState(10);
   const result = useMemo(() => {
@@ -527,13 +527,13 @@ function SIPCalc() {
 //  INCOME TAX CALCULATOR (INDIA)
 // ──────────────────────────────────────────────
 function TaxCalc() {
-  const [salary, setSalary] = useState;
-  const [hra, setHra] = useState;
-  const [deduction80c, set80c] = useState;
-  const [deduction80d, set80d] = useState;
+  const [salary, setSalary] = useState(0);
+  const [hra, setHra] = useState(0);
+  const [deduction80c, set80c] = useState(0);
+  const [deduction80d, set80d] = useState(0);
   const [homeLoan, setHomeLoan] = useState(0);
   const [otherDeductions, setOther] = useState(0);
-  const [standardDeduction, setStd] = useState;
+  const [standardDeduction, setStd] = useState(0);
 
   const oldRegime = useMemo(() => {
     const gross = salary;
@@ -652,8 +652,8 @@ function TaxCalc() {
 //  LOAN AFFORDABILITY CALCULATOR
 // ──────────────────────────────────────────────
 function AffordabilityCalc() {
-  const [income, setIncome] = useState;
-  const [expenses, setExpenses] = useState;
+  const [income, setIncome] = useState(0);
+  const [expenses, setExpenses] = useState(0);
   const [existingEmi, setExistingEmi] = useState(0);
   const [rate, setRate] = useState(8.5);
   const [tenure, setTenure] = useState(20);
@@ -883,7 +883,7 @@ function GPACalc() {
 //  COMPOUND INTEREST
 // ──────────────────────────────────────────────
 function CompoundCalc() {
-  const [p, setP] = useState;
+  const [p, setP] = useState(0);
   const [r, setR] = useState(8);
   const [t, setT] = useState(10);
   const [n, setN] = useState(12);
@@ -956,7 +956,7 @@ function CompoundCalc() {
 //  DISCOUNT CALCULATOR
 // ──────────────────────────────────────────────
 function DiscountCalc() {
-  const [price, setPrice] = useState;
+  const [price, setPrice] = useState(0);
   const [discount, setDiscount] = useState(25);
   const saved = +(price * discount / 100).toFixed(2);
   const final = +(price - saved).toFixed(2);
@@ -983,7 +983,7 @@ function DiscountCalc() {
 //  TIP CALCULATOR
 // ──────────────────────────────────────────────
 function TipCalc() {
-  const [bill, setBill] = useState;
+  const [bill, setBill] = useState(0);
   const [tip, setTip] = useState(15);
   const [people, setPeople] = useState(2);
   const tipAmt = +(bill * tip / 100).toFixed(2);
