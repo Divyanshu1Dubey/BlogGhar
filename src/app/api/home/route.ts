@@ -9,17 +9,26 @@ async function safeCount(model: 'post' | 'game' | 'tool' | 'pageView', where?: a
 }
 
 export async function GET() {
+  const corsHeaders = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+  };
+
   if (!getAvailable()) {
-    return NextResponse.json({
-      error: 'Database not configured',
-      categories: [],
-      featuredPosts: [],
-      trendingPosts: [],
-      games: [],
-      news: [],
-      popularTools: [],
-      stats: { blogCount: 0, gameCount: 0, toolCount: 0, dailyVisitors: 0 },
-    });
+    return NextResponse.json(
+      {
+        error: 'Database not configured',
+        categories: [],
+        featuredPosts: [],
+        trendingPosts: [],
+        games: [],
+        news: [],
+        popularTools: [],
+        stats: { blogCount: 0, gameCount: 0, toolCount: 0, dailyVisitors: 0 },
+      },
+      { headers: corsHeaders }
+    );
   }
 
   try {
@@ -79,20 +88,23 @@ export async function GET() {
       }),
     ]);
 
-    return NextResponse.json({
-      categories,
-      featuredPosts,
-      trendingPosts,
-      games,
-      news,
-      popularTools,
-      stats: {
-        blogCount,
-        gameCount,
-        toolCount,
-        dailyVisitors,
+    return NextResponse.json(
+      {
+        categories,
+        featuredPosts,
+        trendingPosts,
+        games,
+        news,
+        popularTools,
+        stats: {
+          blogCount,
+          gameCount,
+          toolCount,
+          dailyVisitors,
+        },
       },
-    });
+      { headers: corsHeaders }
+    );
   } catch (error) {
     console.error('Home API error:', error);
     return NextResponse.json(
@@ -106,7 +118,7 @@ export async function GET() {
         popularTools: [],
         stats: { blogCount: 0, gameCount: 0, toolCount: 0, dailyVisitors: 0 },
       },
-      { status: 200 },
+      { status: 200, headers: corsHeaders }
     );
   }
 }

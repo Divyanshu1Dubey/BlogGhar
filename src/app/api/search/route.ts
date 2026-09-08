@@ -82,11 +82,10 @@ export async function GET(request: Request) {
         where: {
           OR: [
             { name: { contains: query, mode: 'insensitive' } },
-            { email: { contains: query, mode: 'insensitive' } },
           ],
         },
         take: 3,
-        select: { id: true, name: true, email: true },
+        select: { id: true, name: true },
       });
       users.forEach((u: any) => {
         const username = u.email?.split('@')[0] || u.id;

@@ -11,9 +11,7 @@ import { formatDate, formatNumber } from '@/lib/utils';
 import { AdSlot } from '@/components/ads/ad-slot';
 import NewsletterForm from '@/components/newsletter-form';
 
-const HOME_API =
-  ((process.env.NEXT_PUBLIC_API_URL || '').replace(/\/$/, '') ||
-  (typeof window !== 'undefined' ? window.location.origin : '')) + '/api/home';
+const HOME_API = '/api/home';
 
 type HomeData = {
   featuredPosts: any[];
