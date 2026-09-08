@@ -252,7 +252,7 @@ export default async function BlogPostPage({ params }: { params: Params }) {
                       </div>
                       <div>
                         <span className="block font-medium text-gray-900 dark:text-white text-sm leading-tight">{readTime} min</span>
-                        <span className="text-xs text-gray-400">{wordCount.toLocaleString()} words</span>
+                        <span className="text-xs text-gray-400">{wordCount.toLocaleString('en-IN')} words</span>
                       </div>
                     </div>
 
