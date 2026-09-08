@@ -1739,27 +1739,27 @@ function MarkdownConverter() {
 function TimezoneConv() {
   const zones = ['UTC', 'America/New_York', 'America/Los_Angeles', 'Europe/London', 'Europe/Paris', 'Asia/Tokyo', 'Asia/Kolkata', 'Australia/Sydney', 'Asia/Dubai', 'Asia/Singapore'];
   const [tz, setTz] = useState('Asia/Kolkata');
-  const [time, setTime] = useState(new Date().toISOString().slice(0, 16));
+  const [selectedDateTime, setSelectedDateTime] = useState(() => new Date().toISOString().slice(0, 16));
 
   const currentTime = useMemo(() => {
     try {
-      const d = new Date(time || new Date().toISOString());
+      const d = new Date(selectedDateTime || new Date().toISOString());
       return d.toLocaleString('en-US', { timeZone: tz, dateStyle: 'full', timeStyle: 'short' });
     } catch { return 'Invalid timezone'; }
-  }, [time, tz]);
+  }, [selectedDateTime, tz]);
 
   const otherZones = useMemo(() => {
-    const now = new Date(time || new Date().toISOString());
+    const now = new Date(selectedDateTime || new Date().toISOString());
     return zones.filter(z => z !== tz).map(z => {
-      try { return { zone: z, time: now.toLocaleString('en-US', { timeZone: z, timeStyle: 'short', hour: '2-digit', minute: '2-digit' }) }; }
-      catch { return { zone: z, time: '—' }; }
+      try { return { zone: z, localTime: now.toLocaleString('en-US', { timeZone: z, timeStyle: 'short', hour: '2-digit', minute: '2-digit' }) }; }
+      catch { return { zone: z, localTime: '—' }; }
     });
-  }, [time, tz]);
+  }, [selectedDateTime, tz]);
 
   return (
     <ToolCard title="\u{1F30D} Time Zone Converter">
       <div className="grid grid-cols-2 gap-4 mb-6">
-        <LabelInput label="Date & Time" type="datetime-local" value={time} onChange={(e) => setTime(e.target.value)} />
+        <LabelInput label="Date & Time" type="datetime-local" value={selectedDateTime} onChange={(e) => setSelectedDateTime(e.target.value)} />
         <LabelSelect label="Time Zone" value={tz} onChange={(e) => setTz(e.target.value)}>
           {zones.map(z => <option key={z} value={z}>{z}</option>)}
         </LabelSelect>
@@ -1770,10 +1770,10 @@ function TimezoneConv() {
       </div>
       <h3 className="font-semibold text-sm text-gray-500 uppercase tracking-wide mb-3">World Clock Comparison</h3>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        {otherZones.map(({ zone, time: t }) => (
+        {otherZones.map(({ zone, localTime }) => (
           <div key={zone} className="p-3 bg-gray-50 dark:bg-dark-bg rounded-xl text-center">
             <p className="text-xs text-gray-500 mb-1">{zone.replace('America/', '').replace('Asia/', '').replace('Europe/', '')}</p>
-            <p className="text-lg font-bold text-gray-900 dark:text-white">{t}</p>
+            <p className="text-lg font-bold text-gray-900 dark:text-white">{localTime}</p>
           </div>
         ))}
       </div>
