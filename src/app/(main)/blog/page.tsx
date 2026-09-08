@@ -17,18 +17,21 @@ export async function generateMetadata() {
 }
 
 export default async function BlogPage({ searchParams }: { searchParams?: Promise<{ category?: string }> }) {
-  const params = await searchParams;
+  let params: { category?: string } | undefined;
   let posts: any[] = [];
   let totalPosts = 0;
   let categoriesWithCount: { id: string; name: string; slug: string; icon: string | null; _count: { posts: number } }[] = [];
-
-  const whereCondition = {
-    postType: 'BLOG',
-    status: 'PUBLISHED',
-    ...(params?.category ? { category: { slug: params.category } } : {}),
-  };
+  let pageError: string | null = null;
 
   try {
+    params = await searchParams;
+
+    const whereCondition = {
+      postType: 'BLOG',
+      status: 'PUBLISHED',
+      ...(params?.category ? { category: { slug: params.category } } : {}),
+    };
+
     if (!getAvailable()) {
       posts = [];
       totalPosts = 0;
@@ -53,10 +56,9 @@ export default async function BlogPage({ searchParams }: { searchParams?: Promis
       totalPosts = result[1];
       categoriesWithCount = result[2] as any;
     }
-  } catch {
-    posts = [];
-    totalPosts = 0;
-    categoriesWithCount = [];
+  } catch (error: any) {
+    pageError = error?.message || 'Failed to load blog posts';
+    console.error('Blog page error:', error);
   }
 
   const blogSchema = posts.length > 0 ? {
@@ -76,7 +78,16 @@ export default async function BlogPage({ searchParams }: { searchParams?: Promis
 
   return (
     <div className="min-h-screen bg-gray-50/50 dark:bg-dark-bg">
-      <JsonLd type="BreadcrumbList" data={{
+      {pageError && (
+        <div className="max-w-3xl mx-auto px-4 pt-10">
+          <div className="rounded-2xl border border-red-200 bg-red-50 p-6 text-red-800">
+            <h2 className="font-bold text-lg mb-1">Temporary loading error</h2>
+            <p className="text-sm opacity-90">{pageError}</p>
+            <p className="text-xs mt-3 opacity-75">If this persists, please try again shortly.</p>
+          </div>
+        </div>
+      )}
+      {!pageError && <JsonLd type="BreadcrumbList" data={{
         '@context': 'https://schema.org',
         '@type': 'BreadcrumbList',
         itemListElement: [
