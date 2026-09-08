@@ -8,6 +8,9 @@ import { JsonLd } from '@/components/seo/json-ld';
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
+const clamp2 = { display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' } as const;
+const clamp3 = { display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' } as const;
+
 export async function generateMetadata() {
   return {
     title: 'Blog - Latest Articles, Tutorials & Insights | Blog-Ghar',
