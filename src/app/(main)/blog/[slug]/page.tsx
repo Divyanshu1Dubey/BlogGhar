@@ -77,7 +77,7 @@ export default async function BlogPostPage({ params }: { params: Params }) {
   const readTime = readingTime(post.content);
   const wordCount = post.content ? stripHtml(post.content).split(/\s+/).filter(Boolean).length : 0;
   const publishedDate = post.publishedAt
-    ? new Date(post.publishedAt).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })
+    ? new Intl.DateTimeFormat('en-IN', { year: 'numeric', month: 'long', day: 'numeric' }).format(new Date(post.publishedAt))
     : '';
 
   // Content is stored as Markdown by the parser; convert to HTML before rendering

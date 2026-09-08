@@ -24,15 +24,18 @@ type BlogCardProps = {
   variant?: 'default' | 'featured' | 'compact';
 };
 
-function ImageWithFallback({ src, alt, categoryIcon, className }: { src: string; alt: string; categoryIcon: string; className?: string }) {
+function ImageWithFallback({ src, alt, categoryIcon, categoryName, className }: { src: string; alt: string; categoryIcon: string; categoryName?: string; className?: string }) {
   const [errored, setErrored] = useState(false);
-  if (errored || !src) {
+
+  if (!src || errored) {
+    const cat = categoryName?.toLowerCase().replace(/[^a-z0-9]/g, '') || 'default';
     return (
       <div className={`w-full h-full flex items-center justify-center ${className || ''}`}>
         <span className="text-5xl opacity-80">{categoryIcon || '📝'}</span>
       </div>
     );
   }
+
   return (
     <img
       src={src}
