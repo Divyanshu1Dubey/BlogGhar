@@ -81,7 +81,7 @@ export default async function BlogPage({ searchParams }: { searchParams?: Promis
         <p className="text-gray-600 mb-8">{totalPosts} published articles</p>
 
         {/* Categories */}
-        <div className="flex flex-wrap gap-2 mb-8">
+        <div className="mb-10">
           <CategoryFilter categories={categoriesWithCount} currentSlug={params?.category} />
         </div>
 
