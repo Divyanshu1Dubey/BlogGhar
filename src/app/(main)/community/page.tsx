@@ -2,8 +2,8 @@ import { Metadata } from 'next';
 import CommunityClient from './community-client';
 
 export const metadata: Metadata = {
-  title: 'Community | Blog-Ghar',
-  description: 'Share thoughts, discoveries, questions, and useful links with the Blog-Ghar community. Discover what others are sharing.',
+  title: 'Community',
+  description: 'Share thoughts, discoveries, questions, and useful links with the Blog-Ghar community.',
   alternates: { canonical: 'https://bloghar.com/community' },
 };
 

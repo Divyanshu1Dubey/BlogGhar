@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import SearchPageClient from './search-client';
 
 export const metadata: Metadata = {
-  title: 'Search | Blog-Ghar',
+  title: 'Search',
   description: 'Search blogs, games, news, tools, and community posts on Blog-Ghar.',
   alternates: { canonical: 'https://bloghar.com/search' },
 };
