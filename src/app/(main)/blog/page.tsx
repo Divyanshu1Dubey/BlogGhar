@@ -1,6 +1,7 @@
 import { prisma, getAvailable } from '@/lib/prisma';
 import Link from 'next/link';
 import { BlogCard } from '@/components/blog/blog-card';
+import { CategoryFilter } from '@/components/blog/category-filter';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -77,6 +78,9 @@ export default async function BlogPage({ searchParams }: { searchParams?: Promis
       <div className="max-w-6xl mx-auto px-4 py-12">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Blog</h1>
         <p className="text-gray-600 dark:text-gray-300 mb-8">{totalPosts} published articles</p>
+
+        <CategoryFilter categories={categoriesWithCount} currentSlug={params?.category} />
+
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {posts.map((post) => (
             <BlogCard key={post.id} post={post} variant="default" />
