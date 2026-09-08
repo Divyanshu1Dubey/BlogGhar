@@ -1,4 +1,4 @@
-import { db, getAvailable } from '@/lib/prisma';
+import { prisma, getAvailable } from '@/lib/prisma';
 import Link from 'next/link';
 import { BookOpen, TrendingUp } from 'lucide-react';
 import { JsonLd } from '@/components/seo/json-ld';
@@ -35,7 +35,7 @@ export default async function BlogPage({ searchParams }: { searchParams?: Promis
       categoriesWithCount = [];
     } else {
       const result = await Promise.all([
-        db.post.findMany({
+        prisma.post.findMany({
           where: whereCondition,
           orderBy: { publishedAt: 'desc' },
           take: 60,
@@ -44,8 +44,8 @@ export default async function BlogPage({ searchParams }: { searchParams?: Promis
             category: { select: { name: true, slug: true, icon: true } },
           },
         }),
-        db.post.count({ where: whereCondition }),
-        db.category.findMany({
+        prisma.post.count({ where: whereCondition }),
+        prisma.category.findMany({
           select: { id: true, name: true, slug: true, icon: true, _count: { select: { posts: true } } },
         }),
       ]);
