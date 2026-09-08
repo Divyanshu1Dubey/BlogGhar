@@ -25,7 +25,7 @@ type BlogCardProps = {
 };
 
 function ImageWithFallback({ src, alt, categoryIcon, className }: { src: string; alt: string; categoryIcon: string; className?: string }) {
-  const [errored, setErrored] = false;
+  const [errored, setErrored] = useState(false);
   if (errored || !src) {
     return (
       <div className={`w-full h-full flex items-center justify-center ${className || ''}`}>
