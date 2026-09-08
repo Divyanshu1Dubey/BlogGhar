@@ -1,6 +1,9 @@
+'use client';
+
 import Link from 'next/link';
 import { Eye, Clock, Calendar } from 'lucide-react';
 import { formatDate, formatNumber } from '@/lib/utils';
+import { useState } from 'react';
 
 type Post = {
   id: string;
