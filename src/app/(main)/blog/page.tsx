@@ -1,4 +1,7 @@
 import { prisma, getAvailable } from '@/lib/prisma';
+import Link from 'next/link';
+import { BlogCard } from '@/components/blog/blog-card';
+import { BookOpen, TrendingUp } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -76,38 +79,10 @@ export default async function BlogPage({ searchParams }: { searchParams?: Promis
         <h1 className="text-3xl font-bold text-gray-900 mb-4">Blog</h1>
         <p className="text-gray-600 mb-8">{totalPosts} published articles</p>
 
-        {/* Categories */}
-        <div className="flex flex-wrap gap-2 mb-8">
-          {categoriesWithCount.map((cat: any) => (
-            <a
-              key={cat.id}
-              href={`/blog?category=${cat.slug}`}
-              className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                params?.category === cat.slug
-                  ? 'bg-primary-600 text-white'
-                  : 'bg-white text-gray-700 border border-gray-200 hover:border-primary-300'
-              }`}
-            >
-              <span>{cat.icon || '📂'}</span>
-              <span>{cat.name}</span>
-              <span className="text-xs opacity-70">({cat._count.posts})</span>
-            </a>
-          ))}
-        </div>
-
-        {/* Posts */}
         {posts.length > 0 ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {posts.map((post: any) => (
-              <a
-                key={post.id}
-                href={`/blog/${post.slug}`}
-                className="block rounded-2xl border border-gray-100 bg-white p-5 hover:shadow-md transition"
-              >
-                <h3 className="font-bold text-gray-900 line-clamp-2">{post.title}</h3>
-                <p className="text-sm text-gray-500 line-clamp-3 mt-2">{(post.excerpt || '').slice(0, 160)}</p>
-                <div className="mt-3 text-xs text-gray-400">{post.author?.name || 'Blog-Ghar'} · {post.category?.name || ''}</div>
-              </a>
+              <BlogCard key={post.id} post={post} variant="default" />
             ))}
           </div>
         ) : (
