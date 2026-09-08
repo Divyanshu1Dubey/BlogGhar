@@ -13,7 +13,7 @@ export async function generateMetadata({ params }: { params: CategoryParams }) {
     const category = await db.category.findUnique({ where: { slug } });
     if (!category) return {};
     return {
-      title: `${category.name} | Blog-Ghar`,
+      title: `${category.name}`,
       description: category.description || `Read ${category.name} articles and posts on Blog-Ghar.`,
       alternates: { canonical: `https://bloghar.com/category/${category.slug}` },
     };

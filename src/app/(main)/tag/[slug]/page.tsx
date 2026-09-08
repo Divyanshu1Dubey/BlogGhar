@@ -13,7 +13,7 @@ export async function generateMetadata({ params }: { params: TagParams }) {
     const tag = await db.tag.findUnique({ where: { slug } });
     if (!tag) return {};
     return {
-      title: `${tag.name} | Blog-Ghar`,
+      title: `${tag.name}`,
       description: `Read posts tagged "${tag.name}" on Blog-Ghar.`,
       alternates: { canonical: `https://bloghar.com/tag/${tag.slug}` },
     };

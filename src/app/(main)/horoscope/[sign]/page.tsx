@@ -105,7 +105,7 @@ export async function generateMetadata({ params }: Props) {
   const d = data[sign.toLowerCase()];
   if (!d) return {};
   return {
-    title: `${d.icon} ${d.name} Daily Horoscope | Blog-Ghar`,
+    title: `${d.icon} ${d.name} Daily Horoscope`,
     description: `Get your daily ${d.name} horoscope reading. Love, career, health predictions.`,
     alternates: { canonical: `https://bloghar.com/horoscope/${sign.toLowerCase()}` },
   };

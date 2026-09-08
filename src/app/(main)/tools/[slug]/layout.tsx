@@ -100,7 +100,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const meta = TOOL_META[slug];
 
   return {
-    title: meta?.title || 'Free Online Tool | Blog-Ghar',
+    title: meta?.title || 'Free Online Tool',
     description: meta?.description || 'Free online tool on Blog-Ghar. No registration required.',
     alternates: { canonical: `https://bloghar.com/tools/${slug}` },
     openGraph: {

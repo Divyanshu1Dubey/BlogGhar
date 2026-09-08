@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: { params: NewsParams }) {
     if (!post) return {};
     const authorName = post.author?.name || 'Blog-Ghar';
     return {
-      title: `${post.title} | Blog-Ghar News`,
+      title: `${post.title} News`,
       description: post.excerpt || post.content?.replace(/<[^>]*>/g, '').slice(0, 160) || '',
       openGraph: {
         title: post.title,

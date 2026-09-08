@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Advertise With Us | Blog-Ghar',
+  title: 'Advertise With Us',
   description: 'Reach thousands of daily readers on Blog-Ghar. Advertise your brand, product, or service with our affordable ad packages.',
   alternates: { canonical: 'https://bloghar.com/advertise' },
 };

@@ -9,7 +9,7 @@ export const revalidate = 0;
 
 export async function generateMetadata() {
   return {
-    title: 'Blog - Latest Articles, Tutorials & Insights | Blog-Ghar',
+    title: 'Blog - Latest Articles, Tutorials & Insights',
     description: 'Discover stories, tutorials, and insights across technology, lifestyle, education, finance, and more on Blog-Ghar.',
     alternates: { canonical: 'https://bloghar.com/blog' },
   };

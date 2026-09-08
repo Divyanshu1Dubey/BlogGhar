@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: { params: PostParams }) {
     });
     if (!post) return {};
     return {
-      title: `${post.title} | Blog-Ghar Forum`,
+      title: `${post.title} Forum`,
       description: post.content?.slice(0, 160) || `Discussion: ${post.title}`,
       alternates: { canonical: `https://bloghar.com/forum/${slug}/${id}` },
     };

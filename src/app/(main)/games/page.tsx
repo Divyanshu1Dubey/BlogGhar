@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic';
 
 export async function generateMetadata() {
   return {
-    title: 'Free Online Games - 52+ Games | Blog-Ghar',
+    title: 'Free Online Games - 52+ Games',
     description: 'Play 52+ free online games at Blog-Ghar! Puzzles, arcade, word games, board games, quizzes. Multiplayer modes, levels & leaderboards. No download needed!',
     alternates: { canonical: 'https://bloghar.com/games' },
   };

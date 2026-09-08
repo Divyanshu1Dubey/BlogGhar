@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   if (!post) return {};
   const plainExcerpt = post.excerpt || stripHtml(post.content).slice(0, 160);
   return {
-    title: `${post.title} | Blog-Ghar`,
+    title: `${post.title}`,
     description: plainExcerpt,
     alternates: { canonical: `https://bloghar.com/blog/${post.slug}` },
     openGraph: { title: post.title, description: plainExcerpt, type: 'article' },

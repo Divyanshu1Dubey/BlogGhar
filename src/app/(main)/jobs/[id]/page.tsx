@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: { params: JobParams }) {
     if (!job) return {};
     const url = `https://bloghar.com/jobs/${job.id}`;
     return {
-      title: `${job.title} at ${job.company} | Blog-Ghar Jobs`,
+      title: `${job.title} at ${job.company} Jobs`,
       description: `${job.title} ${job.location ? `- ${job.location}` : ''}`,
       alternates: { canonical: url },
     };
