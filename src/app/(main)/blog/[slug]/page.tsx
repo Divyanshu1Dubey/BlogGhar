@@ -127,7 +127,7 @@ export default async function BlogPostPage({ params }: { params: Params }) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
           <div className="flex gap-8 xl:gap-12 items-start">
             {/* Main Article */}
-            <article className="flex-1 min-w-0 max-w-3xl">
+            <article className="flex-1 min-w-0">
               <div className="bg-white dark:bg-dark-card rounded-3xl overflow-hidden border border-gray-100 dark:border-dark-border shadow-sm">
 
                 {/* Cover Image */}
