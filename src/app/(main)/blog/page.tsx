@@ -1,6 +1,7 @@
 import { prisma, getAvailable } from '@/lib/prisma';
 import Link from 'next/link';
 import { BlogCard } from '@/components/blog/blog-card';
+import { CategoryFilter } from '@/components/blog/category-filter';
 import { BookOpen, TrendingUp } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
@@ -78,6 +79,11 @@ export default async function BlogPage({ searchParams }: { searchParams?: Promis
       <div className="max-w-6xl mx-auto px-4 py-12">
         <h1 className="text-3xl font-bold text-gray-900 mb-4">Blog</h1>
         <p className="text-gray-600 mb-8">{totalPosts} published articles</p>
+
+        {/* Categories */}
+        <div className="flex flex-wrap gap-2 mb-8">
+          <CategoryFilter categories={categoriesWithCount} currentSlug={params?.category} />
+        </div>
 
         {posts.length > 0 ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
