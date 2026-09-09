@@ -3,9 +3,10 @@ import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { formatDate } from '@/lib/utils';
 import Link from 'next/link';
+import ProfileSettingsForm from './profile-settings-form';
 import {
   FileText, Bookmark, Gamepad2, MessageSquare, Trophy, User, Clock,
-  Eye, Shield, Bell, Palette, Trash2, Save
+  Eye, Trash2
 } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
@@ -407,73 +408,13 @@ export default async function ProfilePage({ searchParams }: Props) {
         {activeTab === 'settings' && (
           <div>
             <h3 className="font-display font-bold text-lg mb-6">Account Settings</h3>
-            <div className="space-y-6">
-              {/* Profile Info */}
-              <div>
-                <h4 className="font-medium text-sm uppercase tracking-wider text-gray-500 mb-3">Profile Information</h4>
-                <div className="grid gap-4">
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Display Name</label>
-                    <input
-                      type="text"
-                      defaultValue={user.name || ''}
-                      className="w-full px-4 py-2.5 border border-gray-300 dark:border-dark-border rounded-lg dark:bg-dark-bg focus:outline-none focus:ring-2 focus:ring-primary-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Email</label>
-                    <input
-                      type="email"
-                      defaultValue={user.email || ''}
-                      disabled
-                      className="w-full px-4 py-2.5 border border-gray-300 dark:border-dark-border rounded-lg dark:bg-dark-bg text-gray-500"
-                    />
-                    <p className="text-xs text-gray-400 mt-1">Email cannot be changed</p>
-                  </div>
-                </div>
-              </div>
-
-              <hr className="border-gray-200 dark:border-dark-border" />
-
-              {/* Preferences */}
-              <div>
-                <h4 className="font-medium text-sm uppercase tracking-wider text-gray-500 mb-3">Preferences</h4>
-                <div className="space-y-3">
-                  <label className="flex items-center justify-between cursor-pointer">
-                    <div className="flex items-center gap-2">
-                      <Bell className="w-4 h-4 text-gray-400" />
-                      <span className="text-sm">Email notifications</span>
-                    </div>
-                    <input type="checkbox" defaultChecked className="w-4 h-4 accent-primary-600" />
-                  </label>
-                  <label className="flex items-center justify-between cursor-pointer">
-                    <div className="flex items-center gap-2">
-                      <Palette className="w-4 h-4 text-gray-400" />
-                      <span className="text-sm">Dark mode (follows system)</span>
-                    </div>
-                    <input type="checkbox" className="w-4 h-4 accent-primary-600" />
-                  </label>
-                  <label className="flex items-center justify-between cursor-pointer">
-                    <div className="flex items-center gap-2">
-                      <Shield className="w-4 h-4 text-gray-400" />
-                      <span className="text-sm">Two-factor authentication</span>
-                    </div>
-                    <input type="checkbox" className="w-4 h-4 accent-primary-600" />
-                  </label>
-                </div>
-              </div>
-
-              <hr className="border-gray-200 dark:border-dark-border" />
-
-              {/* Account info */}
-              <div>
-                <h4 className="font-medium text-sm uppercase tracking-wider text-gray-500 mb-3">Account Info</h4>
-                <div className="text-sm text-gray-500 space-y-1">
-                  <p>Member since {formatDate(user.createdAt)}</p>
-                  {user.updatedAt && <p>Last updated {formatDate(user.updatedAt)}</p>}
-                </div>
-              </div>
-            </div>
+            <ProfileSettingsForm initialUser={{
+              id: user.id,
+              name: user.name,
+              email: user.email,
+              bio: user.bio,
+              username: user.username,
+            }} />
           </div>
         )}
       </div>
