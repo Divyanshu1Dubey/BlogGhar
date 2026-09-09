@@ -8,7 +8,7 @@ export async function GET() {
   try {
     const categories = await db.category.findMany({
       orderBy: { name: 'asc' },
-      select: { id: true, name: true, slug: true, icon: true },
+      select: { id: true, name: true, slug: true, icon: true, _count: { select: { posts: true } } },
     });
     return NextResponse.json({ categories });
   } catch {
