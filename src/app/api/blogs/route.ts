@@ -3,6 +3,16 @@ import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 
+// Simple HTML sanitizer for server-side use
+function sanitizeHtml(html: string): string {
+  if (!html) return html;
+  return html
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+    .replace(/on\w+="[^"]*"/gi, '')
+    .replace(/on\w+='[^']*'/gi, '')
+    .replace(/javascript:/gi, '');
+}
+
 // GET /api/custom-blogs — list custom code blogs (auth required for authoring)
 export async function GET(req: NextRequest) {
   try {
@@ -111,11 +121,11 @@ export async function POST(req: NextRequest) {
     if (body.scheduledFor) data.scheduledFor = body.scheduledFor ? new Date(body.scheduledFor) : null;
 
     if (format === 'CUSTOM_CODE') {
-      data.customHtml = body.customHtml || '';
+      data.customHtml = sanitizeHtml(body.customHtml || '');
       data.customCss = body.customCss || '';
       data.customJs = body.customJs || '';
       data.customMeta = body.customMeta ? JSON.stringify(body.customMeta) : null;
-      data.content = body.customHtml || data.content;
+      data.content = data.customHtml || data.content;
     }
 
     const blog = await prisma.post.create({ data });
