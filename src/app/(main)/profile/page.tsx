@@ -5,7 +5,7 @@ import { formatDate } from '@/lib/utils';
 import Link from 'next/link';
 import {
   FileText, Bookmark, Gamepad2, MessageSquare, Trophy, User, Clock,
-  Eye, Shield, Bell, Palette, Trash2
+  Eye, Shield, Bell, Palette, Trash2, Save
 } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
