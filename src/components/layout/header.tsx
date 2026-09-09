@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { useSession, signOut } from 'next-auth/react';
-import { Menu, X, Search, Moon, LogOut, User, Settings } from 'lucide-react';
+import { Menu, X, Search, Moon, LogOut, User, Settings, PenLine } from 'lucide-react';
 import { useTheme } from 'next-themes';
 
 const categories = [

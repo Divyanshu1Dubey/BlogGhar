@@ -13,6 +13,7 @@ import { BlogCard } from '@/components/blog/blog-card';
 import { ReadingProgressBar } from '@/components/ui/reading-progress-bar';
 import { ArticleRenderer } from '@/components/blog/article-renderer';
 import CustomBlogFrame from '@/components/blog/custom-blog-frame';
+import CommentSection from './blog-client';
 import '@/styles/blog-article.css';
 
 type Params = Promise<{ slug: string }>;
@@ -349,6 +350,9 @@ export default async function BlogPostPage({ params }: { params: Params }) {
                   </div>
                 </div>
               )}
+
+              {/* ─── Comments Section ─── */}
+              <CommentSection postId={post.id} />
 
               {/* Browse All Articles CTA */}
               <div className="mt-12 mb-8">
