@@ -17,7 +17,7 @@ export type FormData = {
   featuredImage: string;
   categoryId: string;
   tags: string;
-  status: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
+  status: 'DRAFT' | 'PUBLISHED' | 'SCHEDULED' | 'ARCHIVED';
   postType: 'BLOG' | 'NEWS';
   format: 'STANDARD' | 'CUSTOM_CODE';
   customHtml: string;
@@ -75,6 +75,8 @@ export default function PostEditor({ initialPostId, categories }: PostEditorProp
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [showPreview, setShowPreview] = useState(false);
+  const [previewMode, setPreviewMode] = useState<'desktop' | 'mobile'>('desktop');
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
   const [activeTab, setActiveTab] = useState<'write' | 'raw' | 'custom-code' | 'faqs' | 'related'>('write');
   const [loading, setLoading] = useState(!isNew);
   const [slugManuallyEdited, setSlugManuallyEdited] = useState(false);
@@ -87,6 +89,7 @@ export default function PostEditor({ initialPostId, categories }: PostEditorProp
   useEffect(() => {
     if (isNew && form.title) {
       clearTimeout(autosaveTimer.current);
+      setSaveStatus('saving');
       autosaveTimer.current = setTimeout(() => {
         try {
           const drafts = JSON.parse(localStorage.getItem('blog-drafts') || '[]');
@@ -94,7 +97,12 @@ export default function PostEditor({ initialPostId, categories }: PostEditorProp
           const entry = { ...form, savedAt: Date.now() };
           if (existing >= 0) drafts[existing] = entry; else drafts.unshift(entry);
           localStorage.setItem('blog-drafts', JSON.stringify(drafts.slice(0, 10)));
-        } catch { /* quota exceeded — ignore */ }
+          setSaveStatus('saved');
+          setTimeout(() => setSaveStatus('idle'), 3000);
+        } catch {
+          setSaveStatus('error');
+          setTimeout(() => setSaveStatus('idle'), 5000);
+        }
       }, 3000);
     }
     return () => clearTimeout(autosaveTimer.current);
@@ -192,13 +200,20 @@ export default function PostEditor({ initialPostId, categories }: PostEditorProp
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-display font-extrabold">{isNew ? 'New Post' : 'Edit Post'}</h1>
+          <div className="flex items-center gap-3">
+            <h1 className="text-3xl font-display font-extrabold">{isNew ? 'New Post' : 'Edit Post'}</h1>
+            <SaveStatus status={saveStatus} />
+          </div>
           <p className="text-gray-500 mt-1">
             {isNew ? 'Create a new blog post or news article' : `Editing: ${form.title || 'Untitled'}`}
             {form.format === 'CUSTOM_CODE' && <span className="ml-2 text-xs px-2 py-0.5 bg-purple-100 text-purple-700 rounded-full">CUSTOM CODE</span>}
           </p>
         </div>
         <div className="flex flex-wrap gap-3">
+          <div className="flex rounded-lg border border-gray-300 overflow-hidden">
+            <button onClick={() => { setShowPreview(true); setPreviewMode('desktop'); }} className={`px-3 py-2 text-sm font-medium ${showPreview && previewMode === 'desktop' ? 'bg-primary-50 text-primary-700' : 'hover:bg-gray-50'}`} title="Desktop preview">🖥️</button>
+            <button onClick={() => { setShowPreview(true); setPreviewMode('mobile'); }} className={`px-3 py-2 text-sm font-medium ${showPreview && previewMode === 'mobile' ? 'bg-primary-50 text-primary-700' : 'hover:bg-gray-50'}`} title="Mobile preview">📱</button>
+          </div>
           <button onClick={() => setShowPreview(!showPreview)} className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-sm font-medium">
             <Eye className="w-4 h-4" /> {showPreview ? 'Hide' : 'Preview'}
           </button>
@@ -227,10 +242,44 @@ export default function PostEditor({ initialPostId, categories }: PostEditorProp
       )}
 
       {/* Preview */}
-      {showPreview && form.format === 'CUSTOM_CODE' && (
-        <div className="mb-6 card p-6">
-          <h3 className="font-bold text-sm mb-3 text-gray-500">Preview</h3>
-          <CustomBlogFrame customHtml={form.customHtml} customCss={form.customCss} customJs={form.customJs} />
+      {showPreview && (
+        <div className="mb-6">
+          <h3 className="font-bold text-sm mb-3 text-gray-500 uppercase tracking-wide">Live Preview</h3>
+          {form.format === 'CUSTOM_CODE' ? (
+            <div className="card p-6 rounded-xl border border-gray-200 dark:border-dark-border">
+              <CustomBlogFrame customHtml={form.customHtml} customCss={form.customCss} customJs={form.customJs} />
+            </div>
+          ) : (
+            <div className={`card rounded-xl border border-gray-200 dark:border-dark-border overflow-hidden ${previewMode === 'mobile' ? 'max-w-[375px] mx-auto' : ''}`}>
+              <div className="p-6 md:p-8">
+                <div className="mb-6">
+                  <h1 className="text-2xl md:text-4xl font-display font-extrabold text-gray-900 dark:text-white mb-3">{form.title || 'Untitled'}</h1>
+                  {form.excerpt && <p className="text-gray-600 dark:text-gray-400 text-lg">{form.excerpt}</p>}
+                </div>
+                {form.featuredImage && (
+                  <img src={form.featuredImage} alt="" className="w-full h-64 object-cover rounded-xl mb-8" />
+                )}
+                {form.content ? (
+                  <div className="prose dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: form.content }} />
+                ) : (
+                  <p className="text-gray-400 italic">No content yet. Start writing to see preview.</p>
+                )}
+                {form.faqs && (
+                  <div className="mt-12 pt-8 border-t border-gray-200 dark:border-dark-border">
+                    <h2 className="text-2xl font-display font-bold text-gray-900 dark:text-white mb-6">Frequently Asked Questions</h2>
+                    <div className="space-y-6">
+                      {JSON.parse(form.faqs).map((faq: any, i: number) => (
+                        <div key={i} className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-6">
+                          <h3 className="font-semibold text-gray-900 dark:text-white mb-2">{faq.question}</h3>
+                          <p className="text-gray-600 dark:text-gray-400">{faq.answer}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       )}
 
@@ -398,7 +447,10 @@ function PostSettingsPanel({ form, updateForm, categories, setSlugManuallyEdited
         <div>
           <label className="block text-sm font-medium mb-1">Status</label>
           <select value={form.status} onChange={e => updateForm(f => ({ ...f, status: e.target.value as FormData['status'] }))} className="w-full px-3 py-2 border border-gray-200 dark:border-dark-border rounded-lg text-sm bg-white dark:bg-dark-card">
-            <option value="DRAFT">Draft</option><option value="PUBLISHED">Published</option><option value="ARCHIVED">Archived</option>
+            <option value="DRAFT">Draft</option>
+            <option value="PUBLISHED">Published</option>
+            <option value="SCHEDULED">Schedule for later</option>
+            <option value="ARCHIVED">Archived</option>
           </select>
         </div>
         <div>
@@ -436,6 +488,23 @@ function PostSettingsPanel({ form, updateForm, categories, setSlugManuallyEdited
         </label>
       </div>
     </div>
+  );
+}
+
+function SaveStatus({ status }: { status: 'idle' | 'saving' | 'saved' | 'error' }) {
+  if (status === 'idle') return null;
+  const config = {
+    saving: { label: 'Saving...', className: 'text-yellow-600 animate-pulse' },
+    saved: { label: 'Saved', className: 'text-green-600' },
+    error: { label: 'Save failed', className: 'text-red-600' },
+  }[status];
+  return (
+    <span className={`text-xs font-medium ${config.className}`} title="Autosave status">
+      {status === 'saving' && <span className="inline-block w-3 h-3 border-2 border-current border-t-transparent rounded-full animate-spin mr-1" />}
+      {status === 'saved' && <span className="mr-1">✓</span>}
+      {status === 'error' && <span className="mr-1">⚠</span>}
+      {config.label}
+    </span>
   );
 }
 
