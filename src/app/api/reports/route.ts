@@ -1,67 +1,44 @@
-import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/lib/prisma';
+import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
+import prisma from '@/lib/prisma';
 
-// GET /api/reports - list reports (admin/moderator only)
-export async function GET(req: NextRequest) {
+export async function POST(request: Request) {
   try {
     const session = await getServerSession(authOptions);
-    if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const userId = (session?.user as any)?.id;
 
-    const role = (session.user as any).role;
-    if (!['ADMIN', 'MODERATOR'].includes(role)) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-    }
-
-    const { searchParams } = new URL(req.url);
-    const status = searchParams.get('status')?.toUpperCase();
-
-    const reports = await prisma.report.findMany({
-      where: status && status !== 'ALL' ? { status } : undefined,
-      orderBy: { createdAt: 'desc' },
-      take: 100,
-      include: {
-        reporter: { select: { id: true, name: true } },
-        moderator: { select: { id: true, name: true } },
-      },
-    });
-
-    return NextResponse.json({ reports });
-  } catch {
-    return NextResponse.json({ error: 'Failed' }, { status: 500 });
-  }
-}
-
-// POST /api/reports - create a report (auth required)
-export async function POST(req: NextRequest) {
-  try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const body = await req.json();
-    const { targetType, targetId, reason, details } = body;
+    const body = await request.json();
+    const { targetType, targetId, reason, details, communityPostId } = body;
 
     if (!targetType || !targetId || !reason) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
+    const validTypes = ['post', 'comment', 'community_post', 'user'];
+    if (!validTypes.includes(targetType)) {
+      return NextResponse.json({ error: 'Invalid target type' }, { status: 400 });
+    }
+
+    const validReasons = ['SPAM', 'ABUSE', 'MISINFORMATION', 'OTHER'];
+    const normalizedReason = validReasons.includes(reason.toUpperCase()) ? reason.toUpperCase() : 'OTHER';
+
     const report = await prisma.report.create({
       data: {
-        targetType: targetType.toUpperCase(),
+        reporterId: userId || 'anonymous',
+        targetType,
         targetId,
-        reason: reason.toUpperCase(),
+        reason: normalizedReason,
         details: details || null,
-        reporterId: session.user.id,
+        communityPostId: communityPostId || null,
+      },
+      include: {
+        reporter: { select: { name: true, email: true } },
       },
     });
 
-    return NextResponse.json({ report }, { status: 201 });
+    return NextResponse.json({ success: true, report }, { status: 201 });
   } catch {
-    return NextResponse.json({ error: 'Failed' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to submit report' }, { status: 500 });
   }
 }
