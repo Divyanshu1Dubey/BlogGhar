@@ -255,7 +255,7 @@ export default async function ProfilePage({ searchParams }: Props) {
           <div>
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-display font-bold text-lg">My Posts</h3>
-              <Link href="/admin/posts/new" className="btn-primary text-sm">New Post</Link>
+              <Link href="/author/posts/new" className="btn-primary text-sm">New Post</Link>
             </div>
             {user?._count.posts > 0 ? (
               <p className="text-gray-500 mb-4">You have {user._count.posts} post{user._count.posts !== 1 ? 's' : ''}.</p>
@@ -263,7 +263,7 @@ export default async function ProfilePage({ searchParams }: Props) {
               <div className="text-center py-8">
                 <FileText className="w-12 h-12 text-gray-300 mx-auto mb-3" />
                 <p className="text-gray-500 mb-3">You haven't published any posts yet.</p>
-                <Link href="/admin/posts/new" className="btn-primary inline-block">Create Your First Post</Link>
+                <Link href="/author/posts/new" className="btn-primary inline-block">Create Your First Post</Link>
               </div>
             )}
             <div className="mt-4">

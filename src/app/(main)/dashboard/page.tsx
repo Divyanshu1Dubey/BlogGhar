@@ -84,13 +84,8 @@ export default function AuthorDashboardPage() {
 
         {/* Quick Actions */}
         <div className="flex flex-wrap gap-3 mb-8">
-          {isAdmin && (
-            <Link href="/admin/posts/new" className="inline-flex items-center gap-2 px-5 py-3 bg-primary-600 text-white rounded-xl hover:bg-primary-700 font-medium text-sm shadow-md hover:shadow-lg transition-all">
-              <PlusCircle className="w-4 h-4" /> New Post
-            </Link>
-          )}
-          <Link href="/admin/posts/new" className="inline-flex items-center gap-2 px-5 py-3 bg-white dark:bg-dark-card border border-gray-200 dark:border-dark-border rounded-xl hover:border-primary-300 font-medium text-sm transition-all">
-            <PenLine className="w-4 h-4" /> Write Post
+          <Link href="/author/posts/new" className="inline-flex items-center gap-2 px-5 py-3 bg-primary-600 text-white rounded-xl hover:bg-primary-700 font-medium text-sm shadow-md hover:shadow-lg transition-all">
+            <PlusCircle className="w-4 h-4" /> Write Post
           </Link>
           <Link href="/community" className="inline-flex items-center gap-2 px-5 py-3 bg-white dark:bg-dark-card border border-gray-200 dark:border-dark-border rounded-xl hover:border-primary-300 font-medium text-sm transition-all">
             <MessageSquare className="w-4 h-4" /> Community
