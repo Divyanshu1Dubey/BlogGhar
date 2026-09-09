@@ -45,6 +45,11 @@ export function Header() {
             <NavLink href="/forum">Forum</NavLink>
             <NavLink href="/qa">Q&A</NavLink>
             <NavLink href="/jobs">Jobs</NavLink>
+            {session?.user && (
+              <Link href="/author/posts/new" className="ml-2 inline-flex items-center gap-1.5 px-4 py-1.5 bg-primary-600 text-white rounded-lg text-sm font-semibold hover:bg-primary-700 transition-colors shadow-sm">
+                ✍️ Write
+              </Link>
+            )}
           </nav>
 
           {/* Right side actions */}
