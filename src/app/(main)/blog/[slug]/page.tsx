@@ -42,7 +42,7 @@ export default async function BlogPostPage({ params }: { params: Params }) {
   const post = await db.post.findUnique({
     where: { slug },
     include: {
-      author: { select: { name: true, image: true } },
+      author: { select: { name: true, image: true, username: true } },
       category: { select: { name: true, slug: true, icon: true } },
       tags: { select: { id: true, name: true, slug: true } },
     },
@@ -228,9 +228,15 @@ export default async function BlogPostPage({ params }: { params: Params }) {
                         {(post.author?.name || '?').charAt(0).toUpperCase()}
                       </div>
                       <div>
-                        <span className="font-semibold text-gray-900 dark:text-white block text-sm leading-tight">
-                          {post.author?.name || 'Blog-Ghar'}
-                        </span>
+                        {post.author?.username ? (
+                          <Link href={`/writers/${post.author.username}`} className="font-semibold text-gray-900 dark:text-white block text-sm leading-tight hover:text-primary-600 transition-colors">
+                            {post.author.name || 'Blog-Ghar'}
+                          </Link>
+                        ) : (
+                          <span className="font-semibold text-gray-900 dark:text-white block text-sm leading-tight">
+                            {post.author?.name || 'Blog-Ghar'}
+                          </span>
+                        )}
                         <span className="text-xs text-gray-400">Author</span>
                       </div>
                     </div>
@@ -315,6 +321,9 @@ export default async function BlogPostPage({ params }: { params: Params }) {
                           <h3 className="font-display font-bold text-xl text-gray-900 dark:text-white">
                             Written by {post.author?.name || 'Blog-Ghar'}
                           </h3>
+                          {post.author?.username && (
+                            <Link href={`/writers/${post.author.username}`} className="text-xs text-primary-600 hover:text-primary-700 font-medium">View Profile →</Link>
+                          )}
                         </div>
                         <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
                           Passionate about sharing knowledge and insights on technology, lifestyle, and more.
