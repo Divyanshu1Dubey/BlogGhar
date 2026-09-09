@@ -24,6 +24,12 @@ export default function CommentSection({ postId }: Props) {
   const [loading, setLoading] = useState(true);
   const [newComment, setNewComment] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [sessionReady, setSessionReady] = useState(false);
+
+  // Wait for session to stabilize before rendering comment UI
+  useEffect(() => {
+    setSessionReady(true);
+  }, [session]);
 
   const loadComments = async () => {
     try {
@@ -60,6 +66,24 @@ export default function CommentSection({ postId }: Props) {
     }
   };
 
+  // Prevent hydration mismatch: render placeholder until session stabilizes
+  if (!sessionReady) {
+    return (
+      <div className="mt-16">
+        <div className="flex items-center gap-2 mb-6">
+          <div className="w-1 h-6 bg-primary-500 rounded-full" />
+          <h2 className="text-2xl font-display font-bold text-gray-900 dark:text-white">Comments</h2>
+        </div>
+        <div className="bg-white dark:bg-dark-card rounded-2xl border border-gray-100 dark:border-dark-border p-8 text-center">
+          <div className="animate-pulse space-y-3">
+            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/3 mx-auto" />
+            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2 mx-auto" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="mt-16">
       <div className="flex items-center gap-2 mb-6">
@@ -82,26 +106,40 @@ export default function CommentSection({ postId }: Props) {
             <div className="flex justify-end mt-3">
               <button
                 type="submit"
-                disabled={!newComment.trim() || submitting}
-                className="flex items-center gap-2 px-5 py-2.5 bg-primary-600 text-white rounded-xl text-sm font-semibold hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                disabled={submitting || !newComment.trim()}
+                className="btn-primary flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <Send className="w-4 h-4" />
-                {submitting ? 'Posting...' : 'Post Comment'}
+                <Send className="w-4 h-4" /> Post Comment
               </button>
             </div>
           </div>
         </form>
       ) : (
-        <div className="mb-8 p-5 bg-gray-50 dark:bg-dark-bg rounded-2xl border border-gray-100 dark:border-dark-border text-center">
-          <MessageSquare className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-          <p className="text-sm text-gray-500">Please <a href="/login" className="text-primary-600 font-medium">log in</a> to leave a comment.</p>
+        <div className="bg-white dark:bg-dark-card rounded-2xl border border-gray-100 dark:border-dark-border p-8 text-center mb-8">
+          <MessageSquare className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+          <p className="text-gray-500">Sign in to join the conversation</p>
         </div>
       )}
 
       {loading ? (
-        <div className="text-center py-8 text-gray-400">Loading comments...</div>
+        <div className="space-y-4">
+          {[1, 2, 3].map(i => (
+            <div key={i} className="bg-white dark:bg-dark-card rounded-2xl border border-gray-100 dark:border-dark-border p-5 animate-pulse">
+              <div className="flex items-start gap-3">
+                <div className="w-9 h-9 rounded-full bg-gray-200 dark:bg-gray-700" />
+                <div className="flex-1 space-y-2">
+                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/3" />
+                  <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-full" />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       ) : comments.length === 0 ? (
-        <div className="text-center py-8 text-gray-400 text-sm">No comments yet. Be the first to share your thoughts!</div>
+        <div className="bg-white dark:bg-dark-card rounded-2xl border border-gray-100 dark:border-dark-border p-12 text-center">
+          <MessageSquare className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+          <p className="text-gray-500">No comments yet. Be the first to share your thoughts!</p>
+        </div>
       ) : (
         <div className="space-y-4">
           {comments.map((comment) => (
