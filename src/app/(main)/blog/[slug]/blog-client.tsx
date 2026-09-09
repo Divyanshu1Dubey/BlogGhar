@@ -19,17 +19,16 @@ type Props = {
 };
 
 export default function CommentSection({ postId }: Props) {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(true);
   const [newComment, setNewComment] = useState('');
   const [submitting, setSubmitting] = useState(false);
-  const [sessionReady, setSessionReady] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
-  // Wait for session to stabilize before rendering comment UI
   useEffect(() => {
-    setSessionReady(true);
-  }, [session]);
+    setMounted(true);
+  }, []);
 
   const loadComments = async () => {
     try {
@@ -66,8 +65,7 @@ export default function CommentSection({ postId }: Props) {
     }
   };
 
-  // Prevent hydration mismatch: render placeholder until session stabilizes
-  if (!sessionReady) {
+  if (!mounted) {
     return (
       <div className="mt-16">
         <div className="flex items-center gap-2 mb-6">
@@ -84,6 +82,8 @@ export default function CommentSection({ postId }: Props) {
     );
   }
 
+  const isAuthenticated = status === 'authenticated';
+
   return (
     <div className="mt-16">
       <div className="flex items-center gap-2 mb-6">
@@ -93,7 +93,7 @@ export default function CommentSection({ postId }: Props) {
         </h2>
       </div>
 
-      {session ? (
+      {isAuthenticated ? (
         <form onSubmit={handleSubmit} className="mb-8">
           <div className="bg-white dark:bg-dark-card rounded-2xl border border-gray-100 dark:border-dark-border p-5">
             <textarea
