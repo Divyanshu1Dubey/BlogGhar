@@ -89,11 +89,18 @@ export function Header() {
                     <Link href="/profile" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-dark-bg transition-colors">
                       <User className="w-4 h-4" /> Profile
                     </Link>
+                    <Link href="/author/posts/new" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-dark-bg transition-colors text-primary-600 font-medium">
+                      <span>✍️</span> New Post
+                    </Link>
                     {isAdmin && (
-                      <Link href="/admin" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-dark-bg transition-colors">
-                        <Settings className="w-4 h-4" /> Admin
-                      </Link>
+                      <>
+                        <div className="border-t border-gray-100 dark:border-gray-700 my-1" />
+                        <Link href="/admin" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-dark-bg transition-colors">
+                          <Settings className="w-4 h-4" /> Admin Panel
+                        </Link>
+                      </>
                     )}
+                    <div className="border-t border-gray-100 dark:border-gray-700 my-1" />
                     <button
                       onClick={() => { signOut({ callbackUrl: '/' }); setUserMenuOpen(false); }}
                       className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"

@@ -13,6 +13,8 @@ const navItems = [
   { href: '/admin/games', label: 'Games', icon: '🎮' },
   { href: '/admin/tools', label: 'Tools', icon: '🔧' },
   { href: '/admin/comments', label: 'Comments', icon: '💬' },
+  { href: '/admin/reports', label: 'Reports', icon: '🚨' },
+  { href: '/admin/moderation', label: 'Moderation', icon: '✅' },
   { href: '/admin/subscribers', label: 'Subscribers', icon: '📧' },
   { href: '/admin/settings', label: 'Settings', icon: '⚙️' },
 ];

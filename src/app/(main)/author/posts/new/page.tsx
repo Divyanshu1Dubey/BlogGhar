@@ -1,6 +1,6 @@
 import prisma from '@/lib/prisma';
 import PostEditor from '@/components/admin/post-editor';
-import AuthorSidebar from './components/author-sidebar';
+import AuthorSidebar from '@/app/(main)/author/components/author-sidebar';
 
 export const dynamic = 'force-dynamic';
 
